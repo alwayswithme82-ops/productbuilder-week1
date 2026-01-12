@@ -1,14 +1,149 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>시급 시각화 - Wage Pulse</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script defer src="/main.js"></script>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+  <div class="scene" aria-hidden="true">
+    <div class="orb orb--one"></div>
+    <div class="orb orb--two"></div>
+    <div class="orb orb--three"></div>
+  </div>
+
+  <header class="hero">
+    <span class="eyebrow">Wage Pulse</span>
+    <h1>자기 시급을 지금 이 순간에<br />움직이는 그래프로 확인하세요</h1>
+    <p>오늘의 흐름, 이번 주의 리듬, 한 달의 전망까지. 입력한 시급을 실제 시간과 연결해
+      실시간으로 보여주는 개인 수입 대시보드입니다.</p>
+  </header>
+
+  <main class="grid">
+    <section class="panel panel--inputs reveal" style="--delay: 0ms;">
+      <h2>나의 시급 설정</h2>
+      <form id="wage-form" class="form">
+        <label class="field">
+          <span>시급</span>
+          <input id="hourly-wage" type="number" inputmode="decimal" min="0" step="100" />
+        </label>
+        <label class="field">
+          <span>통화</span>
+          <select id="currency">
+            <option value="KRW">KRW (원)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="JPY">JPY (¥)</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>주당 근무시간</span>
+          <input id="hours-per-week" type="number" min="1" max="120" step="0.5" />
+        </label>
+        <label class="field">
+          <span>주당 근무일</span>
+          <input id="workdays-per-week" type="number" min="1" max="7" step="1" />
+        </label>
+        <label class="field">
+          <span>오늘 근무 시작</span>
+          <input id="start-time" type="time" />
+        </label>
+        <p class="hint">입력값은 브라우저에 자동 저장됩니다.</p>
+      </form>
+    </section>
+
+    <section class="panel panel--live reveal" style="--delay: 80ms;">
+      <h2>실시간 수입</h2>
+      <div class="live-amount" id="live-amount">0</div>
+      <div class="rate-grid">
+        <div class="rate-card">
+          <span>시간당</span>
+          <strong id="rate-hour">0</strong>
+        </div>
+        <div class="rate-card">
+          <span>분당</span>
+          <strong id="rate-minute">0</strong>
+        </div>
+        <div class="rate-card">
+          <span>초당</span>
+          <strong id="rate-second">0</strong>
+        </div>
+      </div>
+      <p class="note">현재 시간 기준 누적 금액입니다.</p>
+    </section>
+
+    <section class="panel panel--today reveal" style="--delay: 160ms;">
+      <h2>오늘의 진행</h2>
+      <div class="progress-block">
+        <div class="progress-ring" id="today-ring">
+          <span id="today-percent">0%</span>
+          <small>근무 진행률</small>
+        </div>
+        <div class="progress-metrics">
+          <div>
+            <span>예상 오늘 수입</span>
+            <strong id="today-total">0</strong>
+          </div>
+          <div>
+            <span>지금까지</span>
+            <strong id="today-earned">0</strong>
+          </div>
+        </div>
+      </div>
+      <div class="bar">
+        <div class="bar-fill" id="today-bar"></div>
+      </div>
+    </section>
+
+    <section class="panel panel--week reveal" style="--delay: 240ms;">
+      <h2>이번 주 리듬</h2>
+      <div class="stack">
+        <div>
+          <span>이번주 예정 수입</span>
+          <strong id="week-total">0</strong>
+        </div>
+        <div>
+          <span>지금까지</span>
+          <strong id="week-earned">0</strong>
+        </div>
+      </div>
+      <div class="week-grid" id="week-grid">
+        <div class="day-card" data-day="0"><span>월</span><strong>0</strong><div class="day-bar"></div></div>
+        <div class="day-card" data-day="1"><span>화</span><strong>0</strong><div class="day-bar"></div></div>
+        <div class="day-card" data-day="2"><span>수</span><strong>0</strong><div class="day-bar"></div></div>
+        <div class="day-card" data-day="3"><span>목</span><strong>0</strong><div class="day-bar"></div></div>
+        <div class="day-card" data-day="4"><span>금</span><strong>0</strong><div class="day-bar"></div></div>
+        <div class="day-card" data-day="5"><span>토</span><strong>0</strong><div class="day-bar"></div></div>
+        <div class="day-card" data-day="6"><span>일</span><strong>0</strong><div class="day-bar"></div></div>
+      </div>
+    </section>
+
+    <section class="panel panel--projection reveal" style="--delay: 320ms;">
+      <h2>예상 수입</h2>
+      <div class="projection-grid">
+        <div class="projection-card">
+          <span>이번 달 예상</span>
+          <strong id="month-projection">0</strong>
+          <small>월간 평균 주차 기반</small>
+        </div>
+        <div class="projection-card">
+          <span>올해 예상</span>
+          <strong id="year-projection">0</strong>
+          <small>52주 근무 기준</small>
+        </div>
+        <div class="projection-card">
+          <span>일 평균</span>
+          <strong id="day-average">0</strong>
+          <small>근무일 기준</small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Workweek은 월요일 시작 기준으로 계산됩니다.</p>
+  </footer>
 </body>
 </html>
