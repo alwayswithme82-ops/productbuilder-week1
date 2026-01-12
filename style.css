@@ -126,10 +126,16 @@ body {
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
+  z-index: 0;
 }
 
 .panel:hover::after {
   opacity: 1;
+}
+
+.panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .panel h2 {
