@@ -4,6 +4,7 @@ const DEFAULT_SETTINGS = {
   hoursPerWeek: 40,
   workdaysPerWeek: 5,
   startTime: "09:00",
+  endTime: "18:00",
 };
 
 const STORAGE_KEY = "wage-settings";
@@ -15,6 +16,7 @@ const elements = {
   hoursPerWeek: document.getElementById("hours-per-week"),
   workdaysPerWeek: document.getElementById("workdays-per-week"),
   startTime: document.getElementById("start-time"),
+  endTime: document.getElementById("end-time"),
   liveAmount: document.getElementById("live-amount"),
   rateHour: document.getElementById("rate-hour"),
   rateMinute: document.getElementById("rate-minute"),
@@ -64,6 +66,7 @@ const setFormValues = (settings) => {
   elements.hoursPerWeek.value = settings.hoursPerWeek;
   elements.workdaysPerWeek.value = settings.workdaysPerWeek;
   elements.startTime.value = settings.startTime;
+  elements.endTime.value = settings.endTime;
 };
 
 const parseTimeToMinutes = (timeString) => {
@@ -96,11 +99,12 @@ const formatCurrency = (value, currency) => {
 
 const calculate = (settings, now) => {
   const hourlyWage = Math.max(settings.hourlyWage, 0);
-  const hoursPerWeek = Math.max(settings.hoursPerWeek, 1);
   const workdaysPerWeek = clamp(settings.workdaysPerWeek, 1, 7);
-  const hoursPerDay = hoursPerWeek / workdaysPerWeek;
-  const minutesPerDay = hoursPerDay * 60;
   const startMinutes = parseTimeToMinutes(settings.startTime);
+  const endMinutes = parseTimeToMinutes(settings.endTime);
+  const minutesPerDay = Math.max(endMinutes - startMinutes, 0);
+  const hoursPerDay = minutesPerDay / 60;
+  const hoursPerWeek = Math.max(settings.hoursPerWeek, hoursPerDay * workdaysPerWeek, 1);
   const minutesIntoDay = getMinutesIntoDay(now);
   const isWorkday = getDayIndex(now) < workdaysPerWeek;
   const minutesWorkedToday = isWorkday
@@ -212,6 +216,7 @@ const handleInput = () => {
     hoursPerWeek: Number(elements.hoursPerWeek.value) || 1,
     workdaysPerWeek: Number(elements.workdaysPerWeek.value) || 1,
     startTime: elements.startTime.value || "09:00",
+    endTime: elements.endTime.value || "18:00",
   };
   saveSettings(updated);
   render(updated);
