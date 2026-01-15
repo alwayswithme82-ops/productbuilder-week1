@@ -40,52 +40,6 @@ body {
   overflow-x: hidden;
 }
 
-.loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(12, 12, 12, 0.92);
-  display: none;
-  place-items: center;
-  z-index: 20;
-  padding: 24px;
-}
-
-.loading-overlay.is-visible {
-  display: grid;
-}
-
-.loading-card {
-  width: min(520px, 92vw);
-  background: rgba(20, 20, 20, 0.96);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--stroke);
-  display: grid;
-  gap: 16px;
-  text-align: center;
-}
-
-.loading-text {
-  font-weight: 600;
-  font-size: 1.05rem;
-}
-
-.loading-bar {
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-}
-
-.loading-bar span {
-  display: block;
-  height: 100%;
-  width: 40%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  animation: loading 1.2s ease-in-out infinite;
-}
-
 .topbar {
   position: sticky;
   top: 0;
@@ -658,15 +612,6 @@ select:focus {
   }
   50% {
     transform: translateY(12px);
-  }
-}
-
-@keyframes loading {
-  0% {
-    transform: translateX(-60%);
-  }
-  100% {
-    transform: translateX(180%);
   }
 }
 

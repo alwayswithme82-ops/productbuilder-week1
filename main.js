@@ -355,7 +355,6 @@ const elements = {
   labelPriceStart: document.getElementById("label-price-start"),
   labelPriceCurrent: document.getElementById("label-price-current"),
   dataNote: document.getElementById("data-note"),
-  loadingOverlay: document.getElementById("loading-overlay"),
   shockLine: document.getElementById("shock-line"),
   basketItem: document.getElementById("basket-item"),
   basketStory: document.getElementById("basket-story"),
