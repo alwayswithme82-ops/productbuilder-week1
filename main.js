@@ -183,24 +183,24 @@ const renderReportCanvas = (stats) => {
   }
 
   ctx.fillStyle = "#141414";
-  ctx.font = "84px 'Black Han Sans', sans-serif";
+  ctx.font = "82px 'Gowun Batang', serif";
   ctx.fillText("사장님 나빠요", 80, 210);
 
-  ctx.font = "42px 'Gowun Dodum', sans-serif";
+  ctx.font = "40px 'Noto Sans KR', sans-serif";
   ctx.fillText("내 연봉의 실질 가치", 80, 280);
 
-  ctx.font = "52px 'Black Han Sans', sans-serif";
+  ctx.font = "48px 'Gowun Batang', serif";
   ctx.fillStyle = "#b0261b";
   ctx.fillText(`물가 +${formatPercent(stats.inflationRate)}`, 80, 380);
 
   ctx.fillStyle = "#1b1b1b";
   ctx.fillText(`연봉 +${formatPercent(stats.nominalDelta)}`, 80, 455);
 
-  ctx.font = "40px 'Gowun Dodum', sans-serif";
+  ctx.font = "36px 'Noto Sans KR', sans-serif";
   ctx.fillText(`실질 구매력 ${formatPercent(stats.realDelta)}`, 80, 530);
 
   ctx.fillStyle = "#1b1b1b";
-  ctx.font = "34px 'Gowun Dodum', sans-serif";
+  ctx.font = "32px 'Noto Sans KR', sans-serif";
   ctx.fillText("열심히 일해도 가난해지는 이유,", 80, 620);
   ctx.fillText("이 숫자에 다 있습니다.", 80, 670);
 
@@ -208,9 +208,9 @@ const renderReportCanvas = (stats) => {
   ctx.fillRect(80, 760, 920, 180);
 
   ctx.fillStyle = "#1b1b1b";
-  ctx.font = "32px 'Gowun Dodum', sans-serif";
+  ctx.font = "30px 'Noto Sans KR', sans-serif";
   ctx.fillText("내 연봉은 올랐는데...", 110, 820);
-  ctx.font = "44px 'Black Han Sans', sans-serif";
+  ctx.font = "40px 'Gowun Batang', serif";
   drawWrappedText(ctx, getVerdictText(stats), 110, 890, 860, 52);
 };
 

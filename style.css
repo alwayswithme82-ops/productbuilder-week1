@@ -1,16 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;600&display=swap");
 
 :root {
   color-scheme: light;
-  --bg: #f7efe2;
-  --ink: #1a1714;
-  --ink-soft: #5a4f49;
-  --accent: #f1684e;
-  --accent-dark: #c34732;
-  --accent-2: #ffc48a;
-  --surface: rgba(255, 255, 255, 0.82);
-  --stroke: rgba(26, 23, 20, 0.1);
-  --shadow: 0 30px 80px rgba(30, 19, 15, 0.15);
+  --bg: #f6f3ef;
+  --ink: #1d1a18;
+  --ink-soft: #625953;
+  --accent: #df6c4f;
+  --accent-dark: #b34b35;
+  --accent-2: #f4c391;
+  --surface: rgba(255, 255, 255, 0.92);
+  --stroke: rgba(29, 26, 24, 0.08);
+  --shadow: 0 24px 60px rgba(30, 19, 15, 0.12);
 }
 
 *,
@@ -22,9 +22,9 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Gowun Dodum", "Malgun Gothic", sans-serif;
+  font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
   color: var(--ink);
-  background: radial-gradient(circle at top, #fff6e8 0%, #f7efe2 60%, #f3d8c4 120%);
+  background: radial-gradient(circle at top, #fff9f2 0%, #f6f3ef 55%, #f1e6dc 120%);
   overflow-x: hidden;
 }
 
@@ -39,33 +39,33 @@ body {
   position: absolute;
   border-radius: 50%;
   filter: blur(0);
-  opacity: 0.75;
-  animation: float 14s ease-in-out infinite;
+  opacity: 0.55;
+  animation: float 18s ease-in-out infinite;
 }
 
 .blob--one {
   width: 360px;
   height: 360px;
-  background: radial-gradient(circle, rgba(241, 104, 78, 0.35), transparent 70%);
-  top: -80px;
-  left: -90px;
+  background: radial-gradient(circle, rgba(223, 108, 79, 0.22), transparent 70%);
+  top: -120px;
+  left: -120px;
 }
 
 .blob--two {
   width: 520px;
   height: 520px;
-  background: radial-gradient(circle, rgba(255, 196, 138, 0.45), transparent 70%);
-  right: -160px;
-  top: 10%;
+  background: radial-gradient(circle, rgba(244, 195, 145, 0.35), transparent 70%);
+  right: -200px;
+  top: 5%;
   animation-delay: -4s;
 }
 
 .blob--three {
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(178, 69, 48, 0.25), transparent 70%);
-  bottom: -80px;
-  left: 20%;
+  background: radial-gradient(circle, rgba(179, 75, 53, 0.2), transparent 70%);
+  bottom: -120px;
+  left: 10%;
   animation-delay: -8s;
 }
 
@@ -77,8 +77,8 @@ body {
       transparent 1px
     ),
     linear-gradient(90deg, rgba(255, 255, 255, 0.45) 1px, transparent 1px);
-  background-size: 120px 120px;
-  opacity: 0.35;
+  background-size: 140px 140px;
+  opacity: 0.25;
 }
 
 .hero {
@@ -92,7 +92,7 @@ body {
   display: inline-flex;
   padding: 8px 18px;
   border-radius: 999px;
-  background: rgba(241, 104, 78, 0.18);
+  background: rgba(223, 108, 79, 0.16);
   color: var(--accent-dark);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -101,9 +101,9 @@ body {
 }
 
 .hero h1 {
-  font-family: "Black Han Sans", sans-serif;
-  font-size: clamp(2.8rem, 5vw, 4.2rem);
-  margin: 20px 0 12px;
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
+  font-size: clamp(2.5rem, 4.6vw, 3.8rem);
+  margin: 18px 0 12px;
 }
 
 .hero p {
@@ -127,24 +127,24 @@ body {
   margin: 0 auto;
   padding: 0 24px 80px;
   display: grid;
-  gap: 28px;
+  gap: 24px;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .panel {
   background: var(--surface);
   border-radius: 28px;
-  padding: 28px;
+  padding: 26px;
   border: 1px solid var(--stroke);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
   position: relative;
   overflow: hidden;
 }
 
 .panel h2 {
-  margin: 0 0 16px;
-  font-size: 1.4rem;
+  margin: 0 0 14px;
+  font-size: 1.35rem;
 }
 
 .panel-desc {
@@ -184,7 +184,7 @@ select {
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid var(--stroke);
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.92);
   font-size: 1rem;
   font-family: inherit;
   color: var(--ink);
@@ -209,17 +209,17 @@ select:focus {
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .button--primary {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 14px 30px rgba(241, 104, 78, 0.35);
+  box-shadow: 0 14px 28px rgba(223, 108, 79, 0.28);
 }
 
 .button--ghost {
-  background: rgba(26, 23, 20, 0.08);
+  background: rgba(29, 26, 24, 0.06);
   color: var(--ink);
 }
 
@@ -243,8 +243,8 @@ select:focus {
 }
 
 .result-card strong {
-  font-size: 1.4rem;
-  font-family: "Black Han Sans", sans-serif;
+  font-size: 1.35rem;
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
   color: var(--accent-dark);
 }
 
@@ -256,7 +256,7 @@ select:focus {
   margin-top: 20px;
   padding: 16px 20px;
   border-radius: 16px;
-  background: rgba(241, 104, 78, 0.15);
+  background: rgba(223, 108, 79, 0.14);
   font-weight: 600;
 }
 
@@ -276,7 +276,7 @@ select:focus {
 .stack-money {
   width: 180px;
   height: 220px;
-  background: rgba(26, 23, 20, 0.06);
+  background: rgba(29, 26, 24, 0.05);
   border-radius: 22px;
   position: relative;
   overflow: hidden;
@@ -288,7 +288,7 @@ select:focus {
   left: 0;
   right: 0;
   height: calc(var(--stack-level, 1) * 100%);
-  background: linear-gradient(180deg, #ffe6b1 0%, #f3a76a 55%, #e4674f 100%);
+  background: linear-gradient(180deg, #ffe6b8 0%, #f4b07a 55%, #de6f55 100%);
   border-radius: 22px 22px 16px 16px;
   transition: height 0.6s ease;
 }
@@ -300,14 +300,14 @@ select:focus {
   left: 10%;
   right: 10%;
   height: 32px;
-  background: radial-gradient(circle at 30% 30%, #e4674f 0%, transparent 60%),
-    radial-gradient(circle at 70% 30%, #e89b62 0%, transparent 60%),
-    radial-gradient(circle at 50% 30%, #f3c07d 0%, transparent 65%);
+  background: radial-gradient(circle at 30% 30%, #de6f55 0%, transparent 60%),
+    radial-gradient(circle at 70% 30%, #e8a16b 0%, transparent 60%),
+    radial-gradient(circle at 50% 30%, #f4c990 0%, transparent 65%);
   opacity: 0.9;
 }
 
 .stack-fill--current {
-  background: linear-gradient(180deg, #ffd8b0 0%, #f0a476 55%, #c9533b 100%);
+  background: linear-gradient(180deg, #ffd8b8 0%, #efaa7c 55%, #c4573f 100%);
 }
 
 .panel--basket .basket-grid {
@@ -327,7 +327,7 @@ select:focus {
 
 .basket-result strong {
   font-size: 1.6rem;
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Gowun Batang", "Noto Sans KR", serif;
   color: var(--accent-dark);
 }
 
@@ -355,7 +355,7 @@ select:focus {
   width: 100%;
   height: auto;
   border-radius: 20px;
-  background: #f7d5b8;
+  background: #f4d6c0;
 }
 
 .share-actions {
@@ -366,7 +366,7 @@ select:focus {
 .share-text {
   padding: 16px;
   border-radius: 16px;
-  background: rgba(26, 23, 20, 0.06);
+  background: rgba(29, 26, 24, 0.05);
   font-size: 0.95rem;
   line-height: 1.6;
 }
