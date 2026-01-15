@@ -142,6 +142,23 @@
           <small data-i18n="result_inflation_hint">입사 → 현재 누적</small>
         </div>
       </div>
+      <div class="bar-compare" id="bar-compare">
+        <div class="bar-row">
+          <span data-i18n="bar_start_label">입사 연봉</span>
+          <div class="bar-track">
+            <div class="bar-fill bar-fill--start" id="bar-start"></div>
+          </div>
+          <strong id="bar-start-value">0</strong>
+        </div>
+        <div class="bar-row">
+          <span data-i18n="bar_real_label">현재 실질</span>
+          <div class="bar-track">
+            <div class="bar-fill bar-fill--real" id="bar-real"></div>
+          </div>
+          <strong id="bar-real-value">0</strong>
+        </div>
+        <p class="bar-gap" id="bar-gap"></p>
+      </div>
       <div class="callout" id="verdict" data-i18n="verdict_loading">결과를 계산 중입니다.</div>
       <div class="shock-line" id="shock-line"></div>
       <div class="ad-inline">
@@ -191,6 +208,9 @@
           <option value="soup" data-i18n="basket_soup">국밥</option>
           <option value="soju" data-i18n="basket_soju">소주</option>
           <option value="chicken" data-i18n="basket_chicken">치킨</option>
+          <option value="apartment" data-i18n="basket_apartment">아파트 평당</option>
+          <option value="starbucks" data-i18n="basket_starbucks">스벅 아메</option>
+          <option value="subway" data-i18n="basket_subway">지하철 요금</option>
         </select>
       </label>
       <div class="basket-grid">
@@ -224,7 +244,7 @@
       </div>
       <p class="panel-desc" data-i18n="report_desc">공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.</p>
       <div class="share-grid">
-        <canvas id="report-canvas" width="1080" height="1500" aria-label="공유 리포트"></canvas>
+        <canvas id="report-canvas" width="1080" height="1920" aria-label="공유 리포트"></canvas>
         <div class="share-actions">
           <div class="share-text" id="share-text">텍스트가 여기에 표시됩니다.</div>
           <button class="button button--ghost" type="button" id="copy-text" data-i18n="report_copy">텍스트 복사</button>

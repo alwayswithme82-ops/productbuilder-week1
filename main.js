@@ -84,6 +84,30 @@ const basketItems = {
       US: { start: 12, current: 18 },
     },
   },
+  apartment: {
+    ko: "아파트 평당",
+    en: "Apartment / pyeong",
+    prices: {
+      KR: { start: 35000000, current: 55000000 },
+      US: { start: 300000, current: 420000 },
+    },
+  },
+  starbucks: {
+    ko: "스벅 아메",
+    en: "Starbucks Americano",
+    prices: {
+      KR: { start: 4100, current: 5500 },
+      US: { start: 3.95, current: 4.95 },
+    },
+  },
+  subway: {
+    ko: "지하철 요금",
+    en: "Subway fare",
+    prices: {
+      KR: { start: 1250, current: 1500 },
+      US: { start: 2.75, current: 3.0 },
+    },
+  },
 };
 
 const currencyByCountry = {
@@ -132,8 +156,8 @@ const translations = {
     result_nominal_hint: "명목 상승률",
     result_inflation_change: "물가 상승률",
     result_inflation_hint: "입사 → 현재 누적",
-    verdict_loading: "당신의 가난해진 현실을 분석 중... 💦",
-    loading_text: "당신의 가난해진 현실을 분석 중... 💦",
+    verdict_loading: "결과 계산 중입니다.",
+    loading_text: "결과 계산 중입니다.",
     melt_title: "녹아내리는 지폐",
     melt_start: "입사 연봉",
     melt_current: "현재 연봉 (실질)",
@@ -145,6 +169,9 @@ const translations = {
     basket_soup: "국밥",
     basket_soju: "소주",
     basket_chicken: "치킨",
+    basket_apartment: "아파트 평당",
+    basket_starbucks: "스벅 아메",
+    basket_subway: "지하철 요금",
     label_price_start: "가격",
     label_price_current: "가격",
     basket_start_label: "입사 월급으로",
@@ -176,7 +203,12 @@ const translations = {
     ad_caption: "손해 본 돈, 이걸로 메꾸세요",
     basket_story:
       "{startYear}년엔 {item} {start}개였는데, 지금은 {current}개. {lost}개 압수당했습니다.",
+    bar_start_label: "입사 연봉",
+    bar_real_label: "현재 실질",
+    bar_gap_loss: "이만큼 손해: {loss}",
+    bar_gap_gain: "이만큼 이득: {gain}",
     receipt_title: "🧾 내 인생 손해 명세서",
+    receipt_headline: "나는 {item} {lost}개 손해봤다 😭",
     receipt_item_salary: "잃어버린 연봉",
     receipt_item_basket: "사라진 {item}",
     receipt_item_conscience: "사장님 양심",
@@ -222,8 +254,8 @@ const translations = {
     result_nominal_hint: "Headline increase",
     result_inflation_change: "Inflation",
     result_inflation_hint: "Start → current total",
-    verdict_loading: "Analyzing your poorer reality... 💦",
-    loading_text: "Analyzing your poorer reality... 💦",
+    verdict_loading: "Calculating results...",
+    loading_text: "Calculating results...",
     melt_title: "Melting Cash",
     melt_start: "Starting salary",
     melt_current: "Current salary (real)",
@@ -235,6 +267,9 @@ const translations = {
     basket_soup: "Gukbap",
     basket_soju: "Soju",
     basket_chicken: "Fried chicken",
+    basket_apartment: "Apartment / pyeong",
+    basket_starbucks: "Starbucks Americano",
+    basket_subway: "Subway fare",
     label_price_start: "price",
     label_price_current: "price",
     basket_start_label: "With start paycheck",
@@ -266,7 +301,12 @@ const translations = {
     ad_caption: "Cover your loss with this",
     basket_story:
       "In {startYear}, {item} {start} pcs. Now {current} pcs. Lost {lost} pcs.",
+    bar_start_label: "Start salary",
+    bar_real_label: "Real today",
+    bar_gap_loss: "Loss: {loss}",
+    bar_gap_gain: "Gain: {gain}",
     receipt_title: "🧾 Life Loss Receipt",
+    receipt_headline: "I lost {lost} {item} 😭",
     receipt_item_salary: "Lost salary",
     receipt_item_basket: "Lost {item}",
     receipt_item_conscience: "Boss conscience",
@@ -322,6 +362,11 @@ const elements = {
   moneyImage: document.getElementById("money-image"),
   startSalaryRange: document.getElementById("start-salary-range"),
   currentSalaryRange: document.getElementById("current-salary-range"),
+  barStart: document.getElementById("bar-start"),
+  barReal: document.getElementById("bar-real"),
+  barStartValue: document.getElementById("bar-start-value"),
+  barRealValue: document.getElementById("bar-real-value"),
+  barGap: document.getElementById("bar-gap"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -558,12 +603,33 @@ const renderReportCanvas = (stats, settings) => {
   ctx.font = "36px 'GmarketSansBold', sans-serif";
   ctx.fillText(dict.receipt_title, receiptX + 40, receiptY + 60);
 
-  ctx.font = "24px 'Pretendard', sans-serif";
-  ctx.fillText(`${dict.result_inflation_change}: +${formatPercent(stats.inflationRate, settings.language)}`, receiptX + 40, receiptY + 140);
-  ctx.fillText(`${dict.result_nominal_change}: +${formatPercent(stats.nominalDelta, settings.language)}`, receiptX + 40, receiptY + 180);
-  ctx.fillText(`${dict.result_power_change}: ${formatPercent(stats.realDelta, settings.language)}`, receiptX + 40, receiptY + 220);
+  ctx.font = "26px 'Pretendard', sans-serif";
+  ctx.fillText(
+    dict.receipt_headline
+      .replace("{item}", itemName)
+      .replace("{lost}", formatNumber(lostCount, locale)),
+    receiptX + 40,
+    receiptY + 100,
+  );
 
-  const tableTop = receiptY + 280;
+  ctx.font = "24px 'Pretendard', sans-serif";
+  ctx.fillText(
+    `${dict.result_inflation_change}: +${formatPercent(stats.inflationRate, settings.language)}`,
+    receiptX + 40,
+    receiptY + 160,
+  );
+  ctx.fillText(
+    `${dict.result_nominal_change}: +${formatPercent(stats.nominalDelta, settings.language)}`,
+    receiptX + 40,
+    receiptY + 200,
+  );
+  ctx.fillText(
+    `${dict.result_power_change}: ${formatPercent(stats.realDelta, settings.language)}`,
+    receiptX + 40,
+    receiptY + 240,
+  );
+
+  const tableTop = receiptY + 300;
   ctx.strokeStyle = "#111111";
   ctx.beginPath();
   ctx.moveTo(receiptX + 30, tableTop);
@@ -691,6 +757,14 @@ const render = (settings) => {
     elements.powerChange.classList.add("status-gain");
   }
 
+  const maxValue = Math.max(stats.startSalary, stats.realCurrentSalary, 1);
+  const startPercent = (stats.startSalary / maxValue) * 100;
+  const realPercent = (stats.realCurrentSalary / maxValue) * 100;
+  elements.barStart.style.width = `${startPercent}%`;
+  elements.barReal.style.width = `${realPercent}%`;
+  elements.barStartValue.textContent = formatCurrency(stats.startSalary, settings.country);
+  elements.barRealValue.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
+
   elements.startSalaryLabel.textContent = formatCurrency(stats.startSalary, settings.country);
   elements.currentSalaryLabel.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
 
@@ -728,6 +802,21 @@ const render = (settings) => {
     elements.shockLine.classList.add("status-loss");
   } else if (stats.realDelta >= 0.01) {
     elements.shockLine.classList.add("status-gain");
+  }
+
+  if (lossAmount > 0) {
+    elements.barGap.textContent = dict.bar_gap_loss.replace(
+      "{loss}",
+      formatCurrency(lossAmount, settings.country),
+    );
+  } else if (stats.realDelta >= 0.01) {
+    const gainAmount = stats.realCurrentSalary - stats.startSalary;
+    elements.barGap.textContent = dict.bar_gap_gain.replace(
+      "{gain}",
+      formatCurrency(gainAmount, settings.country),
+    );
+  } else {
+    elements.barGap.textContent = "";
   }
 
   elements.moneyImage.src = stats.realDelta < -0.01 ? moneyImages.burnt : moneyImages.clean;
@@ -777,7 +866,6 @@ const handleInput = () => {
   applyTranslations(updated.language);
   render(updated);
   syncSalaryRanges(updated);
-  showLoadingOverlay();
 };
 
 const handleRangeInput = () => {
@@ -839,19 +927,6 @@ const initAds = () => {
       window.adsbygoogle.push({});
     });
   }
-};
-
-let loadingTimer;
-
-const showLoadingOverlay = () => {
-  if (!elements.loadingOverlay) {
-    return;
-  }
-  elements.loadingOverlay.classList.add("is-visible");
-  window.clearTimeout(loadingTimer);
-  loadingTimer = window.setTimeout(() => {
-    elements.loadingOverlay.classList.remove("is-visible");
-  }, 3000);
 };
 
 const scrollToSection = (targetId) => {
