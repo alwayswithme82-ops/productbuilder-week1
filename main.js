@@ -9,6 +9,7 @@ const DEFAULT_SETTINGS = {
   priceCurrent: 6200,
   language: "ko",
   country: "KR",
+  basketItem: "bigmac",
 };
 
 const STORAGE_KEY = "inflation-check-settings";
@@ -50,6 +51,41 @@ const salaryDefaults = {
   US: { start: 60000, current: 70000 },
 };
 
+const basketItems = {
+  bigmac: {
+    ko: "빅맥",
+    en: "Big Mac",
+    prices: {
+      KR: { start: 4500, current: 6200 },
+      US: { start: 5.15, current: 7.19 },
+    },
+  },
+  soup: {
+    ko: "국밥",
+    en: "Gukbap",
+    prices: {
+      KR: { start: 9000, current: 12000 },
+      US: { start: 9, current: 12 },
+    },
+  },
+  soju: {
+    ko: "소주",
+    en: "Soju",
+    prices: {
+      KR: { start: 4000, current: 5500 },
+      US: { start: 8, current: 12 },
+    },
+  },
+  chicken: {
+    ko: "치킨",
+    en: "Fried chicken",
+    prices: {
+      KR: { start: 17000, current: 22000 },
+      US: { start: 12, current: 18 },
+    },
+  },
+};
+
 const currencyByCountry = {
   KR: { currency: "KRW", locale: "ko-KR" },
   US: { currency: "USD", locale: "en-US" },
@@ -86,28 +122,34 @@ const translations = {
     option_custom: "직접 입력",
     label_custom_inflation: "누적 물가 상승률 (%)",
     hint_data: "공식 지수는 World Bank CPI(2010=100) 기반입니다.",
-    step3_title: "3단계: 결과 확인",
-    step3_hint: "실질 구매력이 얼마나 변했는지 확인합니다.",
-    result_real_salary: "실질 연봉 (입사 연도 기준)",
-    result_real_salary_hint: "현재 연봉을 물가로 환산한 값",
-    result_power_change: "구매력 변화",
-    result_power_hint: "입사 연봉 대비 증감",
+    step3_title: "3단계: 충격 결과",
+    step3_hint: "숫자로 확인하는 월급 실종 사건입니다.",
+    result_real_salary: "지금 연봉의 실체",
+    result_real_salary_hint: "물가로 환산한 실질 연봉",
+    result_power_change: "월급 녹아내림",
+    result_power_hint: "입사 연봉 대비 체감",
     result_nominal_change: "연봉 인상률",
     result_nominal_hint: "명목 상승률",
     result_inflation_change: "물가 상승률",
     result_inflation_hint: "입사 → 현재 누적",
-    verdict_loading: "결과를 계산 중입니다.",
+    verdict_loading: "당신의 가난해진 현실을 분석 중... 💦",
+    loading_text: "당신의 가난해진 현실을 분석 중... 💦",
     melt_title: "녹아내리는 지폐",
     melt_start: "입사 연봉",
     melt_current: "현재 연봉 (실질)",
     step4_title: "4단계: 장바구니 비교",
     step4_hint: "같은 월급으로 살 수 있는 개수입니다.",
-    basket_desc: "월급으로 살 수 있는 빅맥 개수를 비교합니다.",
-    label_price_start: "입사 연도 빅맥 가격",
-    label_price_current: "현재 연도 빅맥 가격",
+    basket_desc: "월급으로 살 수 있는 개수를 비교합니다.",
+    label_basket_item: "비교 아이템",
+    basket_bigmac: "빅맥",
+    basket_soup: "국밥",
+    basket_soju: "소주",
+    basket_chicken: "치킨",
+    label_price_start: "가격",
+    label_price_current: "가격",
     basket_start_label: "입사 월급으로",
     basket_current_label: "현재 월급으로",
-    report_title: '"사장님 나빠요" 리포트',
+    report_title: "연봉 협상용 팩트 폭격기",
     report_generate: "이미지 생성",
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
     report_copy: "텍스트 복사",
@@ -116,16 +158,24 @@ const translations = {
     footer_note: "World Bank CPI(2010=100) 기준이며 실제 체감과 다를 수 있습니다.",
     data_note_template: "{year} 데이터가 없어 {fallback} CPI로 계산했습니다.",
     verdict_negative:
-      "당신의 연봉은 {nominal} 올랐지만, 물가는 {inflation} 올랐습니다. 사실상 연봉 삭감입니다.",
-    verdict_flat: "연봉이 올랐지만 물가와 거의 동일합니다. 실질 구매력은 제자리입니다.",
-    verdict_positive: "연봉 상승이 물가를 앞섰습니다. 그래도 지켜봐야 합니다.",
+      "연봉은 {nominal} 올랐는데 물가가 {inflation}. 결국 월급 깎인 거나 마찬가지.",
+    verdict_flat: "월급이 올랐는데 체감은 그대로. 이게 현실입니다.",
+    verdict_positive: "이번엔 월급이 물가를 이겼네요. 그래도 방심 금지.",
+    power_negative: "당신의 월급은 녹아내렸습니다 ({real})",
+    power_flat: "월급은 제자리입니다 ({real})",
+    power_positive: "월급이 버텼습니다 (+{real})",
+    shock_template: "당신은 {loss} 손해 봤습니다.",
     share_text:
-      "내 연봉은 {nominal} 올랐지만 물가는 {inflation} 올랐네요. 실질 구매력 {real}. #인플레이션 #월급실질가치",
-    report_title_line: "사장님 나빠요",
-    report_subtitle: "내 연봉의 실질 가치",
+      "내 연봉 {nominal} 올랐다더니 물가가 {inflation}. 실질은 {real}. #월급실종 #인플레",
+    report_title_line: "연봉 협상용",
+    report_subtitle: "팩트 폭격기",
     report_caption: "열심히 일해도 가난해지는 이유,",
     report_caption2: "이 숫자에 다 있습니다.",
-    report_footer: "내 연봉은 올랐는데...",
+    report_footer: "월급 올랐다고요? 아니요.",
+    report_watermark: "Powered by 내월급지킴이.com",
+    ad_caption: "손해 본 돈, 이걸로 메꾸세요",
+    basket_story:
+      "{startYear}년엔 {item} {start}개였는데, 지금은 {current}개. {lost}개 압수당했습니다.",
     copy_done: "복사 완료",
     copy_default: "텍스트 복사",
   },
@@ -154,28 +204,34 @@ const translations = {
     option_custom: "Custom input",
     label_custom_inflation: "Total inflation (%)",
     hint_data: "Official CPI is from World Bank CPI (2010=100).",
-    step3_title: "Step 3: Results",
-    step3_hint: "See how much buying power changed.",
-    result_real_salary: "Real salary (start-year value)",
-    result_real_salary_hint: "Current salary adjusted by inflation",
-    result_power_change: "Buying power change",
-    result_power_hint: "Compared to starting salary",
+    step3_title: "Step 3: Reality Check",
+    step3_hint: "This is how your paycheck really feels.",
+    result_real_salary: "Real salary today",
+    result_real_salary_hint: "Adjusted for inflation",
+    result_power_change: "Paycheck melt-down",
+    result_power_hint: "Compared to your start",
     result_nominal_change: "Nominal raise",
     result_nominal_hint: "Headline increase",
     result_inflation_change: "Inflation",
     result_inflation_hint: "Start → current total",
-    verdict_loading: "Calculating...",
+    verdict_loading: "Analyzing your poorer reality... 💦",
+    loading_text: "Analyzing your poorer reality... 💦",
     melt_title: "Melting Cash",
     melt_start: "Starting salary",
     melt_current: "Current salary (real)",
     step4_title: "Step 4: Basket check",
     step4_hint: "How many burgers your paycheck buys.",
-    basket_desc: "Compare how many Big Macs your monthly pay can buy.",
-    label_price_start: "Big Mac price (start year)",
-    label_price_current: "Big Mac price (current year)",
+    basket_desc: "Compare how many items your monthly pay can buy.",
+    label_basket_item: "Pick item",
+    basket_bigmac: "Big Mac",
+    basket_soup: "Gukbap",
+    basket_soju: "Soju",
+    basket_chicken: "Fried chicken",
+    label_price_start: "price",
+    label_price_current: "price",
     basket_start_label: "With start paycheck",
     basket_current_label: "With current paycheck",
-    report_title: '"Boss, this is unfair" report',
+    report_title: "Salary negotiation fact bomb",
     report_generate: "Generate image",
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
@@ -184,16 +240,24 @@ const translations = {
     footer_note: "Based on World Bank CPI (2010=100); real-life impact may differ.",
     data_note_template: "{year} CPI not available. Using {fallback} CPI instead.",
     verdict_negative:
-      "Your salary is up {nominal}, but inflation is {inflation}. That is a real pay cut.",
-    verdict_flat: "Your pay rise barely matches inflation. Buying power is flat.",
-    verdict_positive: "Your pay rise beats inflation for now.",
+      "Salary up {nominal}, inflation up {inflation}. That is a real pay cut.",
+    verdict_flat: "Pay rise barely matches inflation. Reality is flat.",
+    verdict_positive: "Pay beats inflation for now. Stay alert.",
+    power_negative: "Your paycheck melted ({real})",
+    power_flat: "Your paycheck stayed flat ({real})",
+    power_positive: "Your paycheck survived (+{real})",
+    shock_template: "You lost {loss} in real value.",
     share_text:
-      "My salary is up {nominal} but inflation is {inflation}. Real buying power {real}. #inflation #salary",
-    report_title_line: "Boss, this is unfair",
-    report_subtitle: "My real salary value",
+      "Salary up {nominal}, inflation {inflation}. Real value {real}. #salary #inflation",
+    report_title_line: "Salary negotiation",
+    report_subtitle: "Fact bomb",
     report_caption: "Why hard work feels poorer,",
     report_caption2: "the numbers are here.",
-    report_footer: "My salary went up but...",
+    report_footer: "Salary went up? Not really.",
+    report_watermark: "Powered by naewolpay.com",
+    ad_caption: "Cover your loss with this",
+    basket_story:
+      "In {startYear}, {item} {start} pcs. Now {current} pcs. Lost {lost} pcs.",
     copy_done: "Copied",
     copy_default: "Copy text",
   },
@@ -235,9 +299,39 @@ const elements = {
   labelPriceStart: document.getElementById("label-price-start"),
   labelPriceCurrent: document.getElementById("label-price-current"),
   dataNote: document.getElementById("data-note"),
+  loadingOverlay: document.getElementById("loading-overlay"),
+  shockLine: document.getElementById("shock-line"),
+  basketItem: document.getElementById("basket-item"),
+  basketStory: document.getElementById("basket-story"),
+  moneyImage: document.getElementById("money-image"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+const toDataUri = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+
+const moneyImages = {
+  clean: toDataUri(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220">
+      <rect x="10" y="20" width="340" height="180" rx="18" fill="#f4e2a8" stroke="#c69c5d" stroke-width="6"/>
+      <rect x="30" y="45" width="300" height="130" rx="14" fill="#f8edc3" stroke="#d2ab6c" stroke-width="3"/>
+      <text x="180" y="120" font-size="46" text-anchor="middle" font-family="Arial" fill="#6b4b2a">50,000</text>
+      <text x="180" y="152" font-size="18" text-anchor="middle" font-family="Arial" fill="#6b4b2a">Sindaemdang</text>
+    </svg>`,
+  ),
+  burnt: toDataUri(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220">
+      <rect x="10" y="20" width="340" height="180" rx="18" fill="#e2b07f" stroke="#9b5b3a" stroke-width="6"/>
+      <rect x="30" y="45" width="300" height="130" rx="14" fill="#efc899" stroke="#b7774a" stroke-width="3"/>
+      <circle cx="70" cy="80" r="16" fill="#f6f3ef"/>
+      <circle cx="250" cy="70" r="10" fill="#f6f3ef"/>
+      <circle cx="200" cy="150" r="14" fill="#f6f3ef"/>
+      <path d="M20 50 L40 35 L55 45 L35 60 Z" fill="#8b4c2f"/>
+      <text x="180" y="120" font-size="44" text-anchor="middle" font-family="Arial" fill="#6b4b2a">50,000</text>
+      <text x="180" y="152" font-size="18" text-anchor="middle" font-family="Arial" fill="#6b4b2a">Burned</text>
+    </svg>`,
+  ),
+};
 
 const formatCurrency = (value, country) => {
   const { currency, locale } = currencyByCountry[country] || currencyByCountry.KR;
@@ -285,6 +379,7 @@ const setFormValues = (settings) => {
   elements.priceCurrent.value = settings.priceCurrent;
   elements.language.value = settings.language;
   elements.country.value = settings.country;
+  elements.basketItem.value = settings.basketItem;
 };
 
 const applyTranslations = (language) => {
@@ -359,6 +454,17 @@ const getShareText = (stats, language) => {
     .replace("{nominal}", formatPercent(stats.nominalDelta, language))
     .replace("{inflation}", formatPercent(stats.inflationRate, language))
     .replace("{real}", formatPercent(stats.realDelta, language));
+};
+
+const getPowerMessage = (stats, language) => {
+  const dict = translations[language] || translations.ko;
+  if (stats.realDelta <= -0.01) {
+    return dict.power_negative.replace("{real}", formatPercent(stats.realDelta, language));
+  }
+  if (stats.realDelta <= 0.01) {
+    return dict.power_flat.replace("{real}", formatPercent(stats.realDelta, language));
+  }
+  return dict.power_positive.replace("{real}", formatPercent(stats.realDelta, language));
 };
 
 const calculate = (settings) => {
@@ -440,6 +546,10 @@ const renderReportCanvas = (stats, settings) => {
   ctx.fillText(dict.report_footer, 110, 820);
   ctx.font = "36px 'Gowun Batang', serif";
   drawWrappedText(ctx, getVerdictText(stats, settings.language), 110, 890, 860, 46);
+
+  ctx.fillStyle = "rgba(20, 20, 20, 0.6)";
+  ctx.font = "22px 'Noto Sans KR', sans-serif";
+  ctx.fillText(dict.report_watermark, 80, 1040);
 };
 
 const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
@@ -464,10 +574,12 @@ const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
 const renderDynamicLabels = (settings) => {
   const dict = translations[settings.language] || translations.ko;
   const currency = currencyByCountry[settings.country]?.currency || "KRW";
+  const item = basketItems[settings.basketItem] || basketItems.bigmac;
+  const itemName = settings.language === "en" ? item.en : item.ko;
   elements.labelStartSalary.textContent = `${dict.label_start_salary} (${currency})`;
   elements.labelCurrentSalary.textContent = `${dict.label_current_salary} (${currency})`;
-  elements.labelPriceStart.textContent = `${settings.startYear} ${dict.label_price_start}`;
-  elements.labelPriceCurrent.textContent = `${settings.currentYear} ${dict.label_price_current}`;
+  elements.labelPriceStart.textContent = `${settings.startYear} ${itemName} ${dict.label_price_start}`;
+  elements.labelPriceCurrent.textContent = `${settings.currentYear} ${itemName} ${dict.label_price_current}`;
   const salaryStep = settings.country === "US" ? 1000 : 100000;
   elements.startSalary.step = salaryStep;
   elements.currentSalary.step = salaryStep;
@@ -494,10 +606,11 @@ const render = (settings) => {
   const stats = calculate(settings);
   const verdictText = getVerdictText(stats, settings.language);
   const shareText = getShareText(stats, settings.language);
+  const powerMessage = getPowerMessage(stats, settings.language);
   const { locale } = currencyByCountry[settings.country] || currencyByCountry.KR;
 
   elements.realSalary.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
-  elements.powerChange.textContent = formatPercent(stats.realDelta, settings.language);
+  elements.powerChange.textContent = powerMessage;
   elements.nominalChange.textContent = formatPercent(stats.nominalDelta, settings.language);
   elements.inflationChange.textContent = formatPercent(stats.inflationRate, settings.language);
   elements.verdict.textContent = verdictText;
@@ -519,6 +632,24 @@ const render = (settings) => {
   elements.shareText.textContent = shareText;
   elements.downloadReport.removeAttribute("href");
 
+  const dict = translations[settings.language] || translations.ko;
+  const item = basketItems[settings.basketItem] || basketItems.bigmac;
+  const itemName = settings.language === "en" ? item.en : item.ko;
+  const lostCount = Math.max(stats.basketStart - stats.basketCurrent, 0);
+  elements.basketStory.textContent = dict.basket_story
+    .replace("{startYear}", settings.startYear)
+    .replace("{item}", itemName)
+    .replace("{start}", formatNumber(stats.basketStart, locale))
+    .replace("{current}", formatNumber(stats.basketCurrent, locale))
+    .replace("{lost}", formatNumber(lostCount, locale));
+
+  const lossAmount = Math.max(stats.startSalary - stats.realCurrentSalary, 0);
+  elements.shockLine.textContent = lossAmount
+    ? dict.shock_template.replace("{loss}", formatCurrency(lossAmount, settings.country))
+    : "";
+
+  elements.moneyImage.src = stats.realDelta < -0.01 ? moneyImages.burnt : moneyImages.clean;
+
   elements.customInflationWrap.classList.toggle(
     "is-hidden",
     settings.inflationSource !== "custom",
@@ -528,8 +659,13 @@ const render = (settings) => {
   renderDynamicLabels(settings);
 };
 
+const getBasketPriceDefaults = (settings) => {
+  const item = basketItems[settings.basketItem] || basketItems.bigmac;
+  return item.prices[settings.country] || item.prices.KR;
+};
+
 const applyCountryDefaults = (settings, overwritePrices = false) => {
-  const defaults = priceDefaults[settings.country] || priceDefaults.KR;
+  const defaults = getBasketPriceDefaults(settings);
   if (overwritePrices) {
     elements.priceStart.value = defaults.start;
     elements.priceCurrent.value = defaults.current;
@@ -548,19 +684,34 @@ const handleInput = () => {
     priceCurrent: Number(elements.priceCurrent.value) || 0,
     language: elements.language.value,
     country: elements.country.value,
+    basketItem: elements.basketItem.value,
   };
   saveSettings(updated);
   applyTranslations(updated.language);
   render(updated);
+  showLoadingOverlay();
 };
 
 const handleCountryChange = () => {
-  const priceDefault = priceDefaults[elements.country.value] || priceDefaults.KR;
+  const priceDefault = getBasketPriceDefaults({
+    basketItem: elements.basketItem.value,
+    country: elements.country.value,
+  });
   const salaryDefault = salaryDefaults[elements.country.value] || salaryDefaults.KR;
   elements.priceStart.value = priceDefault.start;
   elements.priceCurrent.value = priceDefault.current;
   elements.startSalary.value = salaryDefault.start;
   elements.currentSalary.value = salaryDefault.current;
+  handleInput();
+};
+
+const handleBasketChange = () => {
+  const priceDefault = getBasketPriceDefaults({
+    basketItem: elements.basketItem.value,
+    country: elements.country.value,
+  });
+  elements.priceStart.value = priceDefault.start;
+  elements.priceCurrent.value = priceDefault.current;
   handleInput();
 };
 
@@ -590,8 +741,23 @@ const handleCopy = async () => {
 
 const initAds = () => {
   if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
-    window.adsbygoogle.push({});
+    document.querySelectorAll("ins.adsbygoogle").forEach(() => {
+      window.adsbygoogle.push({});
+    });
   }
+};
+
+let loadingTimer;
+
+const showLoadingOverlay = () => {
+  if (!elements.loadingOverlay) {
+    return;
+  }
+  elements.loadingOverlay.classList.add("is-visible");
+  window.clearTimeout(loadingTimer);
+  loadingTimer = window.setTimeout(() => {
+    elements.loadingOverlay.classList.remove("is-visible");
+  }, 3000);
 };
 
 const scrollToSection = (targetId) => {
@@ -618,6 +784,7 @@ initAds();
 });
 
 elements.country.addEventListener("change", handleCountryChange);
+elements.basketItem.addEventListener("change", handleBasketChange);
 
 elements.generateReport.addEventListener("click", handleGenerate);
 
