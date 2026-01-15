@@ -176,7 +176,7 @@ const translations = {
     label_price_current: "가격",
     basket_start_label: "입사 월급으로",
     basket_current_label: "현재 월급으로",
-    report_title: "연봉 협상용 팩트 폭격기",
+    report_title: "사장님 나빠요 리포트",
     report_generate: "이미지 생성",
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
     report_copy: "텍스트 복사",
@@ -194,8 +194,8 @@ const translations = {
     shock_template: "당신은 {loss} 손해 봤습니다.",
     share_text:
       "내 연봉 {nominal} 올랐다더니 물가가 {inflation}. 실질은 {real}. #월급실종 #인플레",
-    report_title_line: "연봉 협상용",
-    report_subtitle: "팩트 폭격기",
+    report_title_line: "사장님 나빠요",
+    report_subtitle: "월급 실종 보고서",
     report_caption: "열심히 일해도 가난해지는 이유,",
     report_caption2: "이 숫자에 다 있습니다.",
     report_footer: "월급 올랐다고요? 아니요.",
@@ -274,7 +274,7 @@ const translations = {
     label_price_current: "price",
     basket_start_label: "With start paycheck",
     basket_current_label: "With current paycheck",
-    report_title: "Salary negotiation fact bomb",
+    report_title: "\"Boss, this is unfair\" report",
     report_generate: "Generate image",
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
@@ -292,8 +292,8 @@ const translations = {
     shock_template: "You lost {loss} in real value.",
     share_text:
       "Salary up {nominal}, inflation {inflation}. Real value {real}. #salary #inflation",
-    report_title_line: "Salary negotiation",
-    report_subtitle: "Fact bomb",
+    report_title_line: "Boss, this is unfair",
+    report_subtitle: "Salary reality check",
     report_caption: "Why hard work feels poorer,",
     report_caption2: "the numbers are here.",
     report_footer: "Salary went up? Not really.",
@@ -571,114 +571,75 @@ const renderReportCanvas = (stats, settings) => {
   const itemName = settings.language === "en" ? item.en : item.ko;
   const lostCount = Math.max(stats.basketStart - stats.basketCurrent, 0);
   const lossAmount = Math.max(stats.startSalary - stats.realCurrentSalary, 0);
-  const basketLossValue = lostCount * (settings.priceCurrent || 0);
-  const totalLoss = lossAmount + basketLossValue;
   const { locale } = currencyByCountry[settings.country] || currencyByCountry.KR;
+  const headline = dict.receipt_headline
+    .replace("{item}", itemName)
+    .replace("{lost}", formatNumber(lostCount, locale));
 
-  ctx.fillStyle = "#111111";
+  const gradient = ctx.createLinearGradient(0, 0, width, height);
+  gradient.addColorStop(0, "#111111");
+  gradient.addColorStop(0.5, "#182240");
+  gradient.addColorStop(1, "#111111");
+  ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 
-  const receiptX = 120;
-  const receiptY = 80;
-  const receiptW = width - 240;
-  const receiptH = height - 160;
+  ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+  ctx.fillRect(80, 120, width - 160, height - 240);
 
-  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-  ctx.fillRect(receiptX + 12, receiptY + 12, receiptW, receiptH);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "92px 'GmarketSansBold', sans-serif";
+  ctx.fillText(dict.report_title_line, 120, 260);
 
-  ctx.fillStyle = "#f7f7f7";
-  ctx.fillRect(receiptX, receiptY, receiptW, receiptH);
+  ctx.font = "40px 'Pretendard', sans-serif";
+  ctx.fillStyle = "#ffd93d";
+  ctx.fillText(dict.report_subtitle, 120, 320);
 
-  ctx.strokeStyle = "#111111";
-  ctx.setLineDash([14, 10]);
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(receiptX + 30, receiptY + 90);
-  ctx.lineTo(receiptX + receiptW - 30, receiptY + 90);
-  ctx.stroke();
-  ctx.setLineDash([]);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "34px 'Pretendard', sans-serif";
+  ctx.fillText(headline, 120, 400);
 
-  ctx.fillStyle = "#111111";
-  ctx.font = "36px 'GmarketSansBold', sans-serif";
-  ctx.fillText(dict.receipt_title, receiptX + 40, receiptY + 60);
-
-  ctx.font = "26px 'Pretendard', sans-serif";
+  ctx.fillStyle = "#4d96ff";
+  ctx.font = "54px 'GmarketSansBold', sans-serif";
   ctx.fillText(
-    dict.receipt_headline
-      .replace("{item}", itemName)
-      .replace("{lost}", formatNumber(lostCount, locale)),
-    receiptX + 40,
-    receiptY + 100,
+    `${dict.result_power_change} ${formatPercent(stats.realDelta, settings.language)}`,
+    120,
+    480,
   );
 
-  ctx.font = "24px 'Pretendard', sans-serif";
-  ctx.fillText(
-    `${dict.result_inflation_change}: +${formatPercent(stats.inflationRate, settings.language)}`,
-    receiptX + 40,
-    receiptY + 160,
-  );
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "32px 'Pretendard', sans-serif";
   ctx.fillText(
     `${dict.result_nominal_change}: +${formatPercent(stats.nominalDelta, settings.language)}`,
-    receiptX + 40,
-    receiptY + 200,
+    120,
+    560,
   );
   ctx.fillText(
-    `${dict.result_power_change}: ${formatPercent(stats.realDelta, settings.language)}`,
-    receiptX + 40,
-    receiptY + 240,
+    `${dict.result_inflation_change}: +${formatPercent(stats.inflationRate, settings.language)}`,
+    120,
+    610,
   );
 
-  const tableTop = receiptY + 300;
-  ctx.strokeStyle = "#111111";
-  ctx.beginPath();
-  ctx.moveTo(receiptX + 30, tableTop);
-  ctx.lineTo(receiptX + receiptW - 30, tableTop);
-  ctx.stroke();
+  ctx.fillStyle = "#ff4d4d";
+  ctx.font = "48px 'GmarketSansBold', sans-serif";
+  ctx.fillText(
+    dict.shock_template.replace("{loss}", formatCurrency(lossAmount, settings.country)),
+    120,
+    700,
+  );
 
+  ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+  ctx.fillRect(120, 760, width - 240, 280);
+
+  ctx.fillStyle = "#111111";
+  ctx.font = "30px 'Pretendard', sans-serif";
+  ctx.fillText(dict.report_caption, 150, 830);
+  ctx.fillText(dict.report_caption2, 150, 875);
+  ctx.font = "34px 'GmarketSansBold', sans-serif";
+  drawWrappedText(ctx, getVerdictText(stats, settings.language), 150, 940, width - 300, 44);
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
   ctx.font = "22px 'Pretendard', sans-serif";
-  ctx.fillText(dict.receipt_col_item, receiptX + 40, tableTop + 40);
-  ctx.fillText(dict.receipt_col_qty, receiptX + receiptW - 300, tableTop + 40);
-  ctx.fillText(dict.receipt_col_amount, receiptX + receiptW - 160, tableTop + 40);
-
-  const lineY1 = tableTop + 90;
-  ctx.fillText(dict.receipt_item_salary, receiptX + 40, lineY1);
-  ctx.fillText("1", receiptX + receiptW - 300, lineY1);
-  ctx.fillText(`-${formatCurrency(lossAmount, settings.country)}`, receiptX + receiptW - 200, lineY1);
-
-  const lineY2 = lineY1 + 50;
-  ctx.fillText(
-    dict.receipt_item_basket.replace("{item}", itemName),
-    receiptX + 40,
-    lineY2,
-  );
-  ctx.fillText(formatNumber(lostCount, locale), receiptX + receiptW - 300, lineY2);
-  ctx.fillText(`-${formatCurrency(basketLossValue, settings.country)}`, receiptX + receiptW - 200, lineY2);
-
-  const lineY3 = lineY2 + 50;
-  ctx.fillText(dict.receipt_item_conscience, receiptX + 40, lineY3);
-  ctx.fillText("0", receiptX + receiptW - 300, lineY3);
-  ctx.fillText(formatCurrency(0, settings.country), receiptX + receiptW - 200, lineY3);
-
-  const totalY = lineY3 + 70;
-  ctx.strokeStyle = "#111111";
-  ctx.beginPath();
-  ctx.moveTo(receiptX + 30, totalY - 30);
-  ctx.lineTo(receiptX + receiptW - 30, totalY - 30);
-  ctx.stroke();
-
-  ctx.font = "26px 'GmarketSansBold', sans-serif";
-  ctx.fillText(dict.receipt_total, receiptX + 40, totalY + 10);
-  ctx.fillText(`-${formatCurrency(totalLoss, settings.country)}`, receiptX + receiptW - 260, totalY + 10);
-
-  ctx.font = "20px 'Pretendard', sans-serif";
-  ctx.fillText(dict.report_watermark, receiptX + 40, receiptY + receiptH - 80);
-
-  const barcodeY = receiptY + receiptH - 50;
-  const barcodeX = receiptX + 40;
-  for (let i = 0; i < 60; i += 1) {
-    const barWidth = i % 3 === 0 ? 4 : 2;
-    ctx.fillRect(barcodeX + i * 6, barcodeY, barWidth, 30);
-  }
+  ctx.fillText(dict.report_watermark, 120, height - 140);
 };
 
 const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
