@@ -147,6 +147,26 @@ body {
   font-size: 1.35rem;
 }
 
+.panel h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 16px;
+}
+
+.step-hint {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
 .panel-desc {
   margin: -6px 0 18px;
   color: var(--ink-soft);
@@ -155,6 +175,14 @@ body {
 .form {
   display: grid;
   gap: 16px;
+}
+
+.form--grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.field--wide {
+  grid-column: span 2;
 }
 
 .form-divider {
@@ -337,10 +365,6 @@ select:focus {
 }
 
 .panel--share .panel-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px;
   align-items: center;
 }
 
@@ -405,6 +429,10 @@ select:focus {
 
   .field--inline {
     grid-template-columns: 1fr;
+  }
+
+  .field--wide {
+    grid-column: span 1;
   }
 
   .basket-result {

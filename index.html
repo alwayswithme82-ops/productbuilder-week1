@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>내 월급의 실질 가치 - 인플레이션 팩트 체크</title>
   <meta name="description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 구매력을 확인하세요." />
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/style.css?v=2" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-  <script defer src="/main.js"></script>
+  <script defer src="/main.js?v=2"></script>
 </head>
 <body>
   <div class="bg" aria-hidden="true">
@@ -35,26 +35,33 @@
 
   <main class="layout">
     <section class="panel panel--inputs" id="inputs">
-      <h2>입력</h2>
-      <form class="form" id="inflation-form">
+      <div class="panel-head">
+        <h2>1단계: 연봉 입력</h2>
+        <span class="step-hint">입사 시점과 현재를 비교합니다.</span>
+      </div>
+      <form class="form form--grid" id="inflation-form">
         <label class="field">
           <span>입사 연도</span>
           <input id="start-year" type="number" min="2000" max="2025" step="1" value="2019" />
         </label>
         <label class="field">
-          <span>입사 연봉 (원)</span>
-          <input id="start-salary" type="number" min="0" step="100000" value="50000000" />
-        </label>
-        <label class="field">
           <span>현재 연도</span>
           <input id="current-year" type="number" min="2000" max="2025" step="1" value="2025" />
         </label>
-        <label class="field">
+        <label class="field field--wide">
+          <span>입사 연봉 (원)</span>
+          <input id="start-salary" type="number" min="0" step="100000" inputmode="numeric" value="50000000" />
+        </label>
+        <label class="field field--wide">
           <span>현재 연봉 (원)</span>
-          <input id="current-salary" type="number" min="0" step="100000" value="55000000" />
+          <input id="current-salary" type="number" min="0" step="100000" inputmode="numeric" value="55000000" />
         </label>
       </form>
       <div class="form-divider"></div>
+      <div class="panel-head">
+        <h3>2단계: 물가 기준</h3>
+        <span class="step-hint">공식 CPI 또는 체감 물가를 선택하세요.</span>
+      </div>
       <div class="form">
         <label class="field">
           <span>물가 기준</span>
@@ -73,7 +80,10 @@
     </section>
 
     <section class="panel panel--results" id="results">
-      <h2>결과</h2>
+      <div class="panel-head">
+        <h2>3단계: 결과 확인</h2>
+        <span class="step-hint">실질 구매력이 얼마나 변했는지 확인합니다.</span>
+      </div>
       <div class="result-grid">
         <div class="result-card">
           <span>실질 연봉 (입사 연도 기준)</span>
@@ -120,7 +130,10 @@
     </section>
 
     <section class="panel panel--basket" id="basket">
-      <h2>장바구니 비교</h2>
+      <div class="panel-head">
+        <h2>4단계: 장바구니 비교</h2>
+        <span class="step-hint">같은 월급으로 살 수 있는 개수입니다.</span>
+      </div>
       <p class="panel-desc">월급으로 살 수 있는 빅맥 개수를 비교합니다.</p>
       <div class="basket-grid">
         <label class="field">
