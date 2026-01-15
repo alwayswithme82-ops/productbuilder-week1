@@ -84,10 +84,12 @@
         <label class="field field--wide">
           <span data-i18n="label_start_salary" id="label-start-salary">입사 연봉 (원)</span>
           <input id="start-salary" type="number" min="0" step="100000" inputmode="numeric" value="50000000" />
+          <input id="start-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="50000000" />
         </label>
         <label class="field field--wide">
           <span data-i18n="label_current_salary" id="label-current-salary">현재 연봉 (원)</span>
           <input id="current-salary" type="number" min="0" step="100000" inputmode="numeric" value="55000000" />
+          <input id="current-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="55000000" />
         </label>
       </form>
       <div class="form-divider"></div>
@@ -222,7 +224,7 @@
       </div>
       <p class="panel-desc" data-i18n="report_desc">공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.</p>
       <div class="share-grid">
-        <canvas id="report-canvas" width="1080" height="1080" aria-label="공유 리포트"></canvas>
+        <canvas id="report-canvas" width="1080" height="1500" aria-label="공유 리포트"></canvas>
         <div class="share-actions">
           <div class="share-text" id="share-text">텍스트가 여기에 표시됩니다.</div>
           <button class="button button--ghost" type="button" id="copy-text" data-i18n="report_copy">텍스트 복사</button>

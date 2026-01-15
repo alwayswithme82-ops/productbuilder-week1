@@ -176,6 +176,14 @@ const translations = {
     ad_caption: "손해 본 돈, 이걸로 메꾸세요",
     basket_story:
       "{startYear}년엔 {item} {start}개였는데, 지금은 {current}개. {lost}개 압수당했습니다.",
+    receipt_title: "🧾 내 인생 손해 명세서",
+    receipt_item_salary: "잃어버린 연봉",
+    receipt_item_basket: "사라진 {item}",
+    receipt_item_conscience: "사장님 양심",
+    receipt_total: "합계 손실",
+    receipt_col_item: "품목",
+    receipt_col_qty: "수량",
+    receipt_col_amount: "금액",
     copy_done: "복사 완료",
     copy_default: "텍스트 복사",
   },
@@ -258,6 +266,14 @@ const translations = {
     ad_caption: "Cover your loss with this",
     basket_story:
       "In {startYear}, {item} {start} pcs. Now {current} pcs. Lost {lost} pcs.",
+    receipt_title: "🧾 Life Loss Receipt",
+    receipt_item_salary: "Lost salary",
+    receipt_item_basket: "Lost {item}",
+    receipt_item_conscience: "Boss conscience",
+    receipt_total: "Total loss",
+    receipt_col_item: "Item",
+    receipt_col_qty: "Qty",
+    receipt_col_amount: "Amount",
     copy_done: "Copied",
     copy_default: "Copy text",
   },
@@ -304,6 +320,8 @@ const elements = {
   basketItem: document.getElementById("basket-item"),
   basketStory: document.getElementById("basket-story"),
   moneyImage: document.getElementById("money-image"),
+  startSalaryRange: document.getElementById("start-salary-range"),
+  currentSalaryRange: document.getElementById("current-salary-range"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -380,6 +398,8 @@ const setFormValues = (settings) => {
   elements.language.value = settings.language;
   elements.country.value = settings.country;
   elements.basketItem.value = settings.basketItem;
+  elements.startSalaryRange.value = settings.startSalary;
+  elements.currentSalaryRange.value = settings.currentSalary;
 };
 
 const applyTranslations = (language) => {
@@ -503,53 +523,97 @@ const renderReportCanvas = (stats, settings) => {
   const canvas = elements.reportCanvas;
   const ctx = canvas.getContext("2d");
   const { width, height } = canvas;
-  const gradient = ctx.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, "#fff1d6");
-  gradient.addColorStop(0.55, "#ffd2a8");
-  gradient.addColorStop(1, "#f69a76");
+  const item = basketItems[settings.basketItem] || basketItems.bigmac;
+  const itemName = settings.language === "en" ? item.en : item.ko;
+  const lostCount = Math.max(stats.basketStart - stats.basketCurrent, 0);
+  const lossAmount = Math.max(stats.startSalary - stats.realCurrentSalary, 0);
+  const basketLossValue = lostCount * (settings.priceCurrent || 0);
+  const totalLoss = lossAmount + basketLossValue;
+  const { locale } = currencyByCountry[settings.country] || currencyByCountry.KR;
 
-  ctx.fillStyle = gradient;
+  ctx.fillStyle = "#111111";
   ctx.fillRect(0, 0, width, height);
 
-  ctx.fillStyle = "rgba(18, 18, 18, 0.1)";
-  for (let i = 0; i < 18; i += 1) {
-    ctx.fillRect(80 + i * 50, 100, 12, height - 200);
+  const receiptX = 120;
+  const receiptY = 80;
+  const receiptW = width - 240;
+  const receiptH = height - 160;
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+  ctx.fillRect(receiptX + 12, receiptY + 12, receiptW, receiptH);
+
+  ctx.fillStyle = "#f7f7f7";
+  ctx.fillRect(receiptX, receiptY, receiptW, receiptH);
+
+  ctx.strokeStyle = "#111111";
+  ctx.setLineDash([14, 10]);
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(receiptX + 30, receiptY + 90);
+  ctx.lineTo(receiptX + receiptW - 30, receiptY + 90);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = "#111111";
+  ctx.font = "36px 'GmarketSansBold', sans-serif";
+  ctx.fillText(dict.receipt_title, receiptX + 40, receiptY + 60);
+
+  ctx.font = "24px 'Pretendard', sans-serif";
+  ctx.fillText(`${dict.result_inflation_change}: +${formatPercent(stats.inflationRate, settings.language)}`, receiptX + 40, receiptY + 140);
+  ctx.fillText(`${dict.result_nominal_change}: +${formatPercent(stats.nominalDelta, settings.language)}`, receiptX + 40, receiptY + 180);
+  ctx.fillText(`${dict.result_power_change}: ${formatPercent(stats.realDelta, settings.language)}`, receiptX + 40, receiptY + 220);
+
+  const tableTop = receiptY + 280;
+  ctx.strokeStyle = "#111111";
+  ctx.beginPath();
+  ctx.moveTo(receiptX + 30, tableTop);
+  ctx.lineTo(receiptX + receiptW - 30, tableTop);
+  ctx.stroke();
+
+  ctx.font = "22px 'Pretendard', sans-serif";
+  ctx.fillText(dict.receipt_col_item, receiptX + 40, tableTop + 40);
+  ctx.fillText(dict.receipt_col_qty, receiptX + receiptW - 300, tableTop + 40);
+  ctx.fillText(dict.receipt_col_amount, receiptX + receiptW - 160, tableTop + 40);
+
+  const lineY1 = tableTop + 90;
+  ctx.fillText(dict.receipt_item_salary, receiptX + 40, lineY1);
+  ctx.fillText("1", receiptX + receiptW - 300, lineY1);
+  ctx.fillText(`-${formatCurrency(lossAmount, settings.country)}`, receiptX + receiptW - 200, lineY1);
+
+  const lineY2 = lineY1 + 50;
+  ctx.fillText(
+    dict.receipt_item_basket.replace("{item}", itemName),
+    receiptX + 40,
+    lineY2,
+  );
+  ctx.fillText(formatNumber(lostCount, locale), receiptX + receiptW - 300, lineY2);
+  ctx.fillText(`-${formatCurrency(basketLossValue, settings.country)}`, receiptX + receiptW - 200, lineY2);
+
+  const lineY3 = lineY2 + 50;
+  ctx.fillText(dict.receipt_item_conscience, receiptX + 40, lineY3);
+  ctx.fillText("0", receiptX + receiptW - 300, lineY3);
+  ctx.fillText(formatCurrency(0, settings.country), receiptX + receiptW - 200, lineY3);
+
+  const totalY = lineY3 + 70;
+  ctx.strokeStyle = "#111111";
+  ctx.beginPath();
+  ctx.moveTo(receiptX + 30, totalY - 30);
+  ctx.lineTo(receiptX + receiptW - 30, totalY - 30);
+  ctx.stroke();
+
+  ctx.font = "26px 'GmarketSansBold', sans-serif";
+  ctx.fillText(dict.receipt_total, receiptX + 40, totalY + 10);
+  ctx.fillText(`-${formatCurrency(totalLoss, settings.country)}`, receiptX + receiptW - 260, totalY + 10);
+
+  ctx.font = "20px 'Pretendard', sans-serif";
+  ctx.fillText(dict.report_watermark, receiptX + 40, receiptY + receiptH - 80);
+
+  const barcodeY = receiptY + receiptH - 50;
+  const barcodeX = receiptX + 40;
+  for (let i = 0; i < 60; i += 1) {
+    const barWidth = i % 3 === 0 ? 4 : 2;
+    ctx.fillRect(barcodeX + i * 6, barcodeY, barWidth, 30);
   }
-
-  ctx.fillStyle = "#141414";
-  ctx.font = "76px 'Gowun Batang', serif";
-  ctx.fillText(dict.report_title_line, 80, 210);
-
-  ctx.font = "36px 'Noto Sans KR', sans-serif";
-  ctx.fillText(dict.report_subtitle, 80, 280);
-
-  ctx.font = "48px 'Gowun Batang', serif";
-  ctx.fillStyle = "#b0261b";
-  ctx.fillText(`${dict.result_inflation_change} +${formatPercent(stats.inflationRate, settings.language)}`, 80, 380);
-
-  ctx.fillStyle = "#1b1b1b";
-  ctx.fillText(`${dict.result_nominal_change} +${formatPercent(stats.nominalDelta, settings.language)}`, 80, 455);
-
-  ctx.font = "34px 'Noto Sans KR', sans-serif";
-  ctx.fillText(`${dict.result_power_change} ${formatPercent(stats.realDelta, settings.language)}`, 80, 530);
-
-  ctx.fillStyle = "#1b1b1b";
-  ctx.font = "30px 'Noto Sans KR', sans-serif";
-  ctx.fillText(dict.report_caption, 80, 620);
-  ctx.fillText(dict.report_caption2, 80, 670);
-
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(80, 760, 920, 180);
-
-  ctx.fillStyle = "#1b1b1b";
-  ctx.font = "28px 'Noto Sans KR', sans-serif";
-  ctx.fillText(dict.report_footer, 110, 820);
-  ctx.font = "36px 'Gowun Batang', serif";
-  drawWrappedText(ctx, getVerdictText(stats, settings.language), 110, 890, 860, 46);
-
-  ctx.fillStyle = "rgba(20, 20, 20, 0.6)";
-  ctx.font = "22px 'Noto Sans KR', sans-serif";
-  ctx.fillText(dict.report_watermark, 80, 1040);
 };
 
 const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
@@ -583,6 +647,11 @@ const renderDynamicLabels = (settings) => {
   const salaryStep = settings.country === "US" ? 1000 : 100000;
   elements.startSalary.step = salaryStep;
   elements.currentSalary.step = salaryStep;
+  elements.startSalaryRange.step = salaryStep;
+  elements.currentSalaryRange.step = salaryStep;
+  const salaryMax = settings.country === "US" ? 200000 : 200000000;
+  elements.startSalaryRange.max = salaryMax;
+  elements.currentSalaryRange.max = salaryMax;
   const priceStep = settings.country === "US" ? 0.01 : 10;
   elements.priceStart.step = priceStep;
   elements.priceCurrent.step = priceStep;
@@ -614,6 +683,13 @@ const render = (settings) => {
   elements.nominalChange.textContent = formatPercent(stats.nominalDelta, settings.language);
   elements.inflationChange.textContent = formatPercent(stats.inflationRate, settings.language);
   elements.verdict.textContent = verdictText;
+
+  elements.powerChange.classList.remove("status-loss", "status-gain");
+  if (stats.realDelta <= -0.01) {
+    elements.powerChange.classList.add("status-loss");
+  } else if (stats.realDelta >= 0.01) {
+    elements.powerChange.classList.add("status-gain");
+  }
 
   elements.startSalaryLabel.textContent = formatCurrency(stats.startSalary, settings.country);
   elements.currentSalaryLabel.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
@@ -647,6 +723,12 @@ const render = (settings) => {
   elements.shockLine.textContent = lossAmount
     ? dict.shock_template.replace("{loss}", formatCurrency(lossAmount, settings.country))
     : "";
+  elements.shockLine.classList.remove("status-loss", "status-gain");
+  if (lossAmount > 0) {
+    elements.shockLine.classList.add("status-loss");
+  } else if (stats.realDelta >= 0.01) {
+    elements.shockLine.classList.add("status-gain");
+  }
 
   elements.moneyImage.src = stats.realDelta < -0.01 ? moneyImages.burnt : moneyImages.clean;
 
@@ -672,6 +754,11 @@ const applyCountryDefaults = (settings, overwritePrices = false) => {
   }
 };
 
+const syncSalaryRanges = (settings) => {
+  elements.startSalaryRange.value = settings.startSalary;
+  elements.currentSalaryRange.value = settings.currentSalary;
+};
+
 const handleInput = () => {
   const updated = {
     startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
@@ -689,7 +776,14 @@ const handleInput = () => {
   saveSettings(updated);
   applyTranslations(updated.language);
   render(updated);
+  syncSalaryRanges(updated);
   showLoadingOverlay();
+};
+
+const handleRangeInput = () => {
+  elements.startSalary.value = elements.startSalaryRange.value;
+  elements.currentSalary.value = elements.currentSalaryRange.value;
+  handleInput();
 };
 
 const handleCountryChange = () => {
@@ -785,6 +879,8 @@ initAds();
 
 elements.country.addEventListener("change", handleCountryChange);
 elements.basketItem.addEventListener("change", handleBasketChange);
+elements.startSalaryRange.addEventListener("input", handleRangeInput);
+elements.currentSalaryRange.addEventListener("input", handleRangeInput);
 
 elements.generateReport.addEventListener("click", handleGenerate);
 
