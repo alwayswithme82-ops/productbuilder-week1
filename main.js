@@ -5,11 +5,9 @@ const DEFAULT_SETTINGS = {
   currentSalary: 55000000,
   inflationSource: "cpi",
   customInflation: 18,
-  priceStart: 4500,
-  priceCurrent: 6200,
   language: "ko",
   country: "KR",
-  basketItem: "bigmac",
+  maskPercent: 60,
 };
 
 const STORAGE_KEY = "inflation-check-settings";
@@ -41,73 +39,9 @@ const cpiData = {
   },
 };
 
-const priceDefaults = {
-  KR: { start: 4500, current: 6200 },
-  US: { start: 5.15, current: 7.19 },
-};
-
 const salaryDefaults = {
   KR: { start: 50000000, current: 55000000 },
   US: { start: 60000, current: 70000 },
-};
-
-const basketItems = {
-  bigmac: {
-    ko: "빅맥",
-    en: "Big Mac",
-    prices: {
-      KR: { start: 4500, current: 6200 },
-      US: { start: 5.15, current: 7.19 },
-    },
-  },
-  soup: {
-    ko: "국밥",
-    en: "Gukbap",
-    prices: {
-      KR: { start: 9000, current: 12000 },
-      US: { start: 9, current: 12 },
-    },
-  },
-  soju: {
-    ko: "소주",
-    en: "Soju",
-    prices: {
-      KR: { start: 4000, current: 5500 },
-      US: { start: 8, current: 12 },
-    },
-  },
-  chicken: {
-    ko: "치킨",
-    en: "Fried chicken",
-    prices: {
-      KR: { start: 17000, current: 22000 },
-      US: { start: 12, current: 18 },
-    },
-  },
-  apartment: {
-    ko: "아파트 평당",
-    en: "Apartment / pyeong",
-    prices: {
-      KR: { start: 35000000, current: 55000000 },
-      US: { start: 300000, current: 420000 },
-    },
-  },
-  starbucks: {
-    ko: "스벅 아메",
-    en: "Starbucks Americano",
-    prices: {
-      KR: { start: 4100, current: 5500 },
-      US: { start: 3.95, current: 4.95 },
-    },
-  },
-  subway: {
-    ko: "지하철 요금",
-    en: "Subway fare",
-    prices: {
-      KR: { start: 1250, current: 1500 },
-      US: { start: 2.75, current: 3.0 },
-    },
-  },
 };
 
 const currencyByCountry = {
@@ -158,32 +92,16 @@ const translations = {
     result_inflation_hint: "입사 → 현재 누적",
     verdict_loading: "결과 계산 중입니다.",
     loading_text: "결과 계산 중입니다.",
-    melt_title: "녹아내리는 지폐",
-    melt_start: "입사 연봉",
-    melt_current: "현재 연봉 (실질)",
-    step4_title: "4단계: 장바구니 비교",
-    step4_hint: "같은 월급으로 살 수 있는 개수입니다.",
-    basket_desc: "월급으로 살 수 있는 개수를 비교합니다.",
-    label_basket_item: "비교 아이템",
-    basket_bigmac: "빅맥",
-    basket_soup: "국밥",
-    basket_soju: "소주",
-    basket_chicken: "치킨",
-    basket_apartment: "아파트 평당",
-    basket_starbucks: "스벅 아메",
-    basket_subway: "지하철 요금",
-    label_price_start: "가격",
-    label_price_current: "가격",
-    basket_start_label: "입사 월급으로",
-    basket_current_label: "현재 월급으로",
     report_title: "사장님 나빠요 리포트",
     report_generate: "이미지 생성",
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
     report_copy: "텍스트 복사",
     report_download: "이미지 다운로드",
+    label_mask_percent: "연봉 공개 비율",
+    hint_mask: "공유 이미지에 연봉 손해액을 일부만 표시합니다.",
     ad_title: "스폰서",
     footer_note: "World Bank CPI(2010=100) 기준이며 실제 체감과 다를 수 있습니다.",
-    data_note_template: "{year} 데이터가 없어 {fallback} CPI로 계산했습니다.",
+    data_note_template: "{year}년 CPI가 아직 발표되지 않아 {fallback}년 지수로 보정했습니다.",
     verdict_negative:
       "연봉은 {nominal} 올랐는데 물가가 {inflation}. 결국 월급 깎인 거나 마찬가지.",
     verdict_flat: "월급이 올랐는데 체감은 그대로. 이게 현실입니다.",
@@ -196,13 +114,13 @@ const translations = {
       "내 연봉 {nominal} 올랐다더니 물가가 {inflation}. 실질은 {real}. #월급실종 #인플레",
     report_title_line: "사장님 나빠요",
     report_subtitle: "월급 실종 보고서",
+    report_headline: "실질 구매력 {real}",
     report_caption: "열심히 일해도 가난해지는 이유,",
     report_caption2: "이 숫자에 다 있습니다.",
     report_footer: "월급 올랐다고요? 아니요.",
     report_watermark: "Powered by 내월급지킴이.com",
+    report_mask_note: "연봉 손해액은 {percent}%만 표시됨",
     ad_caption: "손해 본 돈, 이걸로 메꾸세요",
-    basket_story:
-      "{startYear}년엔 {item} {start}개였는데, 지금은 {current}개. {lost}개 압수당했습니다.",
     bar_start_label: "입사 연봉",
     bar_real_label: "현재 실질",
     bar_gap_loss: "이만큼 손해: {loss}",
@@ -256,32 +174,16 @@ const translations = {
     result_inflation_hint: "Start → current total",
     verdict_loading: "Calculating results...",
     loading_text: "Calculating results...",
-    melt_title: "Melting Cash",
-    melt_start: "Starting salary",
-    melt_current: "Current salary (real)",
-    step4_title: "Step 4: Basket check",
-    step4_hint: "How many burgers your paycheck buys.",
-    basket_desc: "Compare how many items your monthly pay can buy.",
-    label_basket_item: "Pick item",
-    basket_bigmac: "Big Mac",
-    basket_soup: "Gukbap",
-    basket_soju: "Soju",
-    basket_chicken: "Fried chicken",
-    basket_apartment: "Apartment / pyeong",
-    basket_starbucks: "Starbucks Americano",
-    basket_subway: "Subway fare",
-    label_price_start: "price",
-    label_price_current: "price",
-    basket_start_label: "With start paycheck",
-    basket_current_label: "With current paycheck",
     report_title: "\"Boss, this is unfair\" report",
     report_generate: "Generate image",
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
     report_download: "Download image",
+    label_mask_percent: "Salary reveal",
+    hint_mask: "Only show a portion of the loss amount on the share image.",
     ad_title: "Sponsor",
     footer_note: "Based on World Bank CPI (2010=100); real-life impact may differ.",
-    data_note_template: "{year} CPI not available. Using {fallback} CPI instead.",
+    data_note_template: "{year} CPI not released yet. Adjusted using {fallback} index.",
     verdict_negative:
       "Salary up {nominal}, inflation up {inflation}. That is a real pay cut.",
     verdict_flat: "Pay rise barely matches inflation. Reality is flat.",
@@ -294,13 +196,13 @@ const translations = {
       "Salary up {nominal}, inflation {inflation}. Real value {real}. #salary #inflation",
     report_title_line: "Boss, this is unfair",
     report_subtitle: "Salary reality check",
+    report_headline: "Real buying power {real}",
     report_caption: "Why hard work feels poorer,",
     report_caption2: "the numbers are here.",
     report_footer: "Salary went up? Not really.",
     report_watermark: "Powered by naewolpay.com",
+    report_mask_note: "Loss amount shown at {percent}%.",
     ad_caption: "Cover your loss with this",
-    basket_story:
-      "In {startYear}, {item} {start} pcs. Now {current} pcs. Lost {lost} pcs.",
     bar_start_label: "Start salary",
     bar_real_label: "Real today",
     bar_gap_loss: "Loss: {loss}",
@@ -328,19 +230,11 @@ const elements = {
   inflationSource: document.getElementById("inflation-source"),
   customInflationWrap: document.getElementById("custom-inflation-wrap"),
   customInflation: document.getElementById("custom-inflation"),
-  priceStart: document.getElementById("price-start"),
-  priceCurrent: document.getElementById("price-current"),
   realSalary: document.getElementById("real-salary"),
   powerChange: document.getElementById("power-change"),
   nominalChange: document.getElementById("nominal-change"),
   inflationChange: document.getElementById("inflation-change"),
   verdict: document.getElementById("verdict"),
-  stackStart: document.getElementById("stack-start"),
-  stackCurrent: document.getElementById("stack-current"),
-  startSalaryLabel: document.getElementById("start-salary-label"),
-  currentSalaryLabel: document.getElementById("current-salary-label"),
-  basketStart: document.getElementById("basket-start"),
-  basketCurrent: document.getElementById("basket-current"),
   generateReport: document.getElementById("generate-report"),
   reportCanvas: document.getElementById("report-canvas"),
   downloadReport: document.getElementById("download-report"),
@@ -352,13 +246,8 @@ const elements = {
   country: document.getElementById("country"),
   labelStartSalary: document.getElementById("label-start-salary"),
   labelCurrentSalary: document.getElementById("label-current-salary"),
-  labelPriceStart: document.getElementById("label-price-start"),
-  labelPriceCurrent: document.getElementById("label-price-current"),
   dataNote: document.getElementById("data-note"),
   shockLine: document.getElementById("shock-line"),
-  basketItem: document.getElementById("basket-item"),
-  basketStory: document.getElementById("basket-story"),
-  moneyImage: document.getElementById("money-image"),
   startSalaryRange: document.getElementById("start-salary-range"),
   currentSalaryRange: document.getElementById("current-salary-range"),
   barStart: document.getElementById("bar-start"),
@@ -366,37 +255,24 @@ const elements = {
   barStartValue: document.getElementById("bar-start-value"),
   barRealValue: document.getElementById("bar-real-value"),
   barGap: document.getElementById("bar-gap"),
+  maskPercent: document.getElementById("mask-percent"),
+  maskPercentLabel: document.getElementById("mask-percent-label"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-const toDataUri = (svg) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-
-const moneyImages = {
-  clean: toDataUri(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220">
-      <rect x="10" y="20" width="340" height="180" rx="18" fill="#f4e2a8" stroke="#c69c5d" stroke-width="6"/>
-      <rect x="30" y="45" width="300" height="130" rx="14" fill="#f8edc3" stroke="#d2ab6c" stroke-width="3"/>
-      <text x="180" y="120" font-size="46" text-anchor="middle" font-family="Arial" fill="#6b4b2a">50,000</text>
-      <text x="180" y="152" font-size="18" text-anchor="middle" font-family="Arial" fill="#6b4b2a">Sindaemdang</text>
-    </svg>`,
-  ),
-  burnt: toDataUri(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220">
-      <rect x="10" y="20" width="340" height="180" rx="18" fill="#e2b07f" stroke="#9b5b3a" stroke-width="6"/>
-      <rect x="30" y="45" width="300" height="130" rx="14" fill="#efc899" stroke="#b7774a" stroke-width="3"/>
-      <circle cx="70" cy="80" r="16" fill="#f6f3ef"/>
-      <circle cx="250" cy="70" r="10" fill="#f6f3ef"/>
-      <circle cx="200" cy="150" r="14" fill="#f6f3ef"/>
-      <path d="M20 50 L40 35 L55 45 L35 60 Z" fill="#8b4c2f"/>
-      <text x="180" y="120" font-size="44" text-anchor="middle" font-family="Arial" fill="#6b4b2a">50,000</text>
-      <text x="180" y="152" font-size="18" text-anchor="middle" font-family="Arial" fill="#6b4b2a">Burned</text>
-    </svg>`,
-  ),
-};
-
 const formatCurrency = (value, country) => {
   const { currency, locale } = currencyByCountry[country] || currencyByCountry.KR;
+  if (currency === "KRW") {
+    const rounded = Math.round(value);
+    const absValue = Math.abs(rounded);
+    const sign = rounded < 0 ? "-" : "";
+    if (absValue < 10000) {
+      return `${sign}${formatNumber(absValue, locale)}원`;
+    }
+    const man = Math.round(absValue / 10000);
+    return `${sign}${formatNumber(man, locale)}만원`;
+  }
   const digits = currency === "KRW" ? 0 : 2;
   return new Intl.NumberFormat(locale, {
     style: "currency",
@@ -437,11 +313,9 @@ const setFormValues = (settings) => {
   elements.currentSalary.value = settings.currentSalary;
   elements.inflationSource.value = settings.inflationSource;
   elements.customInflation.value = settings.customInflation;
-  elements.priceStart.value = settings.priceStart;
-  elements.priceCurrent.value = settings.priceCurrent;
   elements.language.value = settings.language;
   elements.country.value = settings.country;
-  elements.basketItem.value = settings.basketItem;
+  elements.maskPercent.value = settings.maskPercent;
   elements.startSalaryRange.value = settings.startSalary;
   elements.currentSalaryRange.value = settings.currentSalary;
 };
@@ -542,13 +416,6 @@ const calculate = (settings) => {
   const inflationRate = inflationFactor - 1;
   const monthlyStart = startSalary / 12;
   const monthlyCurrent = currentSalary / 12;
-  const basketStart = settings.priceStart
-    ? Math.floor(monthlyStart / settings.priceStart)
-    : 0;
-  const basketCurrent = settings.priceCurrent
-    ? Math.floor(monthlyCurrent / settings.priceCurrent)
-    : 0;
-
   return {
     startSalary,
     currentSalary,
@@ -556,8 +423,6 @@ const calculate = (settings) => {
     nominalDelta,
     realDelta,
     inflationRate,
-    basketStart,
-    basketCurrent,
     inflationInfo,
   };
 };
@@ -567,14 +432,13 @@ const renderReportCanvas = (stats, settings) => {
   const canvas = elements.reportCanvas;
   const ctx = canvas.getContext("2d");
   const { width, height } = canvas;
-  const item = basketItems[settings.basketItem] || basketItems.bigmac;
-  const itemName = settings.language === "en" ? item.en : item.ko;
-  const lostCount = Math.max(stats.basketStart - stats.basketCurrent, 0);
   const lossAmount = Math.max(stats.startSalary - stats.realCurrentSalary, 0);
-  const { locale } = currencyByCountry[settings.country] || currencyByCountry.KR;
-  const headline = dict.receipt_headline
-    .replace("{item}", itemName)
-    .replace("{lost}", formatNumber(lostCount, locale));
+  const maskPercent = clamp(Number(settings.maskPercent) || 100, 10, 100);
+  const maskedLoss = lossAmount * (maskPercent / 100);
+  const headline = dict.report_headline.replace(
+    "{real}",
+    formatPercent(stats.realDelta, settings.language),
+  );
 
   const gradient = ctx.createLinearGradient(0, 0, width, height);
   gradient.addColorStop(0, "#111111");
@@ -622,7 +486,7 @@ const renderReportCanvas = (stats, settings) => {
   ctx.fillStyle = "#ff4d4d";
   ctx.font = "48px 'GmarketSansBold', sans-serif";
   ctx.fillText(
-    dict.shock_template.replace("{loss}", formatCurrency(lossAmount, settings.country)),
+    dict.shock_template.replace("{loss}", formatCurrency(maskedLoss, settings.country)),
     120,
     700,
   );
@@ -639,6 +503,9 @@ const renderReportCanvas = (stats, settings) => {
 
   ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
   ctx.font = "22px 'Pretendard', sans-serif";
+  if (maskPercent < 100) {
+    ctx.fillText(dict.report_mask_note.replace("{percent}", maskPercent), 120, height - 170);
+  }
   ctx.fillText(dict.report_watermark, 120, height - 140);
 };
 
@@ -664,12 +531,8 @@ const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
 const renderDynamicLabels = (settings) => {
   const dict = translations[settings.language] || translations.ko;
   const currency = currencyByCountry[settings.country]?.currency || "KRW";
-  const item = basketItems[settings.basketItem] || basketItems.bigmac;
-  const itemName = settings.language === "en" ? item.en : item.ko;
   elements.labelStartSalary.textContent = `${dict.label_start_salary} (${currency})`;
   elements.labelCurrentSalary.textContent = `${dict.label_current_salary} (${currency})`;
-  elements.labelPriceStart.textContent = `${settings.startYear} ${itemName} ${dict.label_price_start}`;
-  elements.labelPriceCurrent.textContent = `${settings.currentYear} ${itemName} ${dict.label_price_current}`;
   const salaryStep = settings.country === "US" ? 1000 : 100000;
   elements.startSalary.step = salaryStep;
   elements.currentSalary.step = salaryStep;
@@ -678,9 +541,6 @@ const renderDynamicLabels = (settings) => {
   const salaryMax = settings.country === "US" ? 200000 : 200000000;
   elements.startSalaryRange.max = salaryMax;
   elements.currentSalaryRange.max = salaryMax;
-  const priceStep = settings.country === "US" ? 0.01 : 10;
-  elements.priceStart.step = priceStep;
-  elements.priceCurrent.step = priceStep;
 };
 
 const renderDataNote = (stats, settings) => {
@@ -702,7 +562,7 @@ const render = (settings) => {
   const verdictText = getVerdictText(stats, settings.language);
   const shareText = getShareText(stats, settings.language);
   const powerMessage = getPowerMessage(stats, settings.language);
-  const { locale } = currencyByCountry[settings.country] || currencyByCountry.KR;
+  const dict = translations[settings.language] || translations.ko;
 
   elements.realSalary.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
   elements.powerChange.textContent = powerMessage;
@@ -725,33 +585,8 @@ const render = (settings) => {
   elements.barStartValue.textContent = formatCurrency(stats.startSalary, settings.country);
   elements.barRealValue.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
 
-  elements.startSalaryLabel.textContent = formatCurrency(stats.startSalary, settings.country);
-  elements.currentSalaryLabel.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
-
-  const ratio = clamp(stats.realCurrentSalary / (stats.startSalary || 1), 0.2, 1.1);
-  elements.stackStart.style.setProperty("--stack-level", "1");
-  elements.stackCurrent.style.setProperty("--stack-level", ratio.toFixed(2));
-
-  elements.basketStart.textContent = `${formatNumber(stats.basketStart, locale)}${
-    settings.language === "en" ? " pcs" : "개"
-  }`;
-  elements.basketCurrent.textContent = `${formatNumber(stats.basketCurrent, locale)}${
-    settings.language === "en" ? " pcs" : "개"
-  }`;
-
   elements.shareText.textContent = shareText;
   elements.downloadReport.removeAttribute("href");
-
-  const dict = translations[settings.language] || translations.ko;
-  const item = basketItems[settings.basketItem] || basketItems.bigmac;
-  const itemName = settings.language === "en" ? item.en : item.ko;
-  const lostCount = Math.max(stats.basketStart - stats.basketCurrent, 0);
-  elements.basketStory.textContent = dict.basket_story
-    .replace("{startYear}", settings.startYear)
-    .replace("{item}", itemName)
-    .replace("{start}", formatNumber(stats.basketStart, locale))
-    .replace("{current}", formatNumber(stats.basketCurrent, locale))
-    .replace("{lost}", formatNumber(lostCount, locale));
 
   const lossAmount = Math.max(stats.startSalary - stats.realCurrentSalary, 0);
   elements.shockLine.textContent = lossAmount
@@ -779,8 +614,6 @@ const render = (settings) => {
     elements.barGap.textContent = "";
   }
 
-  elements.moneyImage.src = stats.realDelta < -0.01 ? moneyImages.burnt : moneyImages.clean;
-
   elements.customInflationWrap.classList.toggle(
     "is-hidden",
     settings.inflationSource !== "custom",
@@ -790,22 +623,14 @@ const render = (settings) => {
   renderDynamicLabels(settings);
 };
 
-const getBasketPriceDefaults = (settings) => {
-  const item = basketItems[settings.basketItem] || basketItems.bigmac;
-  return item.prices[settings.country] || item.prices.KR;
-};
-
-const applyCountryDefaults = (settings, overwritePrices = false) => {
-  const defaults = getBasketPriceDefaults(settings);
-  if (overwritePrices) {
-    elements.priceStart.value = defaults.start;
-    elements.priceCurrent.value = defaults.current;
-  }
-};
-
 const syncSalaryRanges = (settings) => {
   elements.startSalaryRange.value = settings.startSalary;
   elements.currentSalaryRange.value = settings.currentSalary;
+};
+
+const updateMaskLabel = (settings) => {
+  const maskValue = clamp(Number(settings.maskPercent) || 100, 10, 100);
+  elements.maskPercentLabel.textContent = `${maskValue}%`;
 };
 
 const handleInput = () => {
@@ -816,16 +641,15 @@ const handleInput = () => {
     currentSalary: Number(elements.currentSalary.value) || 0,
     inflationSource: elements.inflationSource.value,
     customInflation: Number(elements.customInflation.value) || 0,
-    priceStart: Number(elements.priceStart.value) || 0,
-    priceCurrent: Number(elements.priceCurrent.value) || 0,
     language: elements.language.value,
     country: elements.country.value,
-    basketItem: elements.basketItem.value,
+    maskPercent: Number(elements.maskPercent.value) || DEFAULT_SETTINGS.maskPercent,
   };
   saveSettings(updated);
   applyTranslations(updated.language);
   render(updated);
   syncSalaryRanges(updated);
+  updateMaskLabel(updated);
 };
 
 const handleRangeInput = () => {
@@ -835,25 +659,9 @@ const handleRangeInput = () => {
 };
 
 const handleCountryChange = () => {
-  const priceDefault = getBasketPriceDefaults({
-    basketItem: elements.basketItem.value,
-    country: elements.country.value,
-  });
   const salaryDefault = salaryDefaults[elements.country.value] || salaryDefaults.KR;
-  elements.priceStart.value = priceDefault.start;
-  elements.priceCurrent.value = priceDefault.current;
   elements.startSalary.value = salaryDefault.start;
   elements.currentSalary.value = salaryDefault.current;
-  handleInput();
-};
-
-const handleBasketChange = () => {
-  const priceDefault = getBasketPriceDefaults({
-    basketItem: elements.basketItem.value,
-    country: elements.country.value,
-  });
-  elements.priceStart.value = priceDefault.start;
-  elements.priceCurrent.value = priceDefault.current;
   handleInput();
 };
 
@@ -899,23 +707,21 @@ const scrollToSection = (targetId) => {
 const settings = loadSettings();
 setFormValues(settings);
 applyTranslations(settings.language);
-applyCountryDefaults(settings, false);
 render(settings);
+updateMaskLabel(settings);
 initAds();
 
 ["input", "change"].forEach((eventName) => {
   elements.form.addEventListener(eventName, handleInput);
   elements.inflationSource.addEventListener(eventName, handleInput);
   elements.customInflation.addEventListener(eventName, handleInput);
-  elements.priceStart.addEventListener(eventName, handleInput);
-  elements.priceCurrent.addEventListener(eventName, handleInput);
   elements.language.addEventListener(eventName, handleInput);
 });
 
 elements.country.addEventListener("change", handleCountryChange);
-elements.basketItem.addEventListener("change", handleBasketChange);
 elements.startSalaryRange.addEventListener("input", handleRangeInput);
 elements.currentSalaryRange.addEventListener("input", handleRangeInput);
+elements.maskPercent.addEventListener("input", handleInput);
 
 elements.generateReport.addEventListener("click", handleGenerate);
 
