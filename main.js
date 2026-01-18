@@ -72,6 +72,7 @@ const translations = {
     label_current_year: "현재 연도",
     label_start_salary: "입사 연봉",
     label_current_salary: "현재 연봉",
+    salary_preview_template: "표시: {amount}",
     step2_title: "2단계: 물가 기준",
     step2_hint: "공식 CPI 또는 체감 물가를 선택하세요.",
     label_inflation_source: "물가 기준",
@@ -154,6 +155,7 @@ const translations = {
     label_current_year: "Current year",
     label_start_salary: "Starting salary",
     label_current_salary: "Current salary",
+    salary_preview_template: "Display: {amount}",
     step2_title: "Step 2: Inflation data",
     step2_hint: "Choose official CPI or a felt-inflation adjustment.",
     label_inflation_source: "Inflation source",
@@ -257,27 +259,38 @@ const elements = {
   barGap: document.getElementById("bar-gap"),
   maskPercent: document.getElementById("mask-percent"),
   maskPercentLabel: document.getElementById("mask-percent-label"),
+  startSalaryPreview: document.getElementById("start-salary-preview"),
+  currentSalaryPreview: document.getElementById("current-salary-preview"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+const formatKrwShort = (value, locale) => {
+  const rounded = Math.round(value);
+  const absValue = Math.abs(rounded);
+  const sign = rounded < 0 ? "-" : "";
+  if (absValue < 10000) {
+    return `${sign}${formatNumber(absValue, locale)}원`;
+  }
+  const man = Math.round(absValue / 10000);
+  const eok = Math.floor(man / 10000);
+  const restMan = man % 10000;
+  if (eok > 0) {
+    const rest = restMan ? ` ${formatNumber(restMan, locale)}만원` : "";
+    return `${sign}${formatNumber(eok, locale)}억${rest}`;
+  }
+  return `${sign}${formatNumber(man, locale)}만원`;
+};
+
 const formatCurrency = (value, country) => {
   const { currency, locale } = currencyByCountry[country] || currencyByCountry.KR;
   if (currency === "KRW") {
-    const rounded = Math.round(value);
-    const absValue = Math.abs(rounded);
-    const sign = rounded < 0 ? "-" : "";
-    if (absValue < 10000) {
-      return `${sign}${formatNumber(absValue, locale)}원`;
-    }
-    const man = Math.round(absValue / 10000);
-    return `${sign}${formatNumber(man, locale)}만원`;
+    return formatKrwShort(value, locale);
   }
-  const digits = currency === "KRW" ? 0 : 2;
   return new Intl.NumberFormat(locale, {
     style: "currency",
     currency,
-    maximumFractionDigits: digits,
+    maximumFractionDigits: 2,
   }).format(Math.round(value * 100) / 100);
 };
 
@@ -584,6 +597,12 @@ const render = (settings) => {
   elements.barReal.style.width = `${realPercent}%`;
   elements.barStartValue.textContent = formatCurrency(stats.startSalary, settings.country);
   elements.barRealValue.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
+
+  const previewTemplate = dict.salary_preview_template || "{amount}";
+  const startPreview = formatCurrency(stats.startSalary, settings.country);
+  const currentPreview = formatCurrency(stats.currentSalary, settings.country);
+  elements.startSalaryPreview.textContent = previewTemplate.replace("{amount}", startPreview);
+  elements.currentSalaryPreview.textContent = previewTemplate.replace("{amount}", currentPreview);
 
   elements.shareText.textContent = shareText;
   elements.downloadReport.removeAttribute("href");

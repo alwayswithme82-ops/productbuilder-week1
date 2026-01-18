@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>내 월급의 실질 가치 - 인플레이션 팩트 체크</title>
   <meta name="description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 구매력을 확인하세요." />
-  <link rel="stylesheet" href="/style.css?v=6" />
+  <link rel="stylesheet" href="/style.css?v=7" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -26,7 +26,7 @@
     })(window, document, "clarity", "script", "v2vaq39762");
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-  <script defer src="/main.js?v=6"></script>
+  <script defer src="/main.js?v=7"></script>
 </head>
 <body>
   <div class="topbar">
@@ -88,11 +88,13 @@
           <span data-i18n="label_start_salary" id="label-start-salary">입사 연봉 (원)</span>
           <input id="start-salary" type="number" min="0" step="100000" inputmode="numeric" value="50000000" />
           <input id="start-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="50000000" />
+          <small class="field-note" id="start-salary-preview"></small>
         </label>
         <label class="field field--wide">
           <span data-i18n="label_current_salary" id="label-current-salary">현재 연봉 (원)</span>
           <input id="current-salary" type="number" min="0" step="100000" inputmode="numeric" value="55000000" />
           <input id="current-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="55000000" />
+          <small class="field-note" id="current-salary-preview"></small>
         </label>
       </form>
       <div class="form-divider"></div>
