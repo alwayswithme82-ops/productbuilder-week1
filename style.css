@@ -289,14 +289,23 @@ body {
   font-size: 0.92rem;
 }
 
-.field-note {
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.65);
-}
-
 .field--inline {
   grid-template-columns: minmax(120px, 1fr) minmax(160px, 1fr);
   align-items: center;
+}
+
+.field-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.unit-select {
+  min-width: 96px;
+}
+
+.unit-select.is-hidden {
+  display: none;
 }
 
 input,
@@ -572,23 +581,6 @@ select:focus {
   margin-top: 12px;
   display: grid;
   gap: 8px;
-}
-
-.field-inline-range {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.field-inline-range .range {
-  flex: 1;
-}
-
-.field-inline-range strong {
-  min-width: 48px;
-  text-align: right;
-  font-weight: 700;
-  color: var(--ink);
 }
 
 .share-grid {

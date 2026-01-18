@@ -7,7 +7,9 @@ const DEFAULT_SETTINGS = {
   customInflation: 18,
   language: "ko",
   country: "KR",
-  maskPercent: 60,
+  maskVisible: true,
+  startSalaryUnit: "man",
+  currentSalaryUnit: "man",
 };
 
 const STORAGE_KEY = "inflation-check-settings";
@@ -72,7 +74,6 @@ const translations = {
     label_current_year: "현재 연도",
     label_start_salary: "입사 연봉",
     label_current_salary: "현재 연봉",
-    salary_preview_template: "표시: {amount}",
     step2_title: "2단계: 물가 기준",
     step2_hint: "공식 CPI 또는 체감 물가를 선택하세요.",
     label_inflation_source: "물가 기준",
@@ -98,8 +99,10 @@ const translations = {
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
     report_copy: "텍스트 복사",
     report_download: "이미지 다운로드",
-    label_mask_percent: "연봉 공개 비율",
-    hint_mask: "공유 이미지에 연봉 손해액을 일부만 표시합니다.",
+    label_mask_visible: "연봉 공개 표시",
+    mask_yes: "예",
+    mask_no: "아니오",
+    hint_mask: "공유 이미지에 연봉 손해액을 공개할지 선택하세요.",
     ad_title: "스폰서",
     footer_note: "World Bank CPI(2010=100) 기준이며 실제 체감과 다를 수 있습니다.",
     data_note_template: "{year}년 CPI가 아직 발표되지 않아 {fallback}년 지수로 보정했습니다.",
@@ -120,7 +123,7 @@ const translations = {
     report_caption2: "이 숫자에 다 있습니다.",
     report_footer: "월급 올랐다고요? 아니요.",
     report_watermark: "Powered by 내월급지킴이.com",
-    report_mask_note: "연봉 손해액은 {percent}%만 표시됨",
+    report_loss_private: "연봉 손해액 비공개",
     ad_caption: "손해 본 돈, 이걸로 메꾸세요",
     bar_start_label: "입사 연봉",
     bar_real_label: "현재 실질",
@@ -155,7 +158,6 @@ const translations = {
     label_current_year: "Current year",
     label_start_salary: "Starting salary",
     label_current_salary: "Current salary",
-    salary_preview_template: "Display: {amount}",
     step2_title: "Step 2: Inflation data",
     step2_hint: "Choose official CPI or a felt-inflation adjustment.",
     label_inflation_source: "Inflation source",
@@ -181,8 +183,10 @@ const translations = {
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
     report_download: "Download image",
-    label_mask_percent: "Salary reveal",
-    hint_mask: "Only show a portion of the loss amount on the share image.",
+    label_mask_visible: "Salary reveal",
+    mask_yes: "Yes",
+    mask_no: "No",
+    hint_mask: "Choose whether to reveal the loss amount in the share image.",
     ad_title: "Sponsor",
     footer_note: "Based on World Bank CPI (2010=100); real-life impact may differ.",
     data_note_template: "{year} CPI not released yet. Adjusted using {fallback} index.",
@@ -203,7 +207,7 @@ const translations = {
     report_caption2: "the numbers are here.",
     report_footer: "Salary went up? Not really.",
     report_watermark: "Powered by naewolpay.com",
-    report_mask_note: "Loss amount shown at {percent}%.",
+    report_loss_private: "Loss amount hidden",
     ad_caption: "Cover your loss with this",
     bar_start_label: "Start salary",
     bar_real_label: "Real today",
@@ -257,10 +261,9 @@ const elements = {
   barStartValue: document.getElementById("bar-start-value"),
   barRealValue: document.getElementById("bar-real-value"),
   barGap: document.getElementById("bar-gap"),
-  maskPercent: document.getElementById("mask-percent"),
-  maskPercentLabel: document.getElementById("mask-percent-label"),
-  startSalaryPreview: document.getElementById("start-salary-preview"),
-  currentSalaryPreview: document.getElementById("current-salary-preview"),
+  maskVisible: document.getElementById("mask-visible"),
+  startSalaryUnit: document.getElementById("start-salary-unit"),
+  currentSalaryUnit: document.getElementById("current-salary-unit"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -280,6 +283,33 @@ const formatKrwShort = (value, locale) => {
     return `${sign}${formatNumber(eok, locale)}억${rest}`;
   }
   return `${sign}${formatNumber(man, locale)}만원`;
+};
+
+const salaryUnitMultipliers = {
+  man: 10000,
+  eok: 100000000,
+};
+
+const getUnitMultiplier = (unit, country) => {
+  if (country !== "KR") {
+    return 1;
+  }
+  return salaryUnitMultipliers[unit] || salaryUnitMultipliers.man;
+};
+
+const getSalaryInputStep = (country, unit) => {
+  if (country !== "KR") {
+    return 1000;
+  }
+  return unit === "eok" ? 0.1 : 10;
+};
+
+const formatSalaryInputValue = (value, unit, country) => {
+  if (country !== "KR") {
+    return Math.round(value);
+  }
+  const divisor = getUnitMultiplier(unit, country);
+  return divisor ? Math.round(value / divisor) : Math.round(value);
 };
 
 const formatCurrency = (value, country) => {
@@ -321,14 +351,24 @@ const saveSettings = (settings) => {
 
 const setFormValues = (settings) => {
   elements.startYear.value = settings.startYear;
-  elements.startSalary.value = settings.startSalary;
+  elements.startSalaryUnit.value = settings.startSalaryUnit || "man";
+  elements.currentSalaryUnit.value = settings.currentSalaryUnit || "man";
+  elements.startSalary.value = formatSalaryInputValue(
+    settings.startSalary,
+    elements.startSalaryUnit.value,
+    settings.country,
+  );
   elements.currentYear.value = settings.currentYear;
-  elements.currentSalary.value = settings.currentSalary;
+  elements.currentSalary.value = formatSalaryInputValue(
+    settings.currentSalary,
+    elements.currentSalaryUnit.value,
+    settings.country,
+  );
   elements.inflationSource.value = settings.inflationSource;
   elements.customInflation.value = settings.customInflation;
   elements.language.value = settings.language;
   elements.country.value = settings.country;
-  elements.maskPercent.value = settings.maskPercent;
+  elements.maskVisible.value = settings.maskVisible ? "yes" : "no";
   elements.startSalaryRange.value = settings.startSalary;
   elements.currentSalaryRange.value = settings.currentSalary;
 };
@@ -446,12 +486,13 @@ const renderReportCanvas = (stats, settings) => {
   const ctx = canvas.getContext("2d");
   const { width, height } = canvas;
   const lossAmount = Math.max(stats.startSalary - stats.realCurrentSalary, 0);
-  const maskPercent = clamp(Number(settings.maskPercent) || 100, 10, 100);
-  const maskedLoss = lossAmount * (maskPercent / 100);
   const headline = dict.report_headline.replace(
     "{real}",
     formatPercent(stats.realDelta, settings.language),
   );
+  const lossText = settings.maskVisible
+    ? dict.shock_template.replace("{loss}", formatCurrency(lossAmount, settings.country))
+    : dict.report_loss_private;
 
   const gradient = ctx.createLinearGradient(0, 0, width, height);
   gradient.addColorStop(0, "#111111");
@@ -498,11 +539,7 @@ const renderReportCanvas = (stats, settings) => {
 
   ctx.fillStyle = "#ff4d4d";
   ctx.font = "48px 'GmarketSansBold', sans-serif";
-  ctx.fillText(
-    dict.shock_template.replace("{loss}", formatCurrency(maskedLoss, settings.country)),
-    120,
-    700,
-  );
+  ctx.fillText(lossText, 120, 700);
 
   ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
   ctx.fillRect(120, 760, width - 240, 280);
@@ -516,9 +553,6 @@ const renderReportCanvas = (stats, settings) => {
 
   ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
   ctx.font = "22px 'Pretendard', sans-serif";
-  if (maskPercent < 100) {
-    ctx.fillText(dict.report_mask_note.replace("{percent}", maskPercent), 120, height - 170);
-  }
   ctx.fillText(dict.report_watermark, 120, height - 140);
 };
 
@@ -544,13 +578,26 @@ const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
 const renderDynamicLabels = (settings) => {
   const dict = translations[settings.language] || translations.ko;
   const currency = currencyByCountry[settings.country]?.currency || "KRW";
-  elements.labelStartSalary.textContent = `${dict.label_start_salary} (${currency})`;
-  elements.labelCurrentSalary.textContent = `${dict.label_current_salary} (${currency})`;
-  const salaryStep = settings.country === "US" ? 1000 : 100000;
-  elements.startSalary.step = salaryStep;
-  elements.currentSalary.step = salaryStep;
-  elements.startSalaryRange.step = salaryStep;
-  elements.currentSalaryRange.step = salaryStep;
+  const isKrw = currency === "KRW";
+  elements.labelStartSalary.textContent = isKrw
+    ? `${dict.label_start_salary} (만원/억)`
+    : `${dict.label_start_salary} (${currency})`;
+  elements.labelCurrentSalary.textContent = isKrw
+    ? `${dict.label_current_salary} (만원/억)`
+    : `${dict.label_current_salary} (${currency})`;
+  elements.startSalaryUnit.classList.toggle("is-hidden", !isKrw);
+  elements.currentSalaryUnit.classList.toggle("is-hidden", !isKrw);
+  const rangeStep = settings.country === "US" ? 1000 : 100000;
+  elements.startSalary.step = getSalaryInputStep(
+    settings.country,
+    settings.startSalaryUnit || "man",
+  );
+  elements.currentSalary.step = getSalaryInputStep(
+    settings.country,
+    settings.currentSalaryUnit || "man",
+  );
+  elements.startSalaryRange.step = rangeStep;
+  elements.currentSalaryRange.step = rangeStep;
   const salaryMax = settings.country === "US" ? 200000 : 200000000;
   elements.startSalaryRange.max = salaryMax;
   elements.currentSalaryRange.max = salaryMax;
@@ -598,12 +645,6 @@ const render = (settings) => {
   elements.barStartValue.textContent = formatCurrency(stats.startSalary, settings.country);
   elements.barRealValue.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
 
-  const previewTemplate = dict.salary_preview_template || "{amount}";
-  const startPreview = formatCurrency(stats.startSalary, settings.country);
-  const currentPreview = formatCurrency(stats.currentSalary, settings.country);
-  elements.startSalaryPreview.textContent = previewTemplate.replace("{amount}", startPreview);
-  elements.currentSalaryPreview.textContent = previewTemplate.replace("{amount}", currentPreview);
-
   elements.shareText.textContent = shareText;
   elements.downloadReport.removeAttribute("href");
 
@@ -647,41 +688,91 @@ const syncSalaryRanges = (settings) => {
   elements.currentSalaryRange.value = settings.currentSalary;
 };
 
-const updateMaskLabel = (settings) => {
-  const maskValue = clamp(Number(settings.maskPercent) || 100, 10, 100);
-  elements.maskPercentLabel.textContent = `${maskValue}%`;
+const syncSalaryInputs = (settings) => {
+  const startUnit = settings.startSalaryUnit || "man";
+  const currentUnit = settings.currentSalaryUnit || "man";
+  elements.startSalary.value = formatSalaryInputValue(
+    settings.startSalary,
+    startUnit,
+    settings.country,
+  );
+  elements.currentSalary.value = formatSalaryInputValue(
+    settings.currentSalary,
+    currentUnit,
+    settings.country,
+  );
 };
 
 const handleInput = () => {
+  const startUnit = elements.startSalaryUnit.value || "man";
+  const currentUnit = elements.currentSalaryUnit.value || "man";
   const updated = {
     startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
-    startSalary: Number(elements.startSalary.value) || 0,
+    startSalary:
+      (Number(elements.startSalary.value) || 0) * getUnitMultiplier(startUnit, elements.country.value),
     currentYear: Number(elements.currentYear.value) || DEFAULT_SETTINGS.currentYear,
-    currentSalary: Number(elements.currentSalary.value) || 0,
+    currentSalary:
+      (Number(elements.currentSalary.value) || 0) *
+      getUnitMultiplier(currentUnit, elements.country.value),
     inflationSource: elements.inflationSource.value,
     customInflation: Number(elements.customInflation.value) || 0,
     language: elements.language.value,
     country: elements.country.value,
-    maskPercent: Number(elements.maskPercent.value) || DEFAULT_SETTINGS.maskPercent,
+    maskVisible: elements.maskVisible.value === "yes",
+    startSalaryUnit: startUnit,
+    currentSalaryUnit: currentUnit,
   };
   saveSettings(updated);
   applyTranslations(updated.language);
   render(updated);
   syncSalaryRanges(updated);
-  updateMaskLabel(updated);
 };
 
 const handleRangeInput = () => {
-  elements.startSalary.value = elements.startSalaryRange.value;
-  elements.currentSalary.value = elements.currentSalaryRange.value;
+  const startUnit = elements.startSalaryUnit.value || "man";
+  const currentUnit = elements.currentSalaryUnit.value || "man";
+  elements.startSalary.value = formatSalaryInputValue(
+    Number(elements.startSalaryRange.value) || 0,
+    startUnit,
+    elements.country.value,
+  );
+  elements.currentSalary.value = formatSalaryInputValue(
+    Number(elements.currentSalaryRange.value) || 0,
+    currentUnit,
+    elements.country.value,
+  );
   handleInput();
 };
 
 const handleCountryChange = () => {
   const salaryDefault = salaryDefaults[elements.country.value] || salaryDefaults.KR;
-  elements.startSalary.value = salaryDefault.start;
-  elements.currentSalary.value = salaryDefault.current;
+  elements.startSalaryRange.value = salaryDefault.start;
+  elements.currentSalaryRange.value = salaryDefault.current;
+  elements.startSalary.value = formatSalaryInputValue(
+    salaryDefault.start,
+    elements.startSalaryUnit.value || "man",
+    elements.country.value,
+  );
+  elements.currentSalary.value = formatSalaryInputValue(
+    salaryDefault.current,
+    elements.currentSalaryUnit.value || "man",
+    elements.country.value,
+  );
   handleInput();
+};
+
+const handleUnitChange = () => {
+  const settings = loadSettings();
+  const updated = {
+    ...settings,
+    startSalaryUnit: elements.startSalaryUnit.value || "man",
+    currentSalaryUnit: elements.currentSalaryUnit.value || "man",
+  };
+  saveSettings(updated);
+  applyTranslations(updated.language);
+  render(updated);
+  syncSalaryRanges(updated);
+  syncSalaryInputs(updated);
 };
 
 const handleGenerate = async () => {
@@ -727,7 +818,7 @@ const settings = loadSettings();
 setFormValues(settings);
 applyTranslations(settings.language);
 render(settings);
-updateMaskLabel(settings);
+syncSalaryInputs(settings);
 initAds();
 
 ["input", "change"].forEach((eventName) => {
@@ -735,12 +826,14 @@ initAds();
   elements.inflationSource.addEventListener(eventName, handleInput);
   elements.customInflation.addEventListener(eventName, handleInput);
   elements.language.addEventListener(eventName, handleInput);
+  elements.maskVisible.addEventListener(eventName, handleInput);
 });
 
 elements.country.addEventListener("change", handleCountryChange);
 elements.startSalaryRange.addEventListener("input", handleRangeInput);
 elements.currentSalaryRange.addEventListener("input", handleRangeInput);
-elements.maskPercent.addEventListener("input", handleInput);
+elements.startSalaryUnit.addEventListener("change", handleUnitChange);
+elements.currentSalaryUnit.addEventListener("change", handleUnitChange);
 
 elements.generateReport.addEventListener("click", handleGenerate);
 
