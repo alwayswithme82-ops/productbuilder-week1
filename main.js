@@ -338,8 +338,40 @@ const parseSalaryInputValue = (value) => {
   return Number(cleaned) || 0;
 };
 
-const toPlainSalaryInput = (value) => {
-  const parsed = parseSalaryInputValue(value);
+const parseKrwManFromFormatted = (value) => {
+  if (!value) {
+    return 0;
+  }
+  const text = String(value).replace(/,/g, "").trim();
+  if (!text) {
+    return 0;
+  }
+  let man = 0;
+  const eokMatch = text.match(/(\d+)\s*억/);
+  if (eokMatch) {
+    man += Number(eokMatch[1]) * 10000;
+  }
+  const manMatch = text.match(/(\d+)\s*만원/);
+  if (manMatch) {
+    man += Number(manMatch[1]);
+  }
+  if (eokMatch || manMatch) {
+    return man;
+  }
+  const wonMatch = text.match(/(\d+)\s*원/);
+  if (wonMatch) {
+    return Math.round(Number(wonMatch[1]) / 10000);
+  }
+  const fallback = parseSalaryInputValue(text);
+  return fallback;
+};
+
+const toPlainSalaryInput = (value, country) => {
+  if (country !== "KR") {
+    const parsed = parseSalaryInputValue(value);
+    return parsed ? String(parsed) : "";
+  }
+  const parsed = parseKrwManFromFormatted(value);
   return parsed ? String(parsed) : "";
 };
 
@@ -923,7 +955,7 @@ const bindSalaryFormatting = (input) => {
   input.addEventListener("focus", () => {
     const caret = input.selectionStart || 0;
     const digitCount = input.value.slice(0, caret).replace(/[^\d]/g, "").length;
-    const plain = toPlainSalaryInput(input.value);
+    const plain = toPlainSalaryInput(input.value, elements.country.value);
     input.value = plain;
     const newPos = Math.min(digitCount, plain.length);
     input.setSelectionRange(newPos, newPos);
