@@ -684,6 +684,7 @@ const renderReportCanvas = (stats, settings) => {
   const lossText = settings.maskVisible
     ? dict.shock_template.replace("{loss}", formatCurrency(lossAmount, settings.country))
     : dict.report_loss_private;
+  const topShift = 120;
 
   const gradient = ctx.createLinearGradient(0, 0, width, height);
   gradient.addColorStop(0, "#111111");
@@ -693,7 +694,7 @@ const renderReportCanvas = (stats, settings) => {
   ctx.fillRect(0, 0, width, height);
 
   ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-  ctx.fillRect(80, 120, width - 160, height - 240);
+  ctx.fillRect(80, 180, width - 160, height - 360);
 
   const drawSticker = (x, y, r, text, fill, stroke) => {
     ctx.save();
@@ -717,7 +718,7 @@ const renderReportCanvas = (stats, settings) => {
     const colors = ["#ffd166", "#4aa3ff", "#ff7a7a", "#52c2a6", "#f4b07a"];
     for (let i = 0; i < 24; i += 1) {
       const cx = 120 + Math.random() * (width - 240);
-      const cy = 140 + Math.random() * 160;
+      const cy = 220 + Math.random() * 160;
       const w = 10 + Math.random() * 12;
       const h = 6 + Math.random() * 10;
       ctx.fillStyle = colors[i % colors.length];
@@ -731,27 +732,27 @@ const renderReportCanvas = (stats, settings) => {
   };
 
   drawConfetti();
-  drawSticker(width - 190, 190, 70, "찐", "#ffd166", "#111111");
-  drawSticker(200, 200, 56, "헉", "#4aa3ff", "#111111");
+  drawSticker(width - 190, 270, 70, "찐", "#ffd166", "#111111");
+  drawSticker(200, 280, 56, "헉", "#4aa3ff", "#111111");
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "92px 'GmarketSansBold', sans-serif";
-  ctx.fillText(dict.report_title_line, 120, 260);
+  ctx.fillText(dict.report_title_line, 120, 260 + topShift);
 
   ctx.font = "40px 'Pretendard', sans-serif";
   ctx.fillStyle = "#ffd93d";
-  ctx.fillText(dict.report_subtitle, 120, 320);
+  ctx.fillText(dict.report_subtitle, 120, 320 + topShift);
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "34px 'Pretendard', sans-serif";
-  ctx.fillText(headline, 120, 400);
+  ctx.fillText(headline, 120, 400 + topShift);
 
   ctx.fillStyle = "#4d96ff";
   ctx.font = "54px 'GmarketSansBold', sans-serif";
   ctx.fillText(
     `${dict.result_power_change} ${formatPercent(stats.realDelta, settings.language)}`,
     120,
-    480,
+    480 + topShift,
   );
 
   ctx.fillStyle = "#ffffff";
@@ -759,27 +760,46 @@ const renderReportCanvas = (stats, settings) => {
   ctx.fillText(
     `${dict.result_nominal_change}: +${formatPercent(stats.nominalDelta, settings.language)}`,
     120,
-    560,
+    560 + topShift,
   );
   ctx.fillText(
     `${dict.result_inflation_change}: +${formatPercent(stats.inflationRate, settings.language)}`,
     120,
-    610,
+    610 + topShift,
   );
 
   ctx.fillStyle = "#ff4d4d";
   ctx.font = "48px 'GmarketSansBold', sans-serif";
-  ctx.fillText(lossText, 120, 700);
+  ctx.fillText(lossText, 120, 700 + topShift);
 
   ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-  ctx.fillRect(120, 760, width - 240, 280);
+  ctx.fillRect(120, 760 + topShift, width - 240, 320);
 
   ctx.fillStyle = "#111111";
   ctx.font = "30px 'Pretendard', sans-serif";
-  ctx.fillText(dict.report_caption, 150, 830);
-  ctx.fillText(dict.report_caption2, 150, 875);
+  ctx.fillText(dict.report_caption, 150, 830 + topShift);
+  ctx.fillText(dict.report_caption2, 150, 875 + topShift);
   ctx.font = "34px 'GmarketSansBold', sans-serif";
-  drawWrappedText(ctx, getVerdictText(stats, settings.language), 150, 940, width - 300, 44);
+  drawWrappedText(
+    ctx,
+    getVerdictText(stats, settings.language),
+    150,
+    940 + topShift,
+    width - 300,
+    44,
+  );
+
+  const footerY = height - 200;
+  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+  ctx.fillRect(120, footerY, width - 240, 120);
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "34px 'GmarketSansBold', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("실질 월급 팩트 체크", width / 2, footerY + 48);
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "28px 'Pretendard', sans-serif";
+  ctx.fillText(window.location.origin, width / 2, footerY + 88);
+  ctx.textAlign = "left";
 
 };
 
