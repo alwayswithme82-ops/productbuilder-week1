@@ -921,7 +921,12 @@ const bindSalaryFormatting = (input) => {
     return;
   }
   input.addEventListener("focus", () => {
-    input.value = toPlainSalaryInput(input.value);
+    const caret = input.selectionStart || 0;
+    const digitCount = input.value.slice(0, caret).replace(/[^\d]/g, "").length;
+    const plain = toPlainSalaryInput(input.value);
+    input.value = plain;
+    const newPos = Math.min(digitCount, plain.length);
+    input.setSelectionRange(newPos, newPos);
   });
   input.addEventListener("blur", () => {
     const rawValue = parseSalaryInputValue(input.value);
