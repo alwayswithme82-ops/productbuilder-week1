@@ -1087,12 +1087,23 @@ select:focus {
 
 @media (max-width: 720px) {
   .topbar-inner {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .topbar-nav {
     width: 100%;
+    order: 3;
+  }
+
+  .topbar-controls {
+    margin-left: auto;
+    order: 2;
+  }
+
+  .brand {
+    order: 1;
   }
 
   .hero {
@@ -1100,7 +1111,7 @@ select:focus {
   }
 
   .hero h1 {
-    font-size: clamp(1.6rem, 7vw, 2.1rem);
+    font-size: clamp(1.45rem, 6.5vw, 1.95rem);
     line-height: 1.2;
   }
 
