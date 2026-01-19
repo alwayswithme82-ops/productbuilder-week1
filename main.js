@@ -128,7 +128,6 @@ const translations = {
     report_caption: "열심히 일해도 가난해지는 이유,",
     report_caption2: "이 숫자에 다 있습니다.",
     report_footer: "월급 올랐다고요? 아니요.",
-    report_watermark: "Powered by 내월급지킴이.com",
     report_loss_private: "연봉 손해액 비공개",
     ad_caption: "손해 본 돈, 이걸로 메꾸세요",
     bar_start_label: "입사 연봉",
@@ -218,7 +217,6 @@ const translations = {
     report_caption: "Why hard work feels poorer,",
     report_caption2: "the numbers are here.",
     report_footer: "Salary went up? Not really.",
-    report_watermark: "Powered by naewolpay.com",
     report_loss_private: "Loss amount hidden",
     ad_caption: "Cover your loss with this",
     bar_start_label: "Start salary",
@@ -643,9 +641,6 @@ const renderReportCanvas = (stats, settings) => {
   ctx.font = "34px 'GmarketSansBold', sans-serif";
   drawWrappedText(ctx, getVerdictText(stats, settings.language), 150, 940, width - 300, 44);
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-  ctx.font = "22px 'Pretendard', sans-serif";
-  ctx.fillText(dict.report_watermark, 120, height - 140);
 };
 
 const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
