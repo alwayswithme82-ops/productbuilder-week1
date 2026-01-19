@@ -126,6 +126,22 @@ a:hover {
 }
 
 .toggle select {
+  min-width: 140px;
+}
+
+@media (max-width: 720px) {
+  .toggle {
+    font-size: 0.72rem;
+    gap: 4px;
+  }
+
+  .toggle select {
+    min-width: 110px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+}
+.toggle select {
   padding: 8px 12px;
   border-radius: 999px;
   background: var(--surface-2);
