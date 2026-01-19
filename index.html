@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>내 월급의 실질 가치 - 인플레이션 팩트 체크</title>
-  <meta name="description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 구매력을 확인하세요." />
+  <title>내 월급의 실질 가치 | 인플레이션 계산기</title>
+  <meta name="description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 연봉과 구매력을 확인하는 인플레이션 계산기입니다." />
   <meta name="robots" content="index, follow" />
   <meta name="google-adsense-account" content="ca-pub-2838025337867178" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="ko_KR" />
   <meta property="og:site_name" content="실질 월급 팩트 체크" />
-  <meta property="og:title" content="내 월급의 실질 가치 - 인플레이션 팩트 체크" />
-  <meta property="og:description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 구매력을 확인하세요." />
+  <meta property="og:title" content="내 월급의 실질 가치 | 인플레이션 계산기" />
+  <meta property="og:description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 연봉과 구매력을 확인하세요." />
   <meta property="og:url" content="https://productbuilder-week1-7w8.pages.dev/" />
   <meta property="og:image" content="/og-facebook.svg" />
   <meta property="og:image:alt" content="Real paycheck check preview" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="내 월급의 실질 가치 - 인플레이션 팩트 체크" />
-  <meta name="twitter:description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 구매력을 확인하세요." />
+  <meta name="twitter:title" content="내 월급의 실질 가치 | 인플레이션 계산기" />
+  <meta name="twitter:description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 연봉과 구매력을 확인하세요." />
   <meta name="twitter:image" content="/og-twitter.svg" />
   <meta name="theme-color" content="#0b1220" />
   <link rel="canonical" href="https://productbuilder-week1-7w8.pages.dev/" />
@@ -85,6 +85,14 @@
     ]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "실질 월급 팩트 체크",
+    "url": "https://productbuilder-week1-7w8.pages.dev/"
+  }
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#inputs" data-i18n="skip_to_main">본문 바로가기</a>
@@ -125,7 +133,7 @@
   </div>
   <header class="hero">
     <span class="badge" data-i18n="hero_badge">인플레이션 팩트 체크</span>
-    <h1 data-i18n="hero_title">내 월급의 실질 가치 - 인플레이션</h1>
+    <h1 data-i18n="hero_title">내 월급의 실질 가치 - 인플레이션 계산기</h1>
     <p data-i18n="hero_desc">
       열심히 일해도 왜 가난해지는지 숫자로 증명합니다. 연봉은 올랐는데 물가가 더 빨리 뛰었다면,
       실질 구매력은 줄어든 겁니다.
@@ -284,6 +292,45 @@
         <p class="hint share-hint" data-i18n="share_hint">
           각 채널 전용 썸네일이 적용된 공유 링크를 사용합니다.
         </p>
+      </div>
+    </section>
+
+    <section class="panel panel--content" id="value">
+      <div class="panel-head">
+        <h2 data-i18n="value_title">핵심 인사이트</h2>
+        <span class="step-hint" data-i18n="value_hint">실질 연봉 변화의 의미를 바로 이해할 수 있게 정리했습니다.</span>
+      </div>
+      <p class="panel-desc" data-i18n="value_desc">
+        이 계산기는 연봉 인상률과 물가 상승률의 격차를 수치로 보여줍니다. 실질 구매력 변화,
+        손실액, 명목/실질 차이를 한 번에 확인하세요.
+      </p>
+      <div class="value-grid">
+        <div class="value-card">
+          <h3 data-i18n="value_item1_title">실질 연봉</h3>
+          <p data-i18n="value_item1_desc">현재 연봉을 입사 시점의 물가로 환산해 비교합니다.</p>
+        </div>
+        <div class="value-card">
+          <h3 data-i18n="value_item2_title">구매력 변화</h3>
+          <p data-i18n="value_item2_desc">연봉 인상과 물가 상승의 차이를 %로 보여줍니다.</p>
+        </div>
+        <div class="value-card">
+          <h3 data-i18n="value_item3_title">손실액</h3>
+          <p data-i18n="value_item3_desc">실질 기준에서 줄어든 금액을 계산합니다.</p>
+        </div>
+      </div>
+      <figure class="preview">
+        <img class="preview-image" src="/og-facebook.svg" alt="실질 연봉 변화 미리보기" loading="lazy" />
+        <figcaption data-i18n="value_caption">계산 결과를 공유용 이미지로 저장할 수 있습니다.</figcaption>
+      </figure>
+      <div class="source-box">
+        <h3 data-i18n="source_title">데이터 출처</h3>
+        <p data-i18n="source_desc">
+          공식 CPI 데이터를 기준으로 계산하며, 사용자가 체감 물가나 직접 입력을 선택할 수 있습니다.
+        </p>
+        <div class="source-links">
+          <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL" target="_blank" rel="noreferrer noopener">World Bank CPI</a>
+          <a href="https://kosis.kr/" target="_blank" rel="noreferrer noopener">KOSIS</a>
+        </div>
       </div>
     </section>
 

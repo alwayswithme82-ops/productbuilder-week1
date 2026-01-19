@@ -58,7 +58,7 @@ const inflationAdjusters = {
 
 const translations = {
   ko: {
-    page_title: "내 월급의 실질 가치 - 인플레이션 팩트 체크",
+    page_title: "내 월급의 실질 가치 | 인플레이션 계산기",
     brand: "실질 월급 팩트 체크",
     skip_to_main: "본문 바로가기",
     nav_about: "소개",
@@ -70,11 +70,24 @@ const translations = {
     label_language: "언어",
     label_country: "국가",
     hero_badge: "인플레이션 팩트 체크",
-    hero_title: "내 월급의 실질 가치",
+    hero_title: "내 월급의 실질 가치 - 인플레이션 계산기",
     hero_desc:
       "열심히 일해도 왜 가난해지는지 숫자로 증명합니다.\n연봉은 올랐는데 물가가 더 빨리 뛰었다면,\n실질 구매력은 줄어든 겁니다.",
     cta_calculate: "바로 계산하기",
     cta_report: "리포트 만들기",
+    value_title: "핵심 인사이트",
+    value_hint: "실질 연봉 변화의 의미를 바로 이해할 수 있게 정리했습니다.",
+    value_desc:
+      "이 계산기는 연봉 인상률과 물가 상승률의 격차를 수치로 보여줍니다.\n실질 구매력 변화, 손실액, 명목/실질 차이를 한 번에 확인하세요.",
+    value_item1_title: "실질 연봉",
+    value_item1_desc: "현재 연봉을 입사 시점의 물가로 환산해 비교합니다.",
+    value_item2_title: "구매력 변화",
+    value_item2_desc: "연봉 인상과 물가 상승의 차이를 %로 보여줍니다.",
+    value_item3_title: "손실액",
+    value_item3_desc: "실질 기준에서 줄어든 금액을 계산합니다.",
+    value_caption: "계산 결과를 공유용 이미지로 저장할 수 있습니다.",
+    source_title: "데이터 출처",
+    source_desc: "공식 CPI 데이터를 기준으로 계산하며, 체감 물가나 직접 입력도 지원합니다.",
     about_title: "서비스 소개",
     about_hint: "실질 구매력을 숫자로 보여주는 인플레이션 계산기입니다.",
     about_desc:
@@ -197,7 +210,7 @@ const translations = {
     copy_default: "텍스트 복사",
   },
   en: {
-    page_title: "Real Salary Value - Inflation Fact Check",
+    page_title: "Real Salary Value | Inflation Calculator",
     brand: "Real Paycheck Reality",
     skip_to_main: "Skip to main content",
     nav_about: "About",
@@ -209,11 +222,24 @@ const translations = {
     label_language: "Language",
     label_country: "Country",
     hero_badge: "Inflation Fact Check",
-    hero_title: "My Real Salary Value",
+    hero_title: "My Real Salary Value - Inflation Calculator",
     hero_desc:
       "Your salary may go up, but prices can rise faster.\nThis shows how much buying power you actually lost.",
     cta_calculate: "Calculate",
     cta_report: "Create Report",
+    value_title: "Key insights",
+    value_hint: "Summarized so you can grasp the real wage shift quickly.",
+    value_desc:
+      "This calculator shows the gap between salary growth and inflation.\nSee real purchasing power, loss amount, and nominal vs real change at a glance.",
+    value_item1_title: "Real salary",
+    value_item1_desc: "Convert today's salary to start-year prices for comparison.",
+    value_item2_title: "Power change",
+    value_item2_desc: "Shows the gap between raises and inflation as a percent.",
+    value_item3_title: "Loss amount",
+    value_item3_desc: "Calculates the purchasing power loss in currency.",
+    value_caption: "Save the result as a shareable image.",
+    source_title: "Data sources",
+    source_desc: "Based on official CPI data, with felt inflation or custom input options.",
     about_title: "About the tool",
     about_hint: "A transparent inflation calculator for real purchasing power.",
     about_desc:
