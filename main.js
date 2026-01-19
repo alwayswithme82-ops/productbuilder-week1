@@ -74,6 +74,8 @@ const translations = {
     label_current_year: "현재 연도",
     label_start_salary: "입사 연봉",
     label_current_salary: "현재 연봉",
+    salary_unit_krw: "만원 입력",
+    salary_display_prefix: "표시:",
     step2_title: "물가 기준",
     step2_hint: "공식 CPI 또는 체감 물가를 선택하세요.",
     label_inflation_source: "물가 기준",
@@ -163,6 +165,8 @@ const translations = {
     label_current_year: "Current year",
     label_start_salary: "Starting salary",
     label_current_salary: "Current salary",
+    salary_unit_krw: "10k KRW input",
+    salary_display_prefix: "Display:",
     step2_title: "Inflation data",
     step2_hint: "Choose official CPI or a felt-inflation adjustment.",
     label_inflation_source: "Inflation source",
@@ -274,6 +278,8 @@ const elements = {
   maskVisible: document.getElementById("mask-visible"),
   startSalaryUnit: document.getElementById("start-salary-unit"),
   currentSalaryUnit: document.getElementById("current-salary-unit"),
+  startSalaryDisplay: document.getElementById("start-salary-display"),
+  currentSalaryDisplay: document.getElementById("current-salary-display"),
   summaryReal: document.getElementById("summary-real"),
   summaryPower: document.getElementById("summary-power"),
   resultDetails: document.getElementById("result-details"),
@@ -366,17 +372,21 @@ const saveSettings = (settings) => {
 
 const setFormValues = (settings) => {
   elements.startYear.value = settings.startYear;
-  elements.startSalaryUnit.value = settings.startSalaryUnit || "man";
-  elements.currentSalaryUnit.value = settings.currentSalaryUnit || "man";
+  if (elements.startSalaryUnit) {
+    elements.startSalaryUnit.value = settings.startSalaryUnit || "man";
+  }
+  if (elements.currentSalaryUnit) {
+    elements.currentSalaryUnit.value = settings.currentSalaryUnit || "man";
+  }
   elements.startSalary.value = formatSalaryInputValue(
     settings.startSalary,
-    elements.startSalaryUnit.value,
+    elements.startSalaryUnit?.value || "man",
     settings.country,
   );
   elements.currentYear.value = settings.currentYear;
   elements.currentSalary.value = formatSalaryInputValue(
     settings.currentSalary,
-    elements.currentSalaryUnit.value,
+    elements.currentSalaryUnit?.value || "man",
     settings.country,
   );
   elements.inflationSource.value = settings.inflationSource;
@@ -594,14 +604,15 @@ const renderDynamicLabels = (settings) => {
   const dict = translations[settings.language] || translations.ko;
   const currency = currencyByCountry[settings.country]?.currency || "KRW";
   const isKrw = currency === "KRW";
-  elements.labelStartSalary.textContent = isKrw
-    ? `${dict.label_start_salary} (만원/억)`
-    : `${dict.label_start_salary} (${currency})`;
-  elements.labelCurrentSalary.textContent = isKrw
-    ? `${dict.label_current_salary} (만원/억)`
-    : `${dict.label_current_salary} (${currency})`;
-  elements.startSalaryUnit.classList.toggle("is-hidden", !isKrw);
-  elements.currentSalaryUnit.classList.toggle("is-hidden", !isKrw);
+  const unitLabel = isKrw ? dict.salary_unit_krw : currency;
+  elements.labelStartSalary.textContent = `${dict.label_start_salary} (${unitLabel})`;
+  elements.labelCurrentSalary.textContent = `${dict.label_current_salary} (${unitLabel})`;
+  if (elements.startSalaryUnit) {
+    elements.startSalaryUnit.classList.toggle("is-hidden", !isKrw);
+  }
+  if (elements.currentSalaryUnit) {
+    elements.currentSalaryUnit.classList.toggle("is-hidden", !isKrw);
+  }
   const rangeStep = settings.country === "US" ? 1000 : 100000;
   elements.startSalary.step = getSalaryInputStep(
     settings.country,
@@ -616,6 +627,15 @@ const renderDynamicLabels = (settings) => {
   const salaryMax = settings.country === "US" ? 200000 : 200000000;
   elements.startSalaryRange.max = salaryMax;
   elements.currentSalaryRange.max = salaryMax;
+  const displayPrefix = dict.salary_display_prefix || "";
+  const startDisplay = formatCurrency(settings.startSalary, settings.country);
+  const currentDisplay = formatCurrency(settings.currentSalary, settings.country);
+  elements.startSalaryDisplay.textContent = displayPrefix
+    ? `${displayPrefix} ${startDisplay}`
+    : startDisplay;
+  elements.currentSalaryDisplay.textContent = displayPrefix
+    ? `${displayPrefix} ${currentDisplay}`
+    : currentDisplay;
 };
 
 const renderDataNote = (stats, settings) => {
@@ -738,8 +758,8 @@ const syncSalaryInputs = (settings) => {
 };
 
 const handleInput = () => {
-  const startUnit = elements.startSalaryUnit.value || "man";
-  const currentUnit = elements.currentSalaryUnit.value || "man";
+  const startUnit = elements.startSalaryUnit?.value || "man";
+  const currentUnit = elements.currentSalaryUnit?.value || "man";
   const updated = {
     startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
     startSalary:
@@ -763,8 +783,8 @@ const handleInput = () => {
 };
 
 const handleRangeInput = () => {
-  const startUnit = elements.startSalaryUnit.value || "man";
-  const currentUnit = elements.currentSalaryUnit.value || "man";
+  const startUnit = elements.startSalaryUnit?.value || "man";
+  const currentUnit = elements.currentSalaryUnit?.value || "man";
   elements.startSalary.value = formatSalaryInputValue(
     Number(elements.startSalaryRange.value) || 0,
     startUnit,
@@ -784,18 +804,21 @@ const handleCountryChange = () => {
   elements.currentSalaryRange.value = salaryDefault.current;
   elements.startSalary.value = formatSalaryInputValue(
     salaryDefault.start,
-    elements.startSalaryUnit.value || "man",
+    elements.startSalaryUnit?.value || "man",
     elements.country.value,
   );
   elements.currentSalary.value = formatSalaryInputValue(
     salaryDefault.current,
-    elements.currentSalaryUnit.value || "man",
+    elements.currentSalaryUnit?.value || "man",
     elements.country.value,
   );
   handleInput();
 };
 
 const handleUnitChange = () => {
+  if (!elements.startSalaryUnit || !elements.currentSalaryUnit) {
+    return;
+  }
   const settings = loadSettings();
   const updated = {
     ...settings,
@@ -866,8 +889,12 @@ initAds();
 elements.country.addEventListener("change", handleCountryChange);
 elements.startSalaryRange.addEventListener("input", handleRangeInput);
 elements.currentSalaryRange.addEventListener("input", handleRangeInput);
-elements.startSalaryUnit.addEventListener("change", handleUnitChange);
-elements.currentSalaryUnit.addEventListener("change", handleUnitChange);
+if (elements.startSalaryUnit) {
+  elements.startSalaryUnit.addEventListener("change", handleUnitChange);
+}
+if (elements.currentSalaryUnit) {
+  elements.currentSalaryUnit.addEventListener("change", handleUnitChange);
+}
 
 elements.generateReport.addEventListener("click", handleGenerate);
 

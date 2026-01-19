@@ -88,22 +88,16 @@
           <span data-i18n="label_start_salary" id="label-start-salary">입사 연봉 (원)</span>
           <div class="field-row">
             <input id="start-salary" type="number" min="0" step="100000" inputmode="numeric" value="50000000" />
-            <select id="start-salary-unit" class="unit-select">
-              <option value="man">만원</option>
-              <option value="eok">억원</option>
-            </select>
           </div>
+          <div class="salary-display" id="start-salary-display">0원</div>
           <input id="start-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="50000000" />
         </label>
         <label class="field field--wide">
           <span data-i18n="label_current_salary" id="label-current-salary">현재 연봉 (원)</span>
           <div class="field-row">
             <input id="current-salary" type="number" min="0" step="100000" inputmode="numeric" value="55000000" />
-            <select id="current-salary-unit" class="unit-select">
-              <option value="man">만원</option>
-              <option value="eok">억원</option>
-            </select>
           </div>
+          <div class="salary-display" id="current-salary-display">0원</div>
           <input id="current-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="55000000" />
         </label>
       </form>

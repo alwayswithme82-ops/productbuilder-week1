@@ -329,6 +329,12 @@ body {
   align-items: center;
 }
 
+.salary-display {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
 .unit-select {
   min-width: 96px;
 }
