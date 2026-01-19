@@ -6,6 +6,7 @@
   <title>내 월급의 실질 가치 - 인플레이션 팩트 체크</title>
   <meta name="description" content="입사 연도와 현재 연봉을 비교해 인플레이션으로 줄어든 실질 구매력을 확인하세요." />
   <meta name="google-adsense-account" content="ca-pub-2838025337867178" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/style.css?v=9" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,9 +31,18 @@
   <script defer src="/main.js?v=9"></script>
 </head>
 <body>
+  <a class="skip-link" href="#inputs" data-i18n="skip_to_main">본문 바로가기</a>
   <div class="topbar">
     <div class="topbar-inner">
-      <div class="brand" data-i18n="brand">실질 월급 팩트 체크</div>
+      <a class="brand" href="/" data-i18n="brand">실질 월급 팩트 체크</a>
+      <nav class="topbar-nav" aria-label="주요 섹션">
+        <a href="#about" data-i18n="nav_about">소개</a>
+        <a href="#method" data-i18n="nav_method">계산 방법</a>
+        <a href="#inputs" data-i18n="nav_calculator">계산기</a>
+        <a href="#faq" data-i18n="nav_faq">FAQ</a>
+        <a href="#contact" data-i18n="nav_contact">문의</a>
+        <a href="#policies" data-i18n="nav_policies">정책</a>
+      </nav>
       <div class="topbar-controls">
         <label class="toggle">
           <span data-i18n="label_language">언어</span>
@@ -71,6 +81,46 @@
   </header>
 
   <main class="layout">
+    <section class="panel panel--content" id="about">
+      <div class="panel-head">
+        <h2 data-i18n="about_title">서비스 소개</h2>
+        <span class="step-hint" data-i18n="about_hint">실질 구매력을 숫자로 보여주는 인플레이션 계산기입니다.</span>
+      </div>
+      <p class="panel-desc" data-i18n="about_desc">
+        입사 연도 연봉과 현재 연봉을 입력하면, 물가 상승률을 반영한 실질 연봉을 계산해줍니다.
+        데이터 출처와 계산식, 업데이트 방식을 명확히 공개해 투명성을 높였습니다.
+      </p>
+      <div class="info-grid">
+        <article class="info-card">
+          <h3 data-i18n="about_card1_title">명확한 목적</h3>
+          <p data-i18n="about_card1_desc">연봉 인상률과 물가 상승률의 격차를 이해하도록 돕습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3 data-i18n="about_card2_title">신뢰할 수 있는 지표</h3>
+          <p data-i18n="about_card2_desc">세계은행 CPI(2010=100)를 기준으로 데이터를 구성했습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3 data-i18n="about_card3_title">개인정보 최소화</h3>
+          <p data-i18n="about_card3_desc">입력값은 브라우저에만 저장되며 서버로 전송되지 않습니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel panel--content" id="method">
+      <div class="panel-head">
+        <h2 data-i18n="method_title">계산 방법</h2>
+        <span class="step-hint" data-i18n="method_hint">누구나 이해할 수 있도록 계산 흐름을 공개합니다.</span>
+      </div>
+      <ol class="method-steps">
+        <li data-i18n="method_step1">입사 연도와 현재 연도, 연봉을 입력합니다.</li>
+        <li data-i18n="method_step2">선택한 CPI 지수로 누적 물가 상승률을 계산합니다.</li>
+        <li data-i18n="method_step3">현재 연봉을 물가로 환산해 실질 구매력 변화를 보여줍니다.</li>
+      </ol>
+      <div class="callout" data-i18n="method_note">
+        본 계산은 평균 물가 기준이며 개인별 체감과 차이가 있을 수 있습니다.
+      </div>
+    </section>
+
     <section class="panel panel--inputs" id="inputs">
       <div class="panel-head">
         <h2 data-i18n="step1_title">연봉 입력</h2>
@@ -208,19 +258,64 @@
       </div>
     </section>
 
-    <section class="panel panel--ad">
-      <h2 data-i18n="ad_title">스폰서</h2>
-      <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
-        data-ad-slot="0000000000"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
+    <section class="panel panel--content" id="faq">
+      <div class="panel-head">
+        <h2 data-i18n="faq_title">자주 묻는 질문</h2>
+        <span class="step-hint" data-i18n="faq_hint">정책, 데이터, 개인정보 관련 안내입니다.</span>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary data-i18n="faq_q1">공식 데이터는 어디서 가져오나요?</summary>
+          <p data-i18n="faq_a1">세계은행 CPI(2010=100)를 기반으로 연도별 지수를 구성했습니다.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq_q2">왜 생활물가 옵션이 있나요?</summary>
+          <p data-i18n="faq_a2">체감 물가가 공식 지수보다 높게 느껴지는 경우를 고려한 보정 옵션입니다.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq_q3">입력한 연봉이 저장되나요?</summary>
+          <p data-i18n="faq_a3">설정값은 브라우저 로컬 저장소에만 저장되며 외부로 전송되지 않습니다.</p>
+        </details>
+        <details>
+          <summary data-i18n="faq_q4">데이터는 얼마나 자주 업데이트되나요?</summary>
+          <p data-i18n="faq_a4">공식 CPI 발표 주기에 맞춰 연 1회 이상 갱신하는 것을 원칙으로 합니다.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="panel panel--content" id="contact">
+      <div class="panel-head">
+        <h2 data-i18n="contact_title">문의</h2>
+        <span class="step-hint" data-i18n="contact_hint">피드백과 데이터 제보를 기다립니다.</span>
+      </div>
+      <p class="panel-desc" data-i18n="contact_desc">
+        제휴, 오류 제보, 데이터 문의는 아래 이메일로 보내주세요. 48시간 내 회신을 목표로 합니다.
+      </p>
+      <a class="contact-link" href="mailto:contact@yourdomain.com">contact@yourdomain.com</a>
+    </section>
+
+    <section class="panel panel--content" id="policies">
+      <div class="panel-head">
+        <h2 data-i18n="policies_title">정책 및 운영 정보</h2>
+        <span class="step-hint" data-i18n="policies_hint">투명한 운영을 위해 주요 문서를 공개합니다.</span>
+      </div>
+      <div class="policy-grid">
+        <a class="policy-card" href="/about.html" data-i18n="policy_about">서비스 소개</a>
+        <a class="policy-card" href="/privacy.html" data-i18n="policy_privacy">개인정보 처리방침</a>
+        <a class="policy-card" href="/terms.html" data-i18n="policy_terms">이용약관</a>
+        <a class="policy-card" href="/contact.html" data-i18n="policy_contact">문의하기</a>
+      </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p data-i18n="footer_note">본 페이지는 데모 지수 기반이며 실제 체감과 다를 수 있습니다. 공식 데이터로 교체해 주세요.</p>
+    <p data-i18n="footer_note">World Bank CPI(2010=100) 기준이며 실제 체감과 차이가 있을 수 있습니다.</p>
+    <div class="footer-links">
+      <a href="/about.html" data-i18n="policy_about">서비스 소개</a>
+      <a href="/privacy.html" data-i18n="policy_privacy">개인정보 처리방침</a>
+      <a href="/terms.html" data-i18n="policy_terms">이용약관</a>
+      <a href="/contact.html" data-i18n="policy_contact">문의하기</a>
+    </div>
   </footer>
 </body>
 </html>
