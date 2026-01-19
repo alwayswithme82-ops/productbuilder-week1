@@ -594,6 +594,45 @@ const renderReportCanvas = (stats, settings) => {
   ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
   ctx.fillRect(80, 120, width - 160, height - 240);
 
+  const drawSticker = (x, y, r, text, fill, stroke) => {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = fill;
+    ctx.fill();
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = stroke;
+    ctx.stroke();
+    ctx.fillStyle = "#111111";
+    ctx.font = "32px 'GmarketSansBold', sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x, y + 2);
+    ctx.restore();
+  };
+
+  const drawConfetti = () => {
+    ctx.save();
+    const colors = ["#ffd166", "#4aa3ff", "#ff7a7a", "#52c2a6", "#f4b07a"];
+    for (let i = 0; i < 24; i += 1) {
+      const cx = 120 + Math.random() * (width - 240);
+      const cy = 140 + Math.random() * 160;
+      const w = 10 + Math.random() * 12;
+      const h = 6 + Math.random() * 10;
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate((Math.PI / 180) * (Math.random() * 40 - 20));
+      ctx.fillRect(-w / 2, -h / 2, w, h);
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+
+  drawConfetti();
+  drawSticker(width - 190, 190, 70, "찐", "#ffd166", "#111111");
+  drawSticker(200, 200, 56, "헉", "#4aa3ff", "#111111");
+
   ctx.fillStyle = "#ffffff";
   ctx.font = "92px 'GmarketSansBold', sans-serif";
   ctx.fillText(dict.report_title_line, 120, 260);
