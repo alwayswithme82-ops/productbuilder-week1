@@ -88,6 +88,9 @@ const translations = {
     result_real_salary_hint: "물가로 환산한 실질 연봉",
     result_power_change: "월급 녹아내림",
     result_power_hint: "입사 연봉 대비 체감",
+    result_summary_label: "현재 실질 연봉",
+    result_detail_cta: "상세 보기",
+    result_details_title: "상세 결과",
     result_nominal_change: "연봉 인상률",
     result_nominal_hint: "명목 상승률",
     result_inflation_change: "물가 상승률",
@@ -172,6 +175,9 @@ const translations = {
     result_real_salary_hint: "Adjusted for inflation",
     result_power_change: "Paycheck melt-down",
     result_power_hint: "Compared to your start",
+    result_summary_label: "Real salary today",
+    result_detail_cta: "View details",
+    result_details_title: "Detailed results",
     result_nominal_change: "Nominal raise",
     result_nominal_hint: "Headline increase",
     result_inflation_change: "Inflation",
@@ -264,6 +270,10 @@ const elements = {
   maskVisible: document.getElementById("mask-visible"),
   startSalaryUnit: document.getElementById("start-salary-unit"),
   currentSalaryUnit: document.getElementById("current-salary-unit"),
+  summaryReal: document.getElementById("summary-real"),
+  summaryPower: document.getElementById("summary-power"),
+  resultDetails: document.getElementById("result-details"),
+  scrollDetails: document.getElementById("scroll-details"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -626,15 +636,20 @@ const render = (settings) => {
 
   elements.realSalary.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
   elements.powerChange.textContent = powerMessage;
+  elements.summaryReal.textContent = formatCurrency(stats.realCurrentSalary, settings.country);
+  elements.summaryPower.textContent = powerMessage;
   elements.nominalChange.textContent = formatPercent(stats.nominalDelta, settings.language);
   elements.inflationChange.textContent = formatPercent(stats.inflationRate, settings.language);
   elements.verdict.textContent = verdictText;
 
   elements.powerChange.classList.remove("status-loss", "status-gain");
+  elements.summaryPower.classList.remove("status-loss", "status-gain");
   if (stats.realDelta <= -0.01) {
     elements.powerChange.classList.add("status-loss");
+    elements.summaryPower.classList.add("status-loss");
   } else if (stats.realDelta >= 0.01) {
     elements.powerChange.classList.add("status-gain");
+    elements.summaryPower.classList.add("status-gain");
   }
 
   const maxValue = Math.max(stats.startSalary, stats.realCurrentSalary, 1);
@@ -846,3 +861,12 @@ elements.jumpToInputs.addEventListener("click", () => {
 elements.jumpToReport.addEventListener("click", () => {
   scrollToSection("report");
 });
+
+if (elements.scrollDetails) {
+  elements.scrollDetails.addEventListener("click", () => {
+    if (elements.resultDetails) {
+      elements.resultDetails.open = true;
+      elements.resultDetails.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}

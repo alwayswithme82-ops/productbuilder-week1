@@ -75,7 +75,7 @@
         <h2 data-i18n="step1_title">연봉 입력</h2>
         <span class="step-hint" data-i18n="step1_hint">입사 시점과 현재를 비교합니다.</span>
       </div>
-      <form class="form form--grid" id="inflation-form">
+      <form class="form form--grid form--compact" id="inflation-form">
         <label class="field">
           <span data-i18n="label_start_year">입사 연도</span>
           <input id="start-year" type="number" min="2000" max="2025" step="1" value="2019" />
@@ -135,56 +135,67 @@
         <h2 data-i18n="step3_title">결과 확인</h2>
         <span class="step-hint" data-i18n="step3_hint">실질 구매력이 얼마나 변했는지 확인합니다.</span>
       </div>
-      <div class="result-grid">
-        <div class="result-card">
-          <span data-i18n="result_real_salary">실질 연봉 (입사 연도 기준)</span>
-          <strong id="real-salary">0원</strong>
-          <small data-i18n="result_real_salary_hint">현재 연봉을 물가로 환산한 값</small>
+      <div class="result-summary">
+        <div class="result-hero">
+          <span data-i18n="result_summary_label">현재 실질 연봉</span>
+          <strong id="summary-real">0원</strong>
+          <p class="summary-power" id="summary-power">구매력 변화 0%</p>
         </div>
-        <div class="result-card">
-          <span data-i18n="result_power_change">구매력 변화</span>
-          <strong id="power-change">0%</strong>
-          <small data-i18n="result_power_hint">입사 연봉 대비 증감</small>
-        </div>
-        <div class="result-card">
-          <span data-i18n="result_nominal_change">연봉 인상률</span>
-          <strong id="nominal-change">0%</strong>
-          <small data-i18n="result_nominal_hint">명목 상승률</small>
-        </div>
-        <div class="result-card">
-          <span data-i18n="result_inflation_change">물가 상승률</span>
-          <strong id="inflation-change">0%</strong>
-          <small data-i18n="result_inflation_hint">입사 → 현재 누적</small>
-        </div>
+        <button class="button button--ghost" type="button" id="scroll-details" data-i18n="result_detail_cta">상세 보기</button>
       </div>
-      <div class="bar-compare" id="bar-compare">
-        <div class="bar-row">
-          <span data-i18n="bar_start_label">입사 연봉</span>
-          <div class="bar-track">
-            <div class="bar-fill bar-fill--start" id="bar-start"></div>
+      <details class="result-details" id="result-details">
+        <summary data-i18n="result_details_title">상세 결과</summary>
+        <div class="result-grid">
+          <div class="result-card">
+            <span data-i18n="result_real_salary">실질 연봉 (입사 연도 기준)</span>
+            <strong id="real-salary">0원</strong>
+            <small data-i18n="result_real_salary_hint">현재 연봉을 물가로 환산한 값</small>
           </div>
-          <strong id="bar-start-value">0</strong>
-        </div>
-        <div class="bar-row">
-          <span data-i18n="bar_real_label">현재 실질</span>
-          <div class="bar-track">
-            <div class="bar-fill bar-fill--real" id="bar-real"></div>
+          <div class="result-card">
+            <span data-i18n="result_power_change">구매력 변화</span>
+            <strong id="power-change">0%</strong>
+            <small data-i18n="result_power_hint">입사 연봉 대비 증감</small>
           </div>
-          <strong id="bar-real-value">0</strong>
+          <div class="result-card">
+            <span data-i18n="result_nominal_change">연봉 인상률</span>
+            <strong id="nominal-change">0%</strong>
+            <small data-i18n="result_nominal_hint">명목 상승률</small>
+          </div>
+          <div class="result-card">
+            <span data-i18n="result_inflation_change">물가 상승률</span>
+            <strong id="inflation-change">0%</strong>
+            <small data-i18n="result_inflation_hint">입사 → 현재 누적</small>
+          </div>
         </div>
-        <p class="bar-gap" id="bar-gap"></p>
-      </div>
-      <div class="callout" id="verdict" data-i18n="verdict_loading">결과를 계산 중입니다.</div>
-      <div class="shock-line" id="shock-line"></div>
-      <div class="ad-inline">
-        <p class="ad-caption" data-i18n="ad_caption">손해 본 돈, 이걸로 메꾸세요</p>
-        <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
-          data-ad-slot="0000000000"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-      </div>
+        <div class="bar-compare" id="bar-compare">
+          <div class="bar-row">
+            <span data-i18n="bar_start_label">입사 연봉</span>
+            <div class="bar-track">
+              <div class="bar-fill bar-fill--start" id="bar-start"></div>
+            </div>
+            <strong id="bar-start-value">0</strong>
+          </div>
+          <div class="bar-row">
+            <span data-i18n="bar_real_label">현재 실질</span>
+            <div class="bar-track">
+              <div class="bar-fill bar-fill--real" id="bar-real"></div>
+            </div>
+            <strong id="bar-real-value">0</strong>
+          </div>
+          <p class="bar-gap" id="bar-gap"></p>
+        </div>
+        <div class="callout" id="verdict" data-i18n="verdict_loading">결과를 계산 중입니다.</div>
+        <div class="shock-line" id="shock-line"></div>
+        <div class="ad-inline">
+          <p class="ad-caption" data-i18n="ad_caption">손해 본 돈, 이걸로 메꾸세요</p>
+          <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
+            data-ad-slot="0000000000"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        </div>
+      </details>
     </section>
 
     <section class="panel panel--share" id="report">
