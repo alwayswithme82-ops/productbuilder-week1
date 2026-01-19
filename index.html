@@ -298,90 +298,98 @@
       </div>
     </section>
 
-    <section class="panel panel--content" id="value">
-      <div class="panel-head">
-        <h2 data-i18n="value_title">핵심 인사이트</h2>
-        <span class="step-hint" data-i18n="value_hint">실질 연봉 변화의 의미를 바로 이해할 수 있게 정리했습니다.</span>
-      </div>
-      <p class="panel-desc" data-i18n="value_desc">
-        이 계산기는 연봉 인상률과 물가 상승률의 격차를 수치로 보여줍니다. 실질 구매력 변화,
-        손실액, 명목/실질 차이를 한 번에 확인하세요.
-      </p>
-      <div class="value-grid">
-        <div class="value-card">
-          <h3 data-i18n="value_item1_title">실질 연봉</h3>
-          <p data-i18n="value_item1_desc">현재 연봉을 입사 시점의 물가로 환산해 비교합니다.</p>
+    <section class="panel panel--content panel--accordion" id="value">
+      <details class="accordion">
+        <summary class="panel-head">
+          <h2 data-i18n="value_title">핵심 인사이트</h2>
+          <span class="step-hint" data-i18n="value_hint">실질 연봉 변화의 의미를 바로 이해할 수 있게 정리했습니다.</span>
+        </summary>
+        <div class="accordion-body">
+          <p class="panel-desc" data-i18n="value_desc">
+            이 계산기는 연봉 인상률과 물가 상승률의 격차를 수치로 보여줍니다. 실질 구매력 변화,
+            손실액, 명목/실질 차이를 한 번에 확인하세요.
+          </p>
+          <div class="value-grid">
+            <div class="value-card">
+              <h3 data-i18n="value_item1_title">실질 연봉</h3>
+              <p data-i18n="value_item1_desc">현재 연봉을 입사 시점의 물가로 환산해 비교합니다.</p>
+            </div>
+            <div class="value-card">
+              <h3 data-i18n="value_item2_title">구매력 변화</h3>
+              <p data-i18n="value_item2_desc">연봉 인상과 물가 상승의 차이를 %로 보여줍니다.</p>
+            </div>
+            <div class="value-card">
+              <h3 data-i18n="value_item3_title">손실액</h3>
+              <p data-i18n="value_item3_desc">실질 기준에서 줄어든 금액을 계산합니다.</p>
+            </div>
+          </div>
+          <figure class="preview">
+            <img class="preview-image" src="/og-facebook.svg" alt="실질 연봉 변화 미리보기" loading="lazy" />
+            <figcaption data-i18n="value_caption">계산 결과를 공유용 이미지로 저장할 수 있습니다.</figcaption>
+          </figure>
+          <div class="source-box">
+            <h3 data-i18n="source_title">데이터 출처</h3>
+            <p data-i18n="source_desc">
+              공식 CPI 데이터를 기준으로 계산하며, 사용자가 체감 물가나 직접 입력을 선택할 수 있습니다.
+            </p>
+            <div class="source-links">
+              <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL" target="_blank" rel="noreferrer noopener">World Bank CPI</a>
+              <a href="https://kosis.kr/" target="_blank" rel="noreferrer noopener">KOSIS</a>
+            </div>
+          </div>
         </div>
-        <div class="value-card">
-          <h3 data-i18n="value_item2_title">구매력 변화</h3>
-          <p data-i18n="value_item2_desc">연봉 인상과 물가 상승의 차이를 %로 보여줍니다.</p>
-        </div>
-        <div class="value-card">
-          <h3 data-i18n="value_item3_title">손실액</h3>
-          <p data-i18n="value_item3_desc">실질 기준에서 줄어든 금액을 계산합니다.</p>
-        </div>
-      </div>
-      <figure class="preview">
-        <img class="preview-image" src="/og-facebook.svg" alt="실질 연봉 변화 미리보기" loading="lazy" />
-        <figcaption data-i18n="value_caption">계산 결과를 공유용 이미지로 저장할 수 있습니다.</figcaption>
-      </figure>
-      <div class="source-box">
-        <h3 data-i18n="source_title">데이터 출처</h3>
-        <p data-i18n="source_desc">
-          공식 CPI 데이터를 기준으로 계산하며, 사용자가 체감 물가나 직접 입력을 선택할 수 있습니다.
-        </p>
-        <div class="source-links">
-          <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL" target="_blank" rel="noreferrer noopener">World Bank CPI</a>
-          <a href="https://kosis.kr/" target="_blank" rel="noreferrer noopener">KOSIS</a>
-        </div>
-      </div>
+      </details>
     </section>
 
-    <section class="panel panel--content" id="geo">
-      <div class="panel-head">
-        <h2 data-i18n="geo_title">AI 검색 대응 요약</h2>
-        <span class="step-hint" data-i18n="geo_hint">생성형 AI 검색 환경에서도 유용한 정보를 제공하도록 구성했습니다.</span>
-      </div>
-      <p class="panel-desc" data-i18n="geo_desc">
-        생성형 AI는 질문 의도와 맥락을 이해해 답변을 구성합니다. 그래서 이 계산기는 질문형 콘텐츠,
-        구조화된 요약, 최신성 표시, 신뢰 가능한 출처 링크를 함께 제공합니다.
-      </p>
-      <div class="geo-list">
-        <div class="geo-card">
-          <h3 data-i18n="geo_item1_title">질문 중심 콘텐츠</h3>
-          <p data-i18n="geo_item1_desc">실제 사용자가 던지는 질문으로 정보를 정리했습니다.</p>
+    <section class="panel panel--content panel--accordion" id="geo">
+      <details class="accordion">
+        <summary class="panel-head">
+          <h2 data-i18n="geo_title">AI 검색 대응 요약</h2>
+          <span class="step-hint" data-i18n="geo_hint">생성형 AI 검색 환경에서도 유용한 정보를 제공하도록 구성했습니다.</span>
+        </summary>
+        <div class="accordion-body">
+          <p class="panel-desc" data-i18n="geo_desc">
+            생성형 AI는 질문 의도와 맥락을 이해해 답변을 구성합니다. 그래서 이 계산기는 질문형 콘텐츠,
+            구조화된 요약, 최신성 표시, 신뢰 가능한 출처 링크를 함께 제공합니다.
+          </p>
+          <div class="geo-list">
+            <div class="geo-card">
+              <h3 data-i18n="geo_item1_title">질문 중심 콘텐츠</h3>
+              <p data-i18n="geo_item1_desc">실제 사용자가 던지는 질문으로 정보를 정리했습니다.</p>
+            </div>
+            <div class="geo-card">
+              <h3 data-i18n="geo_item2_title">사용자 맥락 강조</h3>
+              <p data-i18n="geo_item2_desc">누가, 언제, 왜 연봉 체감이 줄어드는지 설명합니다.</p>
+            </div>
+            <div class="geo-card">
+              <h3 data-i18n="geo_item3_title">구조화된 요약</h3>
+              <p data-i18n="geo_item3_desc">핵심 지표를 단계별로 제시해 재사용하기 쉽게 구성했습니다.</p>
+            </div>
+            <div class="geo-card">
+              <h3 data-i18n="geo_item4_title">외부 신뢰 근거</h3>
+              <p data-i18n="geo_item4_desc">World Bank CPI 등 공신력 있는 지표를 명시합니다.</p>
+            </div>
+            <div class="geo-card">
+              <h3 data-i18n="geo_item5_title">최신성 표시</h3>
+              <p data-i18n="geo_item5_desc">업데이트 날짜를 공개해 최신 정보를 강조합니다.</p>
+            </div>
+          </div>
+          <div class="faq-list geo-qna">
+            <details>
+              <summary data-i18n="geo_q1">내 연봉이 물가보다 얼마나 뒤처졌나요?</summary>
+              <p data-i18n="geo_a1">입사 연도와 현재 연봉을 입력하면 실질 구매력 감소폭을 계산합니다.</p>
+            </details>
+            <details>
+              <summary data-i18n="geo_q2">실질 연봉은 어떻게 계산되나요?</summary>
+              <p data-i18n="geo_a2">공식 CPI 지수로 물가 상승률을 산출한 뒤 현재 연봉을 환산합니다.</p>
+            </details>
+            <details>
+              <summary data-i18n="geo_q3">체감 물가를 반영할 수 있나요?</summary>
+              <p data-i18n="geo_a3">공식 지수 외에 생활물가 보정이나 직접 입력 옵션을 제공합니다.</p>
+            </details>
+          </div>
         </div>
-        <div class="geo-card">
-          <h3 data-i18n="geo_item2_title">사용자 맥락 강조</h3>
-          <p data-i18n="geo_item2_desc">누가, 언제, 왜 연봉 체감이 줄어드는지 설명합니다.</p>
-        </div>
-        <div class="geo-card">
-          <h3 data-i18n="geo_item3_title">구조화된 요약</h3>
-          <p data-i18n="geo_item3_desc">핵심 지표를 단계별로 제시해 재사용하기 쉽게 구성했습니다.</p>
-        </div>
-        <div class="geo-card">
-          <h3 data-i18n="geo_item4_title">외부 신뢰 근거</h3>
-          <p data-i18n="geo_item4_desc">World Bank CPI 등 공신력 있는 지표를 명시합니다.</p>
-        </div>
-        <div class="geo-card">
-          <h3 data-i18n="geo_item5_title">최신성 표시</h3>
-          <p data-i18n="geo_item5_desc">업데이트 날짜를 공개해 최신 정보를 강조합니다.</p>
-        </div>
-      </div>
-      <div class="faq-list geo-qna">
-        <details>
-          <summary data-i18n="geo_q1">내 연봉이 물가보다 얼마나 뒤처졌나요?</summary>
-          <p data-i18n="geo_a1">입사 연도와 현재 연봉을 입력하면 실질 구매력 감소폭을 계산합니다.</p>
-        </details>
-        <details>
-          <summary data-i18n="geo_q2">실질 연봉은 어떻게 계산되나요?</summary>
-          <p data-i18n="geo_a2">공식 CPI 지수로 물가 상승률을 산출한 뒤 현재 연봉을 환산합니다.</p>
-        </details>
-        <details>
-          <summary data-i18n="geo_q3">체감 물가를 반영할 수 있나요?</summary>
-          <p data-i18n="geo_a3">공식 지수 외에 생활물가 보정이나 직접 입력 옵션을 제공합니다.</p>
-        </details>
-      </div>
+      </details>
     </section>
 
     <section class="panel panel--content panel--accordion" id="about">
@@ -432,53 +440,65 @@
       </details>
     </section>
 
-    <section class="panel panel--content" id="faq">
-      <div class="panel-head">
-        <h2 data-i18n="faq_title">자주 묻는 질문</h2>
-        <span class="step-hint" data-i18n="faq_hint">정책, 데이터, 개인정보 관련 안내입니다.</span>
-      </div>
-      <div class="faq-list">
-        <details>
-          <summary data-i18n="faq_q1">공식 데이터는 어디서 가져오나요?</summary>
-          <p data-i18n="faq_a1">세계은행 CPI(2010=100)를 기반으로 연도별 지수를 구성했습니다.</p>
-        </details>
-        <details>
-          <summary data-i18n="faq_q2">왜 생활물가 옵션이 있나요?</summary>
-          <p data-i18n="faq_a2">체감 물가가 공식 지수보다 높게 느껴지는 경우를 고려한 보정 옵션입니다.</p>
-        </details>
-        <details>
-          <summary data-i18n="faq_q3">입력한 연봉이 저장되나요?</summary>
-          <p data-i18n="faq_a3">설정값은 브라우저 로컬 저장소에만 저장되며 외부로 전송되지 않습니다.</p>
-        </details>
-        <details>
-          <summary data-i18n="faq_q4">데이터는 얼마나 자주 업데이트되나요?</summary>
-          <p data-i18n="faq_a4">공식 CPI 발표 주기에 맞춰 연 1회 이상 갱신하는 것을 원칙으로 합니다.</p>
-        </details>
-      </div>
+    <section class="panel panel--content panel--accordion" id="faq">
+      <details class="accordion">
+        <summary class="panel-head">
+          <h2 data-i18n="faq_title">자주 묻는 질문</h2>
+          <span class="step-hint" data-i18n="faq_hint">정책, 데이터, 개인정보 관련 안내입니다.</span>
+        </summary>
+        <div class="accordion-body">
+          <div class="faq-list">
+            <details>
+              <summary data-i18n="faq_q1">공식 데이터는 어디서 가져오나요?</summary>
+              <p data-i18n="faq_a1">세계은행 CPI(2010=100)를 기반으로 연도별 지수를 구성했습니다.</p>
+            </details>
+            <details>
+              <summary data-i18n="faq_q2">왜 생활물가 옵션이 있나요?</summary>
+              <p data-i18n="faq_a2">체감 물가가 공식 지수보다 높게 느껴지는 경우를 고려한 보정 옵션입니다.</p>
+            </details>
+            <details>
+              <summary data-i18n="faq_q3">입력한 연봉이 저장되나요?</summary>
+              <p data-i18n="faq_a3">설정값은 브라우저 로컬 저장소에만 저장되며 외부로 전송되지 않습니다.</p>
+            </details>
+            <details>
+              <summary data-i18n="faq_q4">데이터는 얼마나 자주 업데이트되나요?</summary>
+              <p data-i18n="faq_a4">공식 CPI 발표 주기에 맞춰 연 1회 이상 갱신하는 것을 원칙으로 합니다.</p>
+            </details>
+          </div>
+        </div>
+      </details>
     </section>
 
-    <section class="panel panel--content" id="contact">
-      <div class="panel-head">
-        <h2 data-i18n="contact_title">문의</h2>
-        <span class="step-hint" data-i18n="contact_hint">피드백과 데이터 제보를 기다립니다.</span>
-      </div>
-      <p class="panel-desc" data-i18n="contact_desc">
-        제휴, 오류 제보, 데이터 문의는 아래 이메일로 보내주세요. 48시간 내 회신을 목표로 합니다.
-      </p>
-      <a class="contact-link" href="mailto:alwayswithme82@gmail.com">alwayswithme82@gmail.com</a>
+    <section class="panel panel--content panel--accordion" id="contact">
+      <details class="accordion">
+        <summary class="panel-head">
+          <h2 data-i18n="contact_title">문의</h2>
+          <span class="step-hint" data-i18n="contact_hint">피드백과 데이터 제보를 기다립니다.</span>
+        </summary>
+        <div class="accordion-body">
+          <p class="panel-desc" data-i18n="contact_desc">
+            제휴, 오류 제보, 데이터 문의는 아래 이메일로 보내주세요. 48시간 내 회신을 목표로 합니다.
+          </p>
+          <a class="contact-link" href="mailto:alwayswithme82@gmail.com">alwayswithme82@gmail.com</a>
+        </div>
+      </details>
     </section>
 
-    <section class="panel panel--content" id="policies">
-      <div class="panel-head">
-        <h2 data-i18n="policies_title">정책 및 운영 정보</h2>
-        <span class="step-hint" data-i18n="policies_hint">투명한 운영을 위해 주요 문서를 공개합니다.</span>
-      </div>
-      <div class="policy-grid">
-        <a class="policy-card" href="/about.html" data-i18n="policy_about">서비스 소개</a>
-        <a class="policy-card" href="/privacy.html" data-i18n="policy_privacy">개인정보 처리방침</a>
-        <a class="policy-card" href="/terms.html" data-i18n="policy_terms">이용약관</a>
-        <a class="policy-card" href="/contact.html" data-i18n="policy_contact">문의하기</a>
-      </div>
+    <section class="panel panel--content panel--accordion" id="policies">
+      <details class="accordion">
+        <summary class="panel-head">
+          <h2 data-i18n="policies_title">정책 및 운영 정보</h2>
+          <span class="step-hint" data-i18n="policies_hint">투명한 운영을 위해 주요 문서를 공개합니다.</span>
+        </summary>
+        <div class="accordion-body">
+          <div class="policy-grid">
+            <a class="policy-card" href="/about.html" data-i18n="policy_about">서비스 소개</a>
+            <a class="policy-card" href="/privacy.html" data-i18n="policy_privacy">개인정보 처리방침</a>
+            <a class="policy-card" href="/terms.html" data-i18n="policy_terms">이용약관</a>
+            <a class="policy-card" href="/contact.html" data-i18n="policy_contact">문의하기</a>
+          </div>
+        </div>
+      </details>
     </section>
   </main>
 
