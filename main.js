@@ -75,7 +75,7 @@ const translations = {
       "열심히 일해도 왜 가난해지는지 숫자로 증명합니다.\n연봉은 올랐는데 물가가 더 빨리 뛰었다면,\n실질 구매력은 줄어든 겁니다.",
     cta_calculate: "바로 계산하기",
     cta_report: "리포트 만들기",
-    geo_updated: "최신 업데이트: 2025.08.08",
+    geo_updated: "최신 업데이트: 2026.01.21",
     geo_title: "AI 검색 대응 요약",
     geo_hint: "생성형 AI 검색 환경에서도 유용한 정보를 제공하도록 구성했습니다.",
     geo_desc:
@@ -248,7 +248,7 @@ const translations = {
       "Your salary may go up, but prices can rise faster.\nThis shows how much buying power you actually lost.",
     cta_calculate: "Calculate",
     cta_report: "Create Report",
-    geo_updated: "Last updated: 2025.08.08",
+    geo_updated: "Last updated: 2026.01.21",
     geo_title: "AI search readiness",
     geo_hint: "Structured to answer generative AI queries with clarity.",
     geo_desc:
