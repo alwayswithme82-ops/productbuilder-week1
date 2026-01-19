@@ -128,6 +128,15 @@ const translations = {
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
     report_copy: "텍스트 복사",
     report_download: "이미지 다운로드",
+    share_title: "SNS 공유",
+    share_hint: "모바일에서는 공유 시트에서 카카오톡/인스타그램을 선택할 수 있습니다.",
+    share_kakao: "카카오톡",
+    share_twitter: "트위터",
+    share_facebook: "페이스북",
+    share_instagram: "인스타그램",
+    share_link: "링크 복사",
+    share_link_done: "링크 복사됨",
+    share_reddit: "레딧",
     label_mask_visible: "연봉 공개 표시",
     mask_yes: "예",
     mask_no: "아니오",
@@ -259,6 +268,15 @@ const translations = {
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
     report_download: "Download image",
+    share_title: "Share",
+    share_hint: "On mobile, use the share sheet to pick KakaoTalk or Instagram.",
+    share_kakao: "KakaoTalk",
+    share_twitter: "Twitter",
+    share_facebook: "Facebook",
+    share_instagram: "Instagram",
+    share_link: "Copy link",
+    share_link_done: "Link copied",
+    share_reddit: "Reddit",
     label_mask_visible: "Salary reveal",
     mask_yes: "Yes",
     mask_no: "No",
@@ -340,6 +358,7 @@ const elements = {
   downloadReport: document.getElementById("download-report"),
   shareText: document.getElementById("share-text"),
   copyText: document.getElementById("copy-text"),
+  shareButtons: document.querySelectorAll("[data-share-channel]"),
   jumpToInputs: document.getElementById("jump-to-inputs"),
   jumpToReport: document.getElementById("jump-to-report"),
   language: document.getElementById("language"),
@@ -1008,16 +1027,86 @@ const handleGenerate = async () => {
   elements.downloadReport.href = dataUrl;
 };
 
-const handleCopy = async () => {
-  const dict = translations[elements.language.value] || translations.ko;
+const copyToClipboard = async (text) => {
   try {
-    await navigator.clipboard.writeText(elements.shareText.textContent);
-    elements.copyText.textContent = dict.copy_done;
-    setTimeout(() => {
-      elements.copyText.textContent = dict.copy_default;
-    }, 1600);
+    await navigator.clipboard.writeText(text);
+    return true;
   } catch (error) {
     console.warn("Clipboard copy failed", error);
+    return false;
+  }
+};
+
+const handleCopy = async () => {
+  const dict = translations[elements.language.value] || translations.ko;
+  const success = await copyToClipboard(elements.shareText.textContent);
+  if (!success) {
+    return;
+  }
+  elements.copyText.textContent = dict.copy_done;
+  setTimeout(() => {
+    elements.copyText.textContent = dict.copy_default;
+  }, 1600);
+};
+
+const buildSharePayload = () => {
+  const url = `${window.location.origin}${window.location.pathname}`;
+  const title = document.title || "실질 월급 팩트 체크";
+  const rawText = elements.shareText ? elements.shareText.textContent : title;
+  const text = rawText.replace(/\s+/g, " ").trim();
+  return { title, text, url };
+};
+
+const openSharePopup = (url) => {
+  window.open(url, "_blank", "noopener,noreferrer,width=600,height=600");
+};
+
+const flashButtonText = (button, text) => {
+  const original = button.textContent;
+  button.textContent = text;
+  setTimeout(() => {
+    button.textContent = original;
+  }, 1600);
+};
+
+const handleShare = async (event) => {
+  const button = event.currentTarget;
+  const channel = button.dataset.shareChannel;
+  const dict = translations[elements.language.value] || translations.ko;
+  const payload = buildSharePayload();
+  if (channel === "twitter") {
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(payload.text)}&url=${encodeURIComponent(payload.url)}`;
+    openSharePopup(url);
+    return;
+  }
+  if (channel === "facebook") {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(payload.url)}`;
+    openSharePopup(url);
+    return;
+  }
+  if (channel === "reddit") {
+    const url = `https://www.reddit.com/submit?url=${encodeURIComponent(payload.url)}&title=${encodeURIComponent(payload.title)}`;
+    openSharePopup(url);
+    return;
+  }
+  if (channel === "link") {
+    const success = await copyToClipboard(payload.url);
+    if (success) {
+      flashButtonText(button, dict.share_link_done);
+    }
+    return;
+  }
+  if (navigator.share) {
+    try {
+      await navigator.share(payload);
+      return;
+    } catch (error) {
+      console.warn("Web share failed", error);
+    }
+  }
+  const copied = await copyToClipboard(payload.url);
+  if (copied) {
+    flashButtonText(button, dict.share_link_done);
   }
 };
 
@@ -1064,6 +1153,9 @@ if (elements.currentSalaryUnit) {
 elements.generateReport.addEventListener("click", handleGenerate);
 
 elements.copyText.addEventListener("click", handleCopy);
+elements.shareButtons.forEach((button) => {
+  button.addEventListener("click", handleShare);
+});
 
 elements.jumpToInputs.addEventListener("click", () => {
   scrollToSection("inputs");
@@ -1091,6 +1183,24 @@ if (elements.resultDetails) {
     updateDetailToggleText(elements.language.value, elements.resultDetails.open);
   });
 }
+
+const openAccordionFromHash = () => {
+  const targetId = window.location.hash.replace("#", "");
+  if (!targetId) {
+    return;
+  }
+  const section = document.getElementById(targetId);
+  if (!section) {
+    return;
+  }
+  const accordion = section.querySelector("details.accordion");
+  if (accordion && !accordion.open) {
+    accordion.open = true;
+  }
+};
+
+window.addEventListener("hashchange", openAccordionFromHash);
+openAccordionFromHash();
 
 const bindSalaryFormatting = (input) => {
   if (!input) {

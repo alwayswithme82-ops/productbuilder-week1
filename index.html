@@ -81,46 +81,6 @@
   </header>
 
   <main class="layout">
-    <section class="panel panel--content" id="about">
-      <div class="panel-head">
-        <h2 data-i18n="about_title">서비스 소개</h2>
-        <span class="step-hint" data-i18n="about_hint">실질 구매력을 숫자로 보여주는 인플레이션 계산기입니다.</span>
-      </div>
-      <p class="panel-desc" data-i18n="about_desc">
-        입사 연도 연봉과 현재 연봉을 입력하면, 물가 상승률을 반영한 실질 연봉을 계산해줍니다.
-        데이터 출처와 계산식, 업데이트 방식을 명확히 공개해 투명성을 높였습니다.
-      </p>
-      <div class="info-grid">
-        <article class="info-card">
-          <h3 data-i18n="about_card1_title">명확한 목적</h3>
-          <p data-i18n="about_card1_desc">연봉 인상률과 물가 상승률의 격차를 이해하도록 돕습니다.</p>
-        </article>
-        <article class="info-card">
-          <h3 data-i18n="about_card2_title">신뢰할 수 있는 지표</h3>
-          <p data-i18n="about_card2_desc">세계은행 CPI(2010=100)를 기준으로 데이터를 구성했습니다.</p>
-        </article>
-        <article class="info-card">
-          <h3 data-i18n="about_card3_title">개인정보 최소화</h3>
-          <p data-i18n="about_card3_desc">입력값은 브라우저에만 저장되며 서버로 전송되지 않습니다.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel panel--content" id="method">
-      <div class="panel-head">
-        <h2 data-i18n="method_title">계산 방법</h2>
-        <span class="step-hint" data-i18n="method_hint">누구나 이해할 수 있도록 계산 흐름을 공개합니다.</span>
-      </div>
-      <ol class="method-steps">
-        <li data-i18n="method_step1">입사 연도와 현재 연도, 연봉을 입력합니다.</li>
-        <li data-i18n="method_step2">선택한 CPI 지수로 누적 물가 상승률을 계산합니다.</li>
-        <li data-i18n="method_step3">현재 연봉을 물가로 환산해 실질 구매력 변화를 보여줍니다.</li>
-      </ol>
-      <div class="callout" data-i18n="method_note">
-        본 계산은 평균 물가 기준이며 개인별 체감과 차이가 있을 수 있습니다.
-      </div>
-    </section>
-
     <section class="panel panel--inputs" id="inputs">
       <div class="panel-head">
         <h2 data-i18n="step1_title">연봉 입력</h2>
@@ -256,6 +216,68 @@
           <a class="button button--ghost" id="download-report" download="inflation-report.png" data-i18n="report_download">이미지 다운로드</a>
         </div>
       </div>
+      <div class="share-channels">
+        <p class="share-title" data-i18n="share_title">SNS 공유</p>
+        <div class="share-buttons">
+          <button class="button button--ghost" type="button" data-share-channel="kakao" data-i18n="share_kakao">카카오톡</button>
+          <button class="button button--ghost" type="button" data-share-channel="twitter" data-i18n="share_twitter">트위터</button>
+          <button class="button button--ghost" type="button" data-share-channel="facebook" data-i18n="share_facebook">페이스북</button>
+          <button class="button button--ghost" type="button" data-share-channel="instagram" data-i18n="share_instagram">인스타그램</button>
+          <button class="button button--ghost" type="button" data-share-channel="link" data-i18n="share_link">링크 복사</button>
+          <button class="button button--ghost" type="button" data-share-channel="reddit" data-i18n="share_reddit">레딧</button>
+        </div>
+        <p class="hint share-hint" data-i18n="share_hint">
+          모바일에서는 공유 시트에서 카카오톡/인스타그램을 선택할 수 있습니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="panel panel--content panel--accordion" id="about">
+      <details class="accordion">
+        <summary class="panel-head">
+          <h2 data-i18n="about_title">서비스 소개</h2>
+          <span class="step-hint" data-i18n="about_hint">실질 구매력을 숫자로 보여주는 인플레이션 계산기입니다.</span>
+        </summary>
+        <div class="accordion-body">
+          <p class="panel-desc" data-i18n="about_desc">
+            입사 연도 연봉과 현재 연봉을 입력하면, 물가 상승률을 반영한 실질 연봉을 계산해줍니다.
+            데이터 출처와 계산식, 업데이트 방식을 명확히 공개해 투명성을 높였습니다.
+          </p>
+          <div class="info-grid">
+            <article class="info-card">
+              <h3 data-i18n="about_card1_title">명확한 목적</h3>
+              <p data-i18n="about_card1_desc">연봉 인상률과 물가 상승률의 격차를 이해하도록 돕습니다.</p>
+            </article>
+            <article class="info-card">
+              <h3 data-i18n="about_card2_title">신뢰할 수 있는 지표</h3>
+              <p data-i18n="about_card2_desc">세계은행 CPI(2010=100)를 기준으로 데이터를 구성했습니다.</p>
+            </article>
+            <article class="info-card">
+              <h3 data-i18n="about_card3_title">개인정보 최소화</h3>
+              <p data-i18n="about_card3_desc">입력값은 브라우저에만 저장되며 서버로 전송되지 않습니다.</p>
+            </article>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel panel--content panel--accordion" id="method">
+      <details class="accordion">
+        <summary class="panel-head">
+          <h2 data-i18n="method_title">계산 방법</h2>
+          <span class="step-hint" data-i18n="method_hint">누구나 이해할 수 있도록 계산 흐름을 공개합니다.</span>
+        </summary>
+        <div class="accordion-body">
+          <ol class="method-steps">
+            <li data-i18n="method_step1">입사 연도와 현재 연도, 연봉을 입력합니다.</li>
+            <li data-i18n="method_step2">선택한 CPI 지수로 누적 물가 상승률을 계산합니다.</li>
+            <li data-i18n="method_step3">현재 연봉을 물가로 환산해 실질 구매력 변화를 보여줍니다.</li>
+          </ol>
+          <div class="callout" data-i18n="method_note">
+            본 계산은 평균 물가 기준이며 개인별 체감과 차이가 있을 수 있습니다.
+          </div>
+        </div>
+      </details>
     </section>
 
     <section class="panel panel--content" id="faq">
@@ -291,7 +313,7 @@
       <p class="panel-desc" data-i18n="contact_desc">
         제휴, 오류 제보, 데이터 문의는 아래 이메일로 보내주세요. 48시간 내 회신을 목표로 합니다.
       </p>
-      <a class="contact-link" href="mailto:contact@yourdomain.com">contact@yourdomain.com</a>
+      <a class="contact-link" href="mailto:alwayswithme82@gmail.com">alwayswithme82@gmail.com</a>
     </section>
 
     <section class="panel panel--content" id="policies">
