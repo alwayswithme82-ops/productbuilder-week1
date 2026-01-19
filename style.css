@@ -218,6 +218,7 @@ body {
 }
 
 .panel--results .result-grid,
+.panel--results .result-list,
 .panel--results .bar-compare {
   max-width: 560px;
   margin: 0 auto;
@@ -427,6 +428,29 @@ select:focus {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
+.result-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.result-item {
+  display: grid;
+  gap: 6px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-label {
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
 .result-summary {
   display: grid;
   gap: 16px;
@@ -498,6 +522,17 @@ select:focus {
   font-family: "GmarketSansBold", "Pretendard", sans-serif;
   color: var(--ink);
   line-height: 1.3;
+}
+
+.result-item strong {
+  font-size: 1.3rem;
+  font-family: "GmarketSansBold", "Pretendard", sans-serif;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.result-item small {
+  color: var(--ink-soft);
 }
 
 .bar-compare {
