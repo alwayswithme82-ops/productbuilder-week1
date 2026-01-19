@@ -129,14 +129,12 @@ const translations = {
     report_copy: "텍스트 복사",
     report_download: "이미지 다운로드",
     share_title: "SNS 공유",
-    share_hint: "모바일에서는 공유 시트에서 카카오톡/인스타그램을 선택할 수 있습니다.",
-    share_kakao: "카카오톡",
     share_twitter: "트위터",
     share_facebook: "페이스북",
-    share_instagram: "인스타그램",
     share_link: "링크 복사",
     share_link_done: "링크 복사됨",
     share_reddit: "레딧",
+    share_hint: "각 채널 전용 썸네일이 적용된 공유 링크를 사용합니다.",
     label_mask_visible: "연봉 공개 표시",
     mask_yes: "예",
     mask_no: "아니오",
@@ -269,14 +267,12 @@ const translations = {
     report_copy: "Copy text",
     report_download: "Download image",
     share_title: "Share",
-    share_hint: "On mobile, use the share sheet to pick KakaoTalk or Instagram.",
-    share_kakao: "KakaoTalk",
     share_twitter: "Twitter",
     share_facebook: "Facebook",
-    share_instagram: "Instagram",
     share_link: "Copy link",
     share_link_done: "Link copied",
     share_reddit: "Reddit",
+    share_hint: "Each channel uses its own thumbnail preview.",
     label_mask_visible: "Salary reveal",
     mask_yes: "Yes",
     mask_no: "No",
@@ -1049,8 +1045,8 @@ const handleCopy = async () => {
   }, 1600);
 };
 
-const buildSharePayload = () => {
-  const url = `${window.location.origin}${window.location.pathname}`;
+const buildSharePayload = (urlOverride) => {
+  const url = urlOverride || `${window.location.origin}${window.location.pathname}`;
   const title = document.title || "실질 월급 팩트 체크";
   const rawText = elements.shareText ? elements.shareText.textContent : title;
   const text = rawText.replace(/\s+/g, " ").trim();
@@ -1069,11 +1065,26 @@ const flashButtonText = (button, text) => {
   }, 1600);
 };
 
+const getShareUrl = (channel) => {
+  const base = window.location.origin;
+  if (channel === "twitter") {
+    return `${base}/share-twitter.html`;
+  }
+  if (channel === "facebook") {
+    return `${base}/share-facebook.html`;
+  }
+  if (channel === "reddit") {
+    return `${base}/share-reddit.html`;
+  }
+  return `${base}${window.location.pathname}`;
+};
+
 const handleShare = async (event) => {
   const button = event.currentTarget;
   const channel = button.dataset.shareChannel;
   const dict = translations[elements.language.value] || translations.ko;
-  const payload = buildSharePayload();
+  const shareUrl = getShareUrl(channel);
+  const payload = buildSharePayload(shareUrl);
   if (channel === "twitter") {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(payload.text)}&url=${encodeURIComponent(payload.url)}`;
     openSharePopup(url);
@@ -1090,7 +1101,7 @@ const handleShare = async (event) => {
     return;
   }
   if (channel === "link") {
-    const success = await copyToClipboard(payload.url);
+    const success = await copyToClipboard(`${window.location.origin}${window.location.pathname}`);
     if (success) {
       flashButtonText(button, dict.share_link_done);
     }
