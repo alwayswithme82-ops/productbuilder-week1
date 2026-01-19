@@ -373,23 +373,31 @@ const parseSalaryForCountry = (value, country) => {
   return parseSalaryInputValue(value);
 };
 
-const toPlainSalaryInput = (value, country) => {
-  if (country !== "KR") {
-    const parsed = parseSalaryInputValue(value);
-    return parsed ? String(parsed) : "";
+const formatSalaryInputWithCaret = (input) => {
+  if (!input || elements.country.value !== "KR") {
+    return;
   }
-  const parsed = parseKrwManFromFormatted(value);
-  return parsed ? String(parsed) : "";
-};
-
-const getRawManFromInput = (input, country) => {
-  if (!input) {
-    return 0;
+  const caret = input.selectionStart || 0;
+  const digitCount = input.value.slice(0, caret).replace(/[^\d]/g, "").length;
+  const manValue = parseSalaryForCountry(input.value, "KR");
+  const formatted = formatSalaryInputValue(manValue * 10000, "man", "KR");
+  input.value = formatted;
+  if (!digitCount) {
+    input.setSelectionRange(0, 0);
+    return;
   }
-  if (country === "KR" && input.dataset.rawValue) {
-    return Number(input.dataset.rawValue) || 0;
+  let seen = 0;
+  let newPos = formatted.length;
+  for (let i = 0; i < formatted.length; i += 1) {
+    if (/\d/.test(formatted[i])) {
+      seen += 1;
+      if (seen >= digitCount) {
+        newPos = i + 1;
+        break;
+      }
+    }
   }
-  return parseSalaryForCountry(input.value, country);
+  input.setSelectionRange(newPos, newPos);
 };
 
 const formatCurrency = (value, country) => {
@@ -690,15 +698,9 @@ const renderDynamicLabels = (settings) => {
   const currentFormatted = formatSalaryInputValue(settings.currentSalary, "man", settings.country);
   if (document.activeElement !== elements.startSalary) {
     elements.startSalary.value = startFormatted;
-    if (elements.country.value === "KR") {
-      elements.startSalary.dataset.rawValue = String(Math.round(settings.startSalary / 10000));
-    }
   }
   if (document.activeElement !== elements.currentSalary) {
     elements.currentSalary.value = currentFormatted;
-    if (elements.country.value === "KR") {
-      elements.currentSalary.dataset.rawValue = String(Math.round(settings.currentSalary / 10000));
-    }
   }
 };
 
@@ -824,10 +826,10 @@ const handleInput = () => {
   const updated = {
     startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
     startSalary:
-      getRawManFromInput(elements.startSalary, country) * getUnitMultiplier("man", country),
+      parseSalaryForCountry(elements.startSalary.value, country) * getUnitMultiplier("man", country),
     currentYear: Number(elements.currentYear.value) || DEFAULT_SETTINGS.currentYear,
     currentSalary:
-      getRawManFromInput(elements.currentSalary, country) * getUnitMultiplier("man", country),
+      parseSalaryForCountry(elements.currentSalary.value, country) * getUnitMultiplier("man", country),
     inflationSource: elements.inflationSource.value,
     customInflation: Number(elements.customInflation.value) || 0,
     language: elements.language.value,
@@ -972,46 +974,18 @@ if (elements.resultDetails) {
   });
 }
 
-const enterRawSalaryMode = (input) => {
-  if (!input || input.dataset.rawMode === "true") {
-    return;
-  }
-  const caret = input.selectionStart || 0;
-  const digitCount = input.value.slice(0, caret).replace(/[^\d]/g, "").length;
-  const plain = toPlainSalaryInput(input.value, elements.country.value);
-  input.value = plain;
-  if (elements.country.value === "KR") {
-    input.dataset.rawValue = String(parseSalaryForCountry(input.value, "KR"));
-  }
-  const newPos = Math.min(digitCount, plain.length);
-  input.setSelectionRange(newPos, newPos);
-  input.dataset.rawMode = "true";
-};
-
 const bindSalaryFormatting = (input) => {
   if (!input) {
     return;
   }
-  input.addEventListener("keydown", (event) => {
-    if (elements.country.value !== "KR") {
-      return;
-    }
-    if (/\d/.test(event.key) || event.key === "Backspace" || event.key === "Delete") {
-      enterRawSalaryMode(input);
-    }
-  });
   input.addEventListener("input", () => {
-    const country = elements.country.value;
-    if (country === "KR") {
-      input.dataset.rawValue = String(parseSalaryForCountry(input.value, country));
-    }
+    formatSalaryInputWithCaret(input);
   });
   input.addEventListener("blur", () => {
     const country = elements.country.value;
     const rawValue = parseSalaryForCountry(input.value, country);
     const baseValue = country === "KR" ? rawValue * 10000 : rawValue;
     input.value = formatSalaryInputValue(baseValue, "man", country);
-    delete input.dataset.rawMode;
   });
 };
 
