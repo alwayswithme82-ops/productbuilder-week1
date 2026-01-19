@@ -75,7 +75,6 @@ const translations = {
     label_start_salary: "입사 연봉",
     label_current_salary: "현재 연봉",
     salary_unit_krw: "만원 입력",
-    salary_display_prefix: "표시:",
     step2_title: "물가 기준",
     step2_hint: "공식 CPI 또는 체감 물가를 선택하세요.",
     label_inflation_source: "물가 기준",
@@ -166,7 +165,6 @@ const translations = {
     label_start_salary: "Starting salary",
     label_current_salary: "Current salary",
     salary_unit_krw: "10k KRW input",
-    salary_display_prefix: "Display:",
     step2_title: "Inflation data",
     step2_hint: "Choose official CPI or a felt-inflation adjustment.",
     label_inflation_source: "Inflation source",
@@ -278,8 +276,6 @@ const elements = {
   maskVisible: document.getElementById("mask-visible"),
   startSalaryUnit: document.getElementById("start-salary-unit"),
   currentSalaryUnit: document.getElementById("current-salary-unit"),
-  startSalaryDisplay: document.getElementById("start-salary-display"),
-  currentSalaryDisplay: document.getElementById("current-salary-display"),
   summaryReal: document.getElementById("summary-real"),
   summaryPower: document.getElementById("summary-power"),
   resultDetails: document.getElementById("result-details"),
@@ -330,7 +326,16 @@ const formatSalaryInputValue = (value, unit, country) => {
     return Math.round(value);
   }
   const divisor = getUnitMultiplier(unit, country);
-  return divisor ? Math.round(value / divisor) : Math.round(value);
+  const manValue = divisor ? Math.round(value / divisor) : Math.round(value);
+  return formatKrwShort(manValue * 10000, "ko-KR");
+};
+
+const parseSalaryInputValue = (value) => {
+  if (!value) {
+    return 0;
+  }
+  const cleaned = String(value).replace(/[^\d]/g, "");
+  return Number(cleaned) || 0;
 };
 
 const formatCurrency = (value, country) => {
@@ -627,15 +632,10 @@ const renderDynamicLabels = (settings) => {
   const salaryMax = settings.country === "US" ? 200000 : 200000000;
   elements.startSalaryRange.max = salaryMax;
   elements.currentSalaryRange.max = salaryMax;
-  const displayPrefix = dict.salary_display_prefix || "";
-  const startDisplay = formatCurrency(settings.startSalary, settings.country);
-  const currentDisplay = formatCurrency(settings.currentSalary, settings.country);
-  elements.startSalaryDisplay.textContent = displayPrefix
-    ? `${displayPrefix} ${startDisplay}`
-    : startDisplay;
-  elements.currentSalaryDisplay.textContent = displayPrefix
-    ? `${displayPrefix} ${currentDisplay}`
-    : currentDisplay;
+  const startFormatted = formatSalaryInputValue(settings.startSalary, "man", settings.country);
+  const currentFormatted = formatSalaryInputValue(settings.currentSalary, "man", settings.country);
+  elements.startSalary.value = startFormatted;
+  elements.currentSalary.value = currentFormatted;
 };
 
 const renderDataNote = (stats, settings) => {
@@ -743,38 +743,33 @@ const syncSalaryRanges = (settings) => {
 };
 
 const syncSalaryInputs = (settings) => {
-  const startUnit = settings.startSalaryUnit || "man";
-  const currentUnit = settings.currentSalaryUnit || "man";
   elements.startSalary.value = formatSalaryInputValue(
     settings.startSalary,
-    startUnit,
+    "man",
     settings.country,
   );
   elements.currentSalary.value = formatSalaryInputValue(
     settings.currentSalary,
-    currentUnit,
+    "man",
     settings.country,
   );
 };
 
 const handleInput = () => {
-  const startUnit = elements.startSalaryUnit?.value || "man";
-  const currentUnit = elements.currentSalaryUnit?.value || "man";
   const updated = {
     startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
     startSalary:
-      (Number(elements.startSalary.value) || 0) * getUnitMultiplier(startUnit, elements.country.value),
+      parseSalaryInputValue(elements.startSalary.value) * getUnitMultiplier("man", elements.country.value),
     currentYear: Number(elements.currentYear.value) || DEFAULT_SETTINGS.currentYear,
     currentSalary:
-      (Number(elements.currentSalary.value) || 0) *
-      getUnitMultiplier(currentUnit, elements.country.value),
+      parseSalaryInputValue(elements.currentSalary.value) * getUnitMultiplier("man", elements.country.value),
     inflationSource: elements.inflationSource.value,
     customInflation: Number(elements.customInflation.value) || 0,
     language: elements.language.value,
     country: elements.country.value,
     maskVisible: elements.maskVisible.value === "yes",
-    startSalaryUnit: startUnit,
-    currentSalaryUnit: currentUnit,
+    startSalaryUnit: "man",
+    currentSalaryUnit: "man",
   };
   saveSettings(updated);
   applyTranslations(updated.language);
@@ -783,16 +778,14 @@ const handleInput = () => {
 };
 
 const handleRangeInput = () => {
-  const startUnit = elements.startSalaryUnit?.value || "man";
-  const currentUnit = elements.currentSalaryUnit?.value || "man";
   elements.startSalary.value = formatSalaryInputValue(
     Number(elements.startSalaryRange.value) || 0,
-    startUnit,
+    "man",
     elements.country.value,
   );
   elements.currentSalary.value = formatSalaryInputValue(
     Number(elements.currentSalaryRange.value) || 0,
-    currentUnit,
+    "man",
     elements.country.value,
   );
   handleInput();
@@ -804,32 +797,19 @@ const handleCountryChange = () => {
   elements.currentSalaryRange.value = salaryDefault.current;
   elements.startSalary.value = formatSalaryInputValue(
     salaryDefault.start,
-    elements.startSalaryUnit?.value || "man",
+    "man",
     elements.country.value,
   );
   elements.currentSalary.value = formatSalaryInputValue(
     salaryDefault.current,
-    elements.currentSalaryUnit?.value || "man",
+    "man",
     elements.country.value,
   );
   handleInput();
 };
 
 const handleUnitChange = () => {
-  if (!elements.startSalaryUnit || !elements.currentSalaryUnit) {
-    return;
-  }
-  const settings = loadSettings();
-  const updated = {
-    ...settings,
-    startSalaryUnit: elements.startSalaryUnit.value || "man",
-    currentSalaryUnit: elements.currentSalaryUnit.value || "man",
-  };
-  saveSettings(updated);
-  applyTranslations(updated.language);
-  render(updated);
-  syncSalaryRanges(updated);
-  syncSalaryInputs(updated);
+  return;
 };
 
 const handleGenerate = async () => {
