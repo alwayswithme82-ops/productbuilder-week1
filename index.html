@@ -78,36 +78,32 @@
       <form class="form form--grid" id="inflation-form">
         <label class="field">
           <span data-i18n="label_start_year">입사 연도</span>
-          <input id="start-year" type="number" min="2000" max="2025" step="1" value="2019" aria-describedby="start-year-note" />
-          <small class="field-note" id="start-year-note" data-i18n="hint_start_year">2000~2025 사이 연도를 입력하세요.</small>
+          <input id="start-year" type="number" min="2000" max="2025" step="1" value="2019" />
         </label>
         <label class="field">
           <span data-i18n="label_current_year">현재 연도</span>
-          <input id="current-year" type="number" min="2000" max="2025" step="1" value="2025" aria-describedby="current-year-note" />
-          <small class="field-note" id="current-year-note" data-i18n="hint_current_year">입사 연도 이후로 설정하세요.</small>
+          <input id="current-year" type="number" min="2000" max="2025" step="1" value="2025" />
         </label>
         <label class="field field--wide">
           <span data-i18n="label_start_salary" id="label-start-salary">입사 연봉 (원)</span>
           <div class="field-row">
-            <input id="start-salary" type="number" min="0" step="100000" inputmode="numeric" value="50000000" aria-describedby="start-salary-note" />
+            <input id="start-salary" type="number" min="0" step="100000" inputmode="numeric" value="50000000" />
             <select id="start-salary-unit" class="unit-select">
               <option value="man">만원</option>
               <option value="eok">억원</option>
             </select>
           </div>
-          <small class="field-note" id="start-salary-note" data-i18n="hint_start_salary">예: 4500 (만원 단위)</small>
           <input id="start-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="50000000" />
         </label>
         <label class="field field--wide">
           <span data-i18n="label_current_salary" id="label-current-salary">현재 연봉 (원)</span>
           <div class="field-row">
-            <input id="current-salary" type="number" min="0" step="100000" inputmode="numeric" value="55000000" aria-describedby="current-salary-note" />
+            <input id="current-salary" type="number" min="0" step="100000" inputmode="numeric" value="55000000" />
             <select id="current-salary-unit" class="unit-select">
               <option value="man">만원</option>
               <option value="eok">억원</option>
             </select>
           </div>
-          <small class="field-note" id="current-salary-note" data-i18n="hint_current_salary">예: 5500 (만원 단위)</small>
           <input id="current-salary-range" class="range" type="range" min="0" max="200000000" step="100000" value="55000000" />
         </label>
       </form>
@@ -129,14 +125,8 @@
           <span data-i18n="label_custom_inflation">누적 물가 상승률 (%)</span>
           <input id="custom-inflation" type="number" min="0" step="0.1" value="18" />
         </label>
-        <p class="hint" data-i18n="hint_data">공식 지수는 World Bank CPI(2010=100) 기반입니다.</p>
-        <p class="hint" data-i18n="hint_cpi">CPI는 소비자물가지수로, 물가가 얼마나 올랐는지 보여주는 대표 지표입니다.</p>
+        <p class="hint" data-i18n="hint_data">공식 지수는 KOSIS를 참고하세요. 현재는 데모 지수 기반입니다.</p>
         <p class="data-note" id="data-note"></p>
-      </div>
-      <div class="form-actions">
-        <button class="button button--primary" type="button" id="calculate" data-i18n="cta_submit">계산하기</button>
-        <span class="form-caption" data-i18n="calc_hint">입력 후 계산 버튼을 눌러 결과를 확인하세요.</span>
-        <p class="form-alert" id="form-alert" aria-live="polite"></p>
       </div>
     </section>
 
@@ -145,68 +135,62 @@
         <h2 data-i18n="step3_title">3단계: 결과 확인</h2>
         <span class="step-hint" data-i18n="step3_hint">실질 구매력이 얼마나 변했는지 확인합니다.</span>
       </div>
-      <p class="result-prompt" id="result-prompt" data-i18n="result_prompt">입력 후 계산하기 버튼을 누르세요.</p>
-      <div class="result-content is-hidden" id="result-content">
-        <div class="result-grid">
-          <div class="result-card">
-            <span data-i18n="result_real_salary">실질 연봉 (입사 연도 기준)</span>
-            <strong id="real-salary">0원</strong>
-            <small data-i18n="result_real_salary_hint">현재 연봉을 물가로 환산한 값</small>
-          </div>
-          <div class="result-card">
-            <span data-i18n="result_power_change">구매력 변화</span>
-            <strong id="power-change">0%</strong>
-            <small data-i18n="result_power_hint">입사 연봉 대비 증감</small>
-          </div>
-          <div class="result-card">
-            <span data-i18n="result_nominal_change">연봉 인상률</span>
-            <strong id="nominal-change">0%</strong>
-            <small data-i18n="result_nominal_hint">명목 상승률</small>
-          </div>
-          <div class="result-card">
-            <span data-i18n="result_inflation_change">물가 상승률</span>
-            <strong id="inflation-change">0%</strong>
-            <small data-i18n="result_inflation_hint">입사 → 현재 누적</small>
-          </div>
+      <div class="result-grid">
+        <div class="result-card">
+          <span data-i18n="result_real_salary">실질 연봉 (입사 연도 기준)</span>
+          <strong id="real-salary">0원</strong>
+          <small data-i18n="result_real_salary_hint">현재 연봉을 물가로 환산한 값</small>
         </div>
-        <div class="bar-compare" id="bar-compare">
-          <div class="bar-row">
-            <span data-i18n="bar_start_label">입사 연봉</span>
-            <div class="bar-track">
-              <div class="bar-fill bar-fill--start" id="bar-start"></div>
-            </div>
-            <strong id="bar-start-value">0</strong>
-          </div>
-          <div class="bar-row">
-            <span data-i18n="bar_real_label">현재 실질</span>
-            <div class="bar-track">
-              <div class="bar-fill bar-fill--real" id="bar-real"></div>
-            </div>
-            <strong id="bar-real-value">0</strong>
-          </div>
-          <p class="bar-gap" id="bar-gap"></p>
+        <div class="result-card">
+          <span data-i18n="result_power_change">구매력 변화</span>
+          <strong id="power-change">0%</strong>
+          <small data-i18n="result_power_hint">입사 연봉 대비 증감</small>
         </div>
-        <div class="callout" id="verdict" data-i18n="verdict_loading">결과를 계산 중입니다.</div>
-        <div class="shock-line" id="shock-line"></div>
-        <div class="ad-inline">
-          <p class="ad-caption" data-i18n="ad_caption">손해 본 돈, 이걸로 메꾸세요</p>
-          <ins class="adsbygoogle"
-            style="display:block"
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
-            data-ad-slot="0000000000"
-            data-ad-format="auto"
-            data-full-width-responsive="true"></ins>
+        <div class="result-card">
+          <span data-i18n="result_nominal_change">연봉 인상률</span>
+          <strong id="nominal-change">0%</strong>
+          <small data-i18n="result_nominal_hint">명목 상승률</small>
         </div>
+        <div class="result-card">
+          <span data-i18n="result_inflation_change">물가 상승률</span>
+          <strong id="inflation-change">0%</strong>
+          <small data-i18n="result_inflation_hint">입사 → 현재 누적</small>
+        </div>
+      </div>
+      <div class="bar-compare" id="bar-compare">
+        <div class="bar-row">
+          <span data-i18n="bar_start_label">입사 연봉</span>
+          <div class="bar-track">
+            <div class="bar-fill bar-fill--start" id="bar-start"></div>
+          </div>
+          <strong id="bar-start-value">0</strong>
+        </div>
+        <div class="bar-row">
+          <span data-i18n="bar_real_label">현재 실질</span>
+          <div class="bar-track">
+            <div class="bar-fill bar-fill--real" id="bar-real"></div>
+          </div>
+          <strong id="bar-real-value">0</strong>
+        </div>
+        <p class="bar-gap" id="bar-gap"></p>
+      </div>
+      <div class="callout" id="verdict" data-i18n="verdict_loading">결과를 계산 중입니다.</div>
+      <div class="shock-line" id="shock-line"></div>
+      <div class="ad-inline">
+        <p class="ad-caption" data-i18n="ad_caption">손해 본 돈, 이걸로 메꾸세요</p>
+        <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
+          data-ad-slot="0000000000"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
       </div>
     </section>
 
     <section class="panel panel--share" id="report">
       <div class="panel-head">
         <h2 data-i18n="report_title">"사장님 나빠요" 리포트</h2>
-        <div class="report-actions">
-          <button class="button button--primary" type="button" id="generate-report" data-i18n="report_generate">이미지 생성</button>
-          <span class="report-status" id="report-status" data-i18n="report_status_idle">이미지 생성 후 다운로드할 수 있습니다.</span>
-        </div>
+        <button class="button button--primary" type="button" id="generate-report" data-i18n="report_generate">이미지 생성</button>
       </div>
       <p class="panel-desc" data-i18n="report_desc">공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.</p>
       <div class="report-privacy">

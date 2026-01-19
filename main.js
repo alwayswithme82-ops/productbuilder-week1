@@ -74,7 +74,6 @@ const translations = {
     label_current_year: "현재 연도",
     label_start_salary: "입사 연봉",
     label_current_salary: "현재 연봉",
-    salary_unit_krw: "만원/억",
     step2_title: "2단계: 물가 기준",
     step2_hint: "공식 CPI 또는 체감 물가를 선택하세요.",
     label_inflation_source: "물가 기준",
@@ -83,17 +82,8 @@ const translations = {
     option_custom: "직접 입력",
     label_custom_inflation: "누적 물가 상승률 (%)",
     hint_data: "공식 지수는 World Bank CPI(2010=100) 기반입니다.",
-    hint_cpi: "CPI는 소비자물가지수로, 물가 상승을 대표하는 공식 지표입니다.",
-    hint_start_year: "2000~2025 사이 연도를 입력하세요.",
-    hint_current_year: "입사 연도 이후로 설정하세요.",
-    hint_start_salary_kr: "예: 4500 (만원 단위)",
-    hint_current_salary_kr: "예: 5500 (만원 단위)",
-    hint_start_salary_us: "예: 60000",
-    hint_current_salary_us: "예: 70000",
-    placeholder_salary_kr: "예: 4500",
-    placeholder_salary_us: "예: 60000",
-    step3_title: "3단계: 결과 확인",
-    step3_hint: "실질 구매력이 얼마나 변했는지 확인합니다.",
+    step3_title: "3단계: 충격 결과",
+    step3_hint: "숫자로 확인하는 월급 실종 사건입니다.",
     result_real_salary: "지금 연봉의 실체",
     result_real_salary_hint: "물가로 환산한 실질 연봉",
     result_power_change: "월급 녹아내림",
@@ -104,14 +94,9 @@ const translations = {
     result_inflation_hint: "입사 → 현재 누적",
     verdict_loading: "결과 계산 중입니다.",
     loading_text: "결과 계산 중입니다.",
-    cta_submit: "계산하기",
-    calc_hint: "입력 후 계산 버튼을 눌러 결과를 확인하세요.",
-    result_prompt: "입력 후 계산하기 버튼을 누르세요.",
     report_title: "사장님 나빠요 리포트",
     report_generate: "이미지 생성",
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
-    report_status_idle: "이미지 생성 후 다운로드할 수 있습니다.",
-    report_status_done: "이미지가 생성되었습니다. 다운로드하세요.",
     report_copy: "텍스트 복사",
     report_download: "이미지 다운로드",
     label_mask_visible: "연봉 공개 표시",
@@ -155,10 +140,6 @@ const translations = {
     receipt_col_amount: "금액",
     copy_done: "복사 완료",
     copy_default: "텍스트 복사",
-    error_year_order: "입사 연도는 현재 연도보다 이전이어야 합니다.",
-    error_salary_required: "연봉은 0보다 크게 입력하세요.",
-    error_custom_inflation: "물가 상승률은 0 이상이어야 합니다.",
-    error_divider: "·",
   },
   en: {
     page_title: "Real Salary Value - Inflation Fact Check",
@@ -177,7 +158,6 @@ const translations = {
     label_current_year: "Current year",
     label_start_salary: "Starting salary",
     label_current_salary: "Current salary",
-    salary_unit_krw: "10k / 100M KRW",
     step2_title: "Step 2: Inflation data",
     step2_hint: "Choose official CPI or a felt-inflation adjustment.",
     label_inflation_source: "Inflation source",
@@ -186,17 +166,8 @@ const translations = {
     option_custom: "Custom input",
     label_custom_inflation: "Total inflation (%)",
     hint_data: "Official CPI is from World Bank CPI (2010=100).",
-    hint_cpi: "CPI is the consumer price index, a standard measure of price inflation.",
-    hint_start_year: "Enter a year between 2000 and 2025.",
-    hint_current_year: "Choose a year after your start year.",
-    hint_start_salary_kr: "e.g. 4500 (10k KRW units)",
-    hint_current_salary_kr: "e.g. 5500 (10k KRW units)",
-    hint_start_salary_us: "e.g. 60000",
-    hint_current_salary_us: "e.g. 70000",
-    placeholder_salary_kr: "e.g. 4500",
-    placeholder_salary_us: "e.g. 60000",
-    step3_title: "Step 3: Results",
-    step3_hint: "See how your real buying power changed.",
+    step3_title: "Step 3: Reality Check",
+    step3_hint: "This is how your paycheck really feels.",
     result_real_salary: "Real salary today",
     result_real_salary_hint: "Adjusted for inflation",
     result_power_change: "Paycheck melt-down",
@@ -207,14 +178,9 @@ const translations = {
     result_inflation_hint: "Start → current total",
     verdict_loading: "Calculating results...",
     loading_text: "Calculating results...",
-    cta_submit: "Calculate",
-    calc_hint: "Click calculate to reveal the results.",
-    result_prompt: "Enter your values, then click calculate.",
     report_title: "\"Boss, this is unfair\" report",
     report_generate: "Generate image",
     report_desc: "Save and share this report in your community.",
-    report_status_idle: "Generate an image to enable download.",
-    report_status_done: "Image ready. You can download it now.",
     report_copy: "Copy text",
     report_download: "Download image",
     label_mask_visible: "Salary reveal",
@@ -258,10 +224,6 @@ const translations = {
     receipt_col_amount: "Amount",
     copy_done: "Copied",
     copy_default: "Copy text",
-    error_year_order: "Start year must be earlier than current year.",
-    error_salary_required: "Salary values must be greater than zero.",
-    error_custom_inflation: "Inflation cannot be negative.",
-    error_divider: "·",
   },
 };
 
@@ -284,7 +246,6 @@ const elements = {
   downloadReport: document.getElementById("download-report"),
   shareText: document.getElementById("share-text"),
   copyText: document.getElementById("copy-text"),
-  reportStatus: document.getElementById("report-status"),
   jumpToInputs: document.getElementById("jump-to-inputs"),
   jumpToReport: document.getElementById("jump-to-report"),
   language: document.getElementById("language"),
@@ -303,17 +264,9 @@ const elements = {
   maskVisible: document.getElementById("mask-visible"),
   startSalaryUnit: document.getElementById("start-salary-unit"),
   currentSalaryUnit: document.getElementById("current-salary-unit"),
-  calculate: document.getElementById("calculate"),
-  resultPrompt: document.getElementById("result-prompt"),
-  resultContent: document.getElementById("result-content"),
-  formAlert: document.getElementById("form-alert"),
-  startSalaryNote: document.getElementById("start-salary-note"),
-  currentSalaryNote: document.getElementById("current-salary-note"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-let hasCalculated = false;
 
 const formatKrwShort = (value, locale) => {
   const rounded = Math.round(value);
@@ -378,56 +331,6 @@ const formatPercent = (value, language) => {
 
 const formatNumber = (value, locale) =>
   new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value);
-
-const showResults = (visible) => {
-  elements.resultContent.classList.toggle("is-hidden", !visible);
-  elements.resultPrompt.classList.toggle("is-hidden", visible);
-};
-
-const renderFormAlert = (messages, language) => {
-  const dict = translations[language] || translations.ko;
-  if (!messages.length) {
-    elements.formAlert.textContent = "";
-    return;
-  }
-  elements.formAlert.textContent = messages.join(` ${dict.error_divider || "/" } `);
-};
-
-const getSettingsFromInputs = () => {
-  const startUnit = elements.startSalaryUnit.value || "man";
-  const currentUnit = elements.currentSalaryUnit.value || "man";
-  return {
-    startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
-    startSalary:
-      (Number(elements.startSalary.value) || 0) * getUnitMultiplier(startUnit, elements.country.value),
-    currentYear: Number(elements.currentYear.value) || DEFAULT_SETTINGS.currentYear,
-    currentSalary:
-      (Number(elements.currentSalary.value) || 0) *
-      getUnitMultiplier(currentUnit, elements.country.value),
-    inflationSource: elements.inflationSource.value,
-    customInflation: Number(elements.customInflation.value) || 0,
-    language: elements.language.value,
-    country: elements.country.value,
-    maskVisible: elements.maskVisible.value === "yes",
-    startSalaryUnit: startUnit,
-    currentSalaryUnit: currentUnit,
-  };
-};
-
-const validateSettings = (settings) => {
-  const dict = translations[settings.language] || translations.ko;
-  const errors = [];
-  if (!settings.startYear || !settings.currentYear || settings.startYear > settings.currentYear) {
-    errors.push(dict.error_year_order);
-  }
-  if (settings.startSalary <= 0 || settings.currentSalary <= 0) {
-    errors.push(dict.error_salary_required);
-  }
-  if (settings.inflationSource === "custom" && settings.customInflation < 0) {
-    errors.push(dict.error_custom_inflation);
-  }
-  return errors.filter(Boolean);
-};
 
 const loadSettings = () => {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -676,9 +579,12 @@ const renderDynamicLabels = (settings) => {
   const dict = translations[settings.language] || translations.ko;
   const currency = currencyByCountry[settings.country]?.currency || "KRW";
   const isKrw = currency === "KRW";
-  const unitLabel = isKrw ? dict.salary_unit_krw : currency;
-  elements.labelStartSalary.textContent = `${dict.label_start_salary} (${unitLabel})`;
-  elements.labelCurrentSalary.textContent = `${dict.label_current_salary} (${unitLabel})`;
+  elements.labelStartSalary.textContent = isKrw
+    ? `${dict.label_start_salary} (만원/억)`
+    : `${dict.label_start_salary} (${currency})`;
+  elements.labelCurrentSalary.textContent = isKrw
+    ? `${dict.label_current_salary} (만원/억)`
+    : `${dict.label_current_salary} (${currency})`;
   elements.startSalaryUnit.classList.toggle("is-hidden", !isKrw);
   elements.currentSalaryUnit.classList.toggle("is-hidden", !isKrw);
   const rangeStep = settings.country === "US" ? 1000 : 100000;
@@ -695,13 +601,6 @@ const renderDynamicLabels = (settings) => {
   const salaryMax = settings.country === "US" ? 200000 : 200000000;
   elements.startSalaryRange.max = salaryMax;
   elements.currentSalaryRange.max = salaryMax;
-  const placeholder = isKrw ? dict.placeholder_salary_kr : dict.placeholder_salary_us;
-  const startHint = isKrw ? dict.hint_start_salary_kr : dict.hint_start_salary_us;
-  const currentHint = isKrw ? dict.hint_current_salary_kr : dict.hint_current_salary_us;
-  elements.startSalary.placeholder = placeholder;
-  elements.currentSalary.placeholder = placeholder;
-  elements.startSalaryNote.textContent = startHint;
-  elements.currentSalaryNote.textContent = currentHint;
 };
 
 const renderDataNote = (stats, settings) => {
@@ -805,14 +704,28 @@ const syncSalaryInputs = (settings) => {
 };
 
 const handleInput = () => {
-  const updated = getSettingsFromInputs();
+  const startUnit = elements.startSalaryUnit.value || "man";
+  const currentUnit = elements.currentSalaryUnit.value || "man";
+  const updated = {
+    startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
+    startSalary:
+      (Number(elements.startSalary.value) || 0) * getUnitMultiplier(startUnit, elements.country.value),
+    currentYear: Number(elements.currentYear.value) || DEFAULT_SETTINGS.currentYear,
+    currentSalary:
+      (Number(elements.currentSalary.value) || 0) *
+      getUnitMultiplier(currentUnit, elements.country.value),
+    inflationSource: elements.inflationSource.value,
+    customInflation: Number(elements.customInflation.value) || 0,
+    language: elements.language.value,
+    country: elements.country.value,
+    maskVisible: elements.maskVisible.value === "yes",
+    startSalaryUnit: startUnit,
+    currentSalaryUnit: currentUnit,
+  };
   saveSettings(updated);
   applyTranslations(updated.language);
   render(updated);
   syncSalaryRanges(updated);
-  const errors = validateSettings(updated);
-  renderFormAlert(errors, updated.language);
-  showResults(errors.length ? false : hasCalculated);
 };
 
 const handleRangeInput = () => {
@@ -860,27 +773,6 @@ const handleUnitChange = () => {
   render(updated);
   syncSalaryRanges(updated);
   syncSalaryInputs(updated);
-  const errors = validateSettings(updated);
-  renderFormAlert(errors, updated.language);
-  showResults(errors.length ? false : hasCalculated);
-};
-
-const handleCalculate = () => {
-  const updated = getSettingsFromInputs();
-  const errors = validateSettings(updated);
-  renderFormAlert(errors, updated.language);
-  if (errors.length) {
-    hasCalculated = false;
-    showResults(false);
-    return;
-  }
-  hasCalculated = true;
-  saveSettings(updated);
-  applyTranslations(updated.language);
-  render(updated);
-  syncSalaryRanges(updated);
-  showResults(true);
-  scrollToSection("results");
 };
 
 const handleGenerate = async () => {
@@ -892,8 +784,6 @@ const handleGenerate = async () => {
   renderReportCanvas(stats, settings);
   const dataUrl = elements.reportCanvas.toDataURL("image/png");
   elements.downloadReport.href = dataUrl;
-  const dict = translations[settings.language] || translations.ko;
-  elements.reportStatus.textContent = dict.report_status_done;
 };
 
 const handleCopy = async () => {
@@ -930,8 +820,6 @@ applyTranslations(settings.language);
 render(settings);
 syncSalaryInputs(settings);
 initAds();
-showResults(false);
-renderFormAlert(validateSettings(settings), settings.language);
 
 ["input", "change"].forEach((eventName) => {
   elements.form.addEventListener(eventName, handleInput);
@@ -950,8 +838,6 @@ elements.currentSalaryUnit.addEventListener("change", handleUnitChange);
 elements.generateReport.addEventListener("click", handleGenerate);
 
 elements.copyText.addEventListener("click", handleCopy);
-
-elements.calculate.addEventListener("click", handleCalculate);
 
 elements.jumpToInputs.addEventListener("click", () => {
   scrollToSection("inputs");
