@@ -1059,6 +1059,14 @@ const openSharePopup = (url) => {
   window.open(url, "_blank", "noopener,noreferrer,width=600,height=600");
 };
 
+const openShareTarget = (url) => {
+  if (navigator.share) {
+    window.location.href = url;
+    return;
+  }
+  openSharePopup(url);
+};
+
 const flashButtonText = (button, text) => {
   const original = button.textContent;
   button.textContent = text;
@@ -1095,27 +1103,30 @@ const handleShare = async (event) => {
       await navigator.share(payload);
       return;
     } catch (error) {
+      if (error && error.name === "AbortError") {
+        return;
+      }
       console.warn("Web share failed", error);
     }
   }
   if (channel === "twitter") {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(payload.text)}&url=${encodeURIComponent(payload.url)}`;
-    openSharePopup(url);
+    openShareTarget(url);
     return;
   }
   if (channel === "threads") {
     const url = `https://www.threads.net/intent/post?text=${encodeURIComponent(`${payload.text} ${payload.url}`)}`;
-    openSharePopup(url);
+    openShareTarget(url);
     return;
   }
   if (channel === "facebook") {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(payload.url)}`;
-    openSharePopup(url);
+    openShareTarget(url);
     return;
   }
   if (channel === "reddit") {
     const url = `https://www.reddit.com/submit?url=${encodeURIComponent(payload.url)}&title=${encodeURIComponent(payload.title)}`;
-    openSharePopup(url);
+    openShareTarget(url);
     return;
   }
   if (channel === "link") {
