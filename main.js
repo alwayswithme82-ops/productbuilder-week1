@@ -366,6 +366,13 @@ const parseKrwManFromFormatted = (value) => {
   return fallback;
 };
 
+const parseSalaryForCountry = (value, country) => {
+  if (country === "KR") {
+    return parseKrwManFromFormatted(value);
+  }
+  return parseSalaryInputValue(value);
+};
+
 const toPlainSalaryInput = (value, country) => {
   if (country !== "KR") {
     const parsed = parseSalaryInputValue(value);
@@ -797,17 +804,18 @@ const syncSalaryInputs = (settings) => {
 };
 
 const handleInput = () => {
+  const country = elements.country.value;
   const updated = {
     startYear: Number(elements.startYear.value) || DEFAULT_SETTINGS.startYear,
     startSalary:
-      parseSalaryInputValue(elements.startSalary.value) * getUnitMultiplier("man", elements.country.value),
+      parseSalaryForCountry(elements.startSalary.value, country) * getUnitMultiplier("man", country),
     currentYear: Number(elements.currentYear.value) || DEFAULT_SETTINGS.currentYear,
     currentSalary:
-      parseSalaryInputValue(elements.currentSalary.value) * getUnitMultiplier("man", elements.country.value),
+      parseSalaryForCountry(elements.currentSalary.value, country) * getUnitMultiplier("man", country),
     inflationSource: elements.inflationSource.value,
     customInflation: Number(elements.customInflation.value) || 0,
     language: elements.language.value,
-    country: elements.country.value,
+    country,
     maskVisible: elements.maskVisible.value === "yes",
     startSalaryUnit: "man",
     currentSalaryUnit: "man",
@@ -948,23 +956,37 @@ if (elements.resultDetails) {
   });
 }
 
+const enterRawSalaryMode = (input) => {
+  if (!input || input.dataset.rawMode === "true") {
+    return;
+  }
+  const caret = input.selectionStart || 0;
+  const digitCount = input.value.slice(0, caret).replace(/[^\d]/g, "").length;
+  const plain = toPlainSalaryInput(input.value, elements.country.value);
+  input.value = plain;
+  const newPos = Math.min(digitCount, plain.length);
+  input.setSelectionRange(newPos, newPos);
+  input.dataset.rawMode = "true";
+};
+
 const bindSalaryFormatting = (input) => {
   if (!input) {
     return;
   }
-  input.addEventListener("focus", () => {
-    const caret = input.selectionStart || 0;
-    const digitCount = input.value.slice(0, caret).replace(/[^\d]/g, "").length;
-    const plain = toPlainSalaryInput(input.value, elements.country.value);
-    input.value = plain;
-    const newPos = Math.min(digitCount, plain.length);
-    input.setSelectionRange(newPos, newPos);
+  input.addEventListener("keydown", (event) => {
+    if (elements.country.value !== "KR") {
+      return;
+    }
+    if (/\d/.test(event.key) || event.key === "Backspace" || event.key === "Delete") {
+      enterRawSalaryMode(input);
+    }
   });
   input.addEventListener("blur", () => {
-    const rawValue = parseSalaryInputValue(input.value);
+    const rawValue = parseSalaryForCountry(input.value, elements.country.value);
     const isKrw = elements.country.value === "KR";
     const baseValue = isKrw ? rawValue * 10000 : rawValue;
     input.value = formatSalaryInputValue(baseValue, "man", elements.country.value);
+    delete input.dataset.rawMode;
   });
 };
 
