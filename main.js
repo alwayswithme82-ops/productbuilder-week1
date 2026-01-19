@@ -130,6 +130,7 @@ const translations = {
     report_download: "이미지 다운로드",
     share_title: "SNS 공유",
     share_twitter: "트위터",
+    share_threads: "Threads",
     share_facebook: "페이스북",
     share_link: "링크 복사",
     share_link_done: "링크 복사됨",
@@ -268,6 +269,7 @@ const translations = {
     report_download: "Download image",
     share_title: "Share",
     share_twitter: "Twitter",
+    share_threads: "Threads",
     share_facebook: "Facebook",
     share_link: "Copy link",
     share_link_done: "Link copied",
@@ -1073,6 +1075,9 @@ const getShareUrl = (channel) => {
   if (channel === "facebook") {
     return `${base}/share-facebook.html`;
   }
+  if (channel === "threads") {
+    return `${base}/share-threads.html`;
+  }
   if (channel === "reddit") {
     return `${base}/share-reddit.html`;
   }
@@ -1085,8 +1090,21 @@ const handleShare = async (event) => {
   const dict = translations[elements.language.value] || translations.ko;
   const shareUrl = getShareUrl(channel);
   const payload = buildSharePayload(shareUrl);
+  if (channel !== "link" && navigator.share) {
+    try {
+      await navigator.share(payload);
+      return;
+    } catch (error) {
+      console.warn("Web share failed", error);
+    }
+  }
   if (channel === "twitter") {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(payload.text)}&url=${encodeURIComponent(payload.url)}`;
+    openSharePopup(url);
+    return;
+  }
+  if (channel === "threads") {
+    const url = `https://www.threads.net/intent/post?text=${encodeURIComponent(`${payload.text} ${payload.url}`)}`;
     openSharePopup(url);
     return;
   }
@@ -1106,14 +1124,6 @@ const handleShare = async (event) => {
       flashButtonText(button, dict.share_link_done);
     }
     return;
-  }
-  if (navigator.share) {
-    try {
-      await navigator.share(payload);
-      return;
-    } catch (error) {
-      console.warn("Web share failed", error);
-    }
   }
   const copied = await copyToClipboard(payload.url);
   if (copied) {
