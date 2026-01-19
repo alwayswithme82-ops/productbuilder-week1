@@ -338,6 +338,11 @@ const parseSalaryInputValue = (value) => {
   return Number(cleaned) || 0;
 };
 
+const toPlainSalaryInput = (value) => {
+  const parsed = parseSalaryInputValue(value);
+  return parsed ? String(parsed) : "";
+};
+
 const formatCurrency = (value, country) => {
   const { currency, locale } = currencyByCountry[country] || currencyByCountry.KR;
   if (currency === "KRW") {
@@ -634,8 +639,12 @@ const renderDynamicLabels = (settings) => {
   elements.currentSalaryRange.max = salaryMax;
   const startFormatted = formatSalaryInputValue(settings.startSalary, "man", settings.country);
   const currentFormatted = formatSalaryInputValue(settings.currentSalary, "man", settings.country);
-  elements.startSalary.value = startFormatted;
-  elements.currentSalary.value = currentFormatted;
+  if (document.activeElement !== elements.startSalary) {
+    elements.startSalary.value = startFormatted;
+  }
+  if (document.activeElement !== elements.currentSalary) {
+    elements.currentSalary.value = currentFormatted;
+  }
 };
 
 const renderDataNote = (stats, settings) => {
@@ -906,3 +915,21 @@ if (elements.resultDetails) {
     updateDetailToggleText(elements.language.value, elements.resultDetails.open);
   });
 }
+
+const bindSalaryFormatting = (input) => {
+  if (!input) {
+    return;
+  }
+  input.addEventListener("focus", () => {
+    input.value = toPlainSalaryInput(input.value);
+  });
+  input.addEventListener("blur", () => {
+    const rawValue = parseSalaryInputValue(input.value);
+    const isKrw = elements.country.value === "KR";
+    const baseValue = isKrw ? rawValue * 10000 : rawValue;
+    input.value = formatSalaryInputValue(baseValue, "man", elements.country.value);
+  });
+};
+
+bindSalaryFormatting(elements.startSalary);
+bindSalaryFormatting(elements.currentSalary);
