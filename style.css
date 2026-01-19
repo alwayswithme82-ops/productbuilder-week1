@@ -363,6 +363,12 @@ a:hover {
   color: var(--ink-soft);
 }
 
+.updated {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
 .info-grid {
   display: grid;
   gap: 16px;
@@ -406,6 +412,35 @@ a:hover {
   color: var(--ink-soft);
   line-height: 1.6;
   font-size: 0.95rem;
+}
+
+.geo-list {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 12px;
+}
+
+.geo-card {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.geo-card h3 {
+  margin-bottom: 8px;
+}
+
+.geo-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.geo-qna {
+  margin-top: 16px;
 }
 
 .preview {

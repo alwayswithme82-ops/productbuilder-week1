@@ -138,6 +138,9 @@
       열심히 일해도 왜 가난해지는지 숫자로 증명합니다. 연봉은 올랐는데 물가가 더 빨리 뛰었다면,
       실질 구매력은 줄어든 겁니다.
     </p>
+    <p class="updated" data-i18n="geo_updated">
+      최신 업데이트: <time datetime="2025-08-08">2025.08.08</time>
+    </p>
     <div class="hero-cta">
       <button class="button button--primary" type="button" id="jump-to-inputs" data-i18n="cta_calculate">바로 계산하기</button>
       <button class="button button--ghost" type="button" id="jump-to-report" data-i18n="cta_report">리포트 만들기</button>
@@ -331,6 +334,53 @@
           <a href="https://data.worldbank.org/indicator/FP.CPI.TOTL" target="_blank" rel="noreferrer noopener">World Bank CPI</a>
           <a href="https://kosis.kr/" target="_blank" rel="noreferrer noopener">KOSIS</a>
         </div>
+      </div>
+    </section>
+
+    <section class="panel panel--content" id="geo">
+      <div class="panel-head">
+        <h2 data-i18n="geo_title">AI 검색 대응 요약</h2>
+        <span class="step-hint" data-i18n="geo_hint">생성형 AI 검색 환경에서도 유용한 정보를 제공하도록 구성했습니다.</span>
+      </div>
+      <p class="panel-desc" data-i18n="geo_desc">
+        생성형 AI는 질문 의도와 맥락을 이해해 답변을 구성합니다. 그래서 이 계산기는 질문형 콘텐츠,
+        구조화된 요약, 최신성 표시, 신뢰 가능한 출처 링크를 함께 제공합니다.
+      </p>
+      <div class="geo-list">
+        <div class="geo-card">
+          <h3 data-i18n="geo_item1_title">질문 중심 콘텐츠</h3>
+          <p data-i18n="geo_item1_desc">실제 사용자가 던지는 질문으로 정보를 정리했습니다.</p>
+        </div>
+        <div class="geo-card">
+          <h3 data-i18n="geo_item2_title">사용자 맥락 강조</h3>
+          <p data-i18n="geo_item2_desc">누가, 언제, 왜 연봉 체감이 줄어드는지 설명합니다.</p>
+        </div>
+        <div class="geo-card">
+          <h3 data-i18n="geo_item3_title">구조화된 요약</h3>
+          <p data-i18n="geo_item3_desc">핵심 지표를 단계별로 제시해 재사용하기 쉽게 구성했습니다.</p>
+        </div>
+        <div class="geo-card">
+          <h3 data-i18n="geo_item4_title">외부 신뢰 근거</h3>
+          <p data-i18n="geo_item4_desc">World Bank CPI 등 공신력 있는 지표를 명시합니다.</p>
+        </div>
+        <div class="geo-card">
+          <h3 data-i18n="geo_item5_title">최신성 표시</h3>
+          <p data-i18n="geo_item5_desc">업데이트 날짜를 공개해 최신 정보를 강조합니다.</p>
+        </div>
+      </div>
+      <div class="faq-list geo-qna">
+        <details>
+          <summary data-i18n="geo_q1">내 연봉이 물가보다 얼마나 뒤처졌나요?</summary>
+          <p data-i18n="geo_a1">입사 연도와 현재 연봉을 입력하면 실질 구매력 감소폭을 계산합니다.</p>
+        </details>
+        <details>
+          <summary data-i18n="geo_q2">실질 연봉은 어떻게 계산되나요?</summary>
+          <p data-i18n="geo_a2">공식 CPI 지수로 물가 상승률을 산출한 뒤 현재 연봉을 환산합니다.</p>
+        </details>
+        <details>
+          <summary data-i18n="geo_q3">체감 물가를 반영할 수 있나요?</summary>
+          <p data-i18n="geo_a3">공식 지수 외에 생활물가 보정이나 직접 입력 옵션을 제공합니다.</p>
+        </details>
       </div>
     </section>
 
