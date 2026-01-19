@@ -761,8 +761,16 @@ const renderReportCanvas = (stats, settings) => {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 
+  const panelX = 80;
+  const panelY = 200;
+  const panelW = width - 160;
+  const panelH = height - 320;
+
   ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-  ctx.fillRect(80, 180, width - 160, height - 360);
+  ctx.fillRect(panelX, panelY, panelW, panelH);
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(panelX, panelY, panelW, panelH);
 
   const drawSticker = (x, y, r, text, fill, stroke) => {
     ctx.save();
@@ -785,8 +793,8 @@ const renderReportCanvas = (stats, settings) => {
     ctx.save();
     const colors = ["#ffd166", "#4aa3ff", "#ff7a7a", "#52c2a6", "#f4b07a"];
     for (let i = 0; i < 24; i += 1) {
-      const cx = 120 + Math.random() * (width - 240);
-      const cy = 220 + Math.random() * 160;
+      const cx = panelX + 60 + Math.random() * (panelW - 120);
+      const cy = panelY + 40 + Math.random() * 200;
       const w = 10 + Math.random() * 12;
       const h = 6 + Math.random() * 10;
       ctx.fillStyle = colors[i % colors.length];
@@ -800,73 +808,92 @@ const renderReportCanvas = (stats, settings) => {
   };
 
   drawConfetti();
-  drawSticker(width - 190, 270, 70, "찐", "#ffd166", "#111111");
-  drawSticker(200, 280, 56, "헉", "#4aa3ff", "#111111");
+  drawSticker(panelX + panelW - 110, panelY + 120, 60, "찐", "#ffd166", "#111111");
+  drawSticker(panelX + 120, panelY + 140, 52, "헉", "#4aa3ff", "#111111");
 
+  ctx.textAlign = "center";
   ctx.fillStyle = "#ffffff";
-  ctx.font = "92px 'GmarketSansBold', sans-serif";
-  ctx.fillText(dict.report_title_line, 120, 260 + topShift);
+  ctx.font = "88px 'GmarketSansBold', sans-serif";
+  ctx.fillText(dict.report_title_line, width / 2, 330);
 
-  ctx.font = "40px 'Pretendard', sans-serif";
+  ctx.font = "38px 'Pretendard', sans-serif";
   ctx.fillStyle = "#ffd93d";
-  ctx.fillText(dict.report_subtitle, 120, 320 + topShift);
+  ctx.fillText(dict.report_subtitle, width / 2, 390);
+
+  const barY = 440;
+  const barH = 96;
+  ctx.fillStyle = "rgba(77, 150, 255, 0.18)";
+  ctx.fillRect(panelX + 40, barY, panelW - 80, barH);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "36px 'Pretendard', sans-serif";
+  ctx.fillText(headline, width / 2, barY + 58);
+
+  ctx.textAlign = "left";
+  const cardY = 560;
+  const cardH = 140;
+  const cardGap = 20;
+  const cardW = (panelW - 80 - cardGap) / 2;
+  const cardX = panelX + 40;
+  const cardX2 = cardX + cardW + cardGap;
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.8)";
+  ctx.fillRect(cardX, cardY, cardW, cardH);
+  ctx.fillRect(cardX2, cardY, cardW, cardH);
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "28px 'Pretendard', sans-serif";
+  ctx.fillText(dict.result_nominal_change, cardX + 24, cardY + 46);
+  ctx.fillText(dict.result_inflation_change, cardX2 + 24, cardY + 46);
 
   ctx.fillStyle = "#ffffff";
-  ctx.font = "34px 'Pretendard', sans-serif";
-  ctx.fillText(headline, 120, 400 + topShift);
+  ctx.font = "44px 'GmarketSansBold', sans-serif";
+  ctx.fillText(
+    `+${formatPercent(stats.nominalDelta, settings.language)}`,
+    cardX + 24,
+    cardY + 100,
+  );
+  ctx.fillText(
+    `+${formatPercent(stats.inflationRate, settings.language)}`,
+    cardX2 + 24,
+    cardY + 100,
+  );
 
   ctx.fillStyle = "#4d96ff";
-  ctx.font = "54px 'GmarketSansBold', sans-serif";
+  ctx.font = "52px 'GmarketSansBold', sans-serif";
   ctx.fillText(
     `${dict.result_power_change} ${formatPercent(stats.realDelta, settings.language)}`,
-    120,
-    480 + topShift,
-  );
-
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "32px 'Pretendard', sans-serif";
-  ctx.fillText(
-    `${dict.result_nominal_change}: +${formatPercent(stats.nominalDelta, settings.language)}`,
-    120,
-    560 + topShift,
-  );
-  ctx.fillText(
-    `${dict.result_inflation_change}: +${formatPercent(stats.inflationRate, settings.language)}`,
-    120,
-    610 + topShift,
+    panelX + 40,
+    cardY + 220,
   );
 
   ctx.fillStyle = "#ff4d4d";
-  ctx.font = "48px 'GmarketSansBold', sans-serif";
-  ctx.fillText(lossText, 120, 700 + topShift);
+  ctx.font = "46px 'GmarketSansBold', sans-serif";
+  ctx.fillText(lossText, panelX + 40, cardY + 300);
 
+  const captionBoxY = height - 360;
   ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-  ctx.fillRect(120, 760 + topShift, width - 240, 320);
+  ctx.fillRect(panelX + 40, captionBoxY, panelW - 80, 240);
 
   ctx.fillStyle = "#111111";
   ctx.font = "30px 'Pretendard', sans-serif";
-  ctx.fillText(dict.report_caption, 150, 830 + topShift);
-  ctx.fillText(dict.report_caption2, 150, 875 + topShift);
+  ctx.fillText(dict.report_caption, panelX + 70, captionBoxY + 70);
+  ctx.fillText(dict.report_caption2, panelX + 70, captionBoxY + 115);
   ctx.font = "34px 'GmarketSansBold', sans-serif";
   drawWrappedText(
     ctx,
     getVerdictText(stats, settings.language),
-    150,
-    940 + topShift,
-    width - 300,
+    panelX + 70,
+    captionBoxY + 170,
+    panelW - 140,
     44,
   );
 
-  const footerY = height - 200;
-  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-  ctx.fillRect(120, footerY, width - 240, 120);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+  ctx.fillRect(panelX + 40, height - 140, panelW - 80, 80);
   ctx.fillStyle = "#e2e8f0";
-  ctx.font = "34px 'GmarketSansBold', sans-serif";
+  ctx.font = "30px 'GmarketSansBold', sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("실질 월급 팩트 체크", width / 2, footerY + 48);
-  ctx.fillStyle = "#94a3b8";
-  ctx.font = "28px 'Pretendard', sans-serif";
-  ctx.fillText(window.location.origin, width / 2, footerY + 88);
+  ctx.fillText("실질 월급 팩트 체크", width / 2, height - 90);
   ctx.textAlign = "left";
 
 };
