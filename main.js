@@ -91,7 +91,8 @@ const translations = {
     result_summary_label: "현재 실질 연봉",
     result_detail_open: "상세 보기",
     result_detail_close: "상세 접기",
-    result_details_title: "상세 결과",
+    result_details_open: "상세 결과 보기",
+    result_details_close: "상세 결과 접기",
     result_nominal_change: "연봉 인상률",
     result_nominal_hint: "명목 상승률",
     result_inflation_change: "물가 상승률",
@@ -179,7 +180,8 @@ const translations = {
     result_summary_label: "Real salary today",
     result_detail_open: "View details",
     result_detail_close: "Hide details",
-    result_details_title: "Detailed results",
+    result_details_open: "Show detailed results",
+    result_details_close: "Hide detailed results",
     result_nominal_change: "Nominal raise",
     result_nominal_hint: "Headline increase",
     result_inflation_change: "Inflation",
@@ -276,6 +278,7 @@ const elements = {
   summaryPower: document.getElementById("summary-power"),
   resultDetails: document.getElementById("result-details"),
   scrollDetails: document.getElementById("scroll-details"),
+  resultDetailsSummary: document.querySelector("#result-details summary"),
 };
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -707,6 +710,11 @@ const updateDetailToggleText = (language, isOpen) => {
   }
   const dict = translations[language] || translations.ko;
   elements.scrollDetails.textContent = isOpen ? dict.result_detail_close : dict.result_detail_open;
+  if (elements.resultDetailsSummary) {
+    elements.resultDetailsSummary.textContent = isOpen
+      ? dict.result_details_close
+      : dict.result_details_open;
+  }
 };
 
 const syncSalaryRanges = (settings) => {
