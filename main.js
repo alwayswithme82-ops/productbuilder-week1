@@ -1193,17 +1193,6 @@ const handleShare = async (event) => {
   const dict = translations[elements.language.value] || translations.ko;
   const shareUrl = getShareUrl(channel);
   const payload = buildSharePayload(shareUrl);
-  if (channel !== "link" && navigator.share) {
-    try {
-      await navigator.share(payload);
-      return;
-    } catch (error) {
-      if (error && error.name === "AbortError") {
-        return;
-      }
-      console.warn("Web share failed", error);
-    }
-  }
   if (channel === "twitter") {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(payload.text)}&url=${encodeURIComponent(payload.url)}`;
     openShareTarget(url);
