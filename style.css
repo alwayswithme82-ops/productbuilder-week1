@@ -288,7 +288,7 @@ body {
 }
 
 .form--compact {
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: end;
 }
 
@@ -297,7 +297,7 @@ body {
 }
 
 .form--compact .field--wide {
-  grid-column: span 1;
+  grid-column: 1 / -1;
 }
 
 .form-divider {
