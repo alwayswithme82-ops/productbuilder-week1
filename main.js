@@ -65,7 +65,7 @@ const translations = {
     hero_badge: "인플레이션 팩트 체크",
     hero_title: "내 월급의 실질 가치",
     hero_desc:
-      "열심히 일해도 왜 가난해지는지 숫자로 증명합니다. 연봉은 올랐는데 물가가 더 빨리 뛰었다면, 실질 구매력은 줄어든 겁니다.",
+      "열심히 일해도 왜 가난해지는지 숫자로 증명합니다.\n연봉은 올랐는데 물가가 더 빨리 뛰었다면,\n실질 구매력은 줄어든 겁니다.",
     cta_calculate: "바로 계산하기",
     cta_report: "리포트 만들기",
     step1_title: "연봉 입력",
@@ -152,7 +152,7 @@ const translations = {
     hero_badge: "Inflation Fact Check",
     hero_title: "My Real Salary Value",
     hero_desc:
-      "Your salary may go up, but prices can rise faster. This shows how much buying power you actually lost.",
+      "Your salary may go up, but prices can rise faster.\nThis shows how much buying power you actually lost.",
     cta_calculate: "Calculate",
     cta_report: "Create Report",
     step1_title: "Salary Inputs",
