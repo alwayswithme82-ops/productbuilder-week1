@@ -184,12 +184,12 @@ body {
 }
 
 .layout {
-  max-width: 1140px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 0 24px 80px;
   display: grid;
-  gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  grid-template-columns: 1fr;
 }
 
 .panel {
@@ -201,6 +201,24 @@ body {
   backdrop-filter: blur(6px);
   position: relative;
   overflow: hidden;
+}
+
+.panel--inputs .panel-head,
+.panel--results .panel-head {
+  text-align: center;
+  justify-content: center;
+}
+
+.panel--inputs .form,
+.panel--inputs .form--grid {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.panel--results .result-grid,
+.panel--results .bar-compare {
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .panel--results {
