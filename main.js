@@ -89,7 +89,8 @@ const translations = {
     result_power_change: "월급 녹아내림",
     result_power_hint: "입사 연봉 대비 체감",
     result_summary_label: "현재 실질 연봉",
-    result_detail_cta: "상세 보기",
+    result_detail_open: "상세 보기",
+    result_detail_close: "상세 접기",
     result_details_title: "상세 결과",
     result_nominal_change: "연봉 인상률",
     result_nominal_hint: "명목 상승률",
@@ -176,7 +177,8 @@ const translations = {
     result_power_change: "Paycheck melt-down",
     result_power_hint: "Compared to your start",
     result_summary_label: "Real salary today",
-    result_detail_cta: "View details",
+    result_detail_open: "View details",
+    result_detail_close: "Hide details",
     result_details_title: "Detailed results",
     result_nominal_change: "Nominal raise",
     result_nominal_hint: "Headline increase",
@@ -641,6 +643,7 @@ const render = (settings) => {
   elements.nominalChange.textContent = formatPercent(stats.nominalDelta, settings.language);
   elements.inflationChange.textContent = formatPercent(stats.inflationRate, settings.language);
   elements.verdict.textContent = verdictText;
+  updateDetailToggleText(settings.language, elements.resultDetails?.open);
 
   elements.powerChange.classList.remove("status-loss", "status-gain");
   elements.summaryPower.classList.remove("status-loss", "status-gain");
@@ -696,6 +699,14 @@ const render = (settings) => {
 
   renderDataNote(stats, settings);
   renderDynamicLabels(settings);
+};
+
+const updateDetailToggleText = (language, isOpen) => {
+  if (!elements.scrollDetails) {
+    return;
+  }
+  const dict = translations[language] || translations.ko;
+  elements.scrollDetails.textContent = isOpen ? dict.result_detail_close : dict.result_detail_open;
 };
 
 const syncSalaryRanges = (settings) => {
@@ -865,8 +876,18 @@ elements.jumpToReport.addEventListener("click", () => {
 if (elements.scrollDetails) {
   elements.scrollDetails.addEventListener("click", () => {
     if (elements.resultDetails) {
-      elements.resultDetails.open = true;
-      elements.resultDetails.scrollIntoView({ behavior: "smooth", block: "start" });
+      const willOpen = !elements.resultDetails.open;
+      elements.resultDetails.open = willOpen;
+      updateDetailToggleText(elements.language.value, willOpen);
+      if (willOpen) {
+        elements.resultDetails.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
+  });
+}
+
+if (elements.resultDetails) {
+  elements.resultDetails.addEventListener("toggle", () => {
+    updateDetailToggleText(elements.language.value, elements.resultDetails.open);
   });
 }
