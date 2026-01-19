@@ -1100,7 +1100,8 @@ select:focus {
   }
 
   .hero h1 {
-    font-size: clamp(2.1rem, 9vw, 2.8rem);
+    font-size: clamp(1.8rem, 7.5vw, 2.4rem);
+    line-height: 1.2;
   }
 
   .field--inline {

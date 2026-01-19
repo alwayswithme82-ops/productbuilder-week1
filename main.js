@@ -1147,8 +1147,15 @@ const openSharePopup = (url) => {
   window.open(url, "_blank", "noopener,noreferrer,width=600,height=600");
 };
 
+const isLikelyMobile = () => {
+  if (window.matchMedia) {
+    return window.matchMedia("(max-width: 720px)").matches;
+  }
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+};
+
 const openShareTarget = (url) => {
-  if (navigator.share) {
+  if (isLikelyMobile()) {
     window.location.href = url;
     return;
   }
