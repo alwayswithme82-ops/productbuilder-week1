@@ -1434,7 +1434,7 @@ const scrollToSection = (targetId) => {
   if (!node) {
     return;
   }
-  const headerOffset = 92;
+  const headerOffset = 120;
   const top = node.getBoundingClientRect().top + window.scrollY - headerOffset;
   window.scrollTo({ top, behavior: "smooth" });
 };
