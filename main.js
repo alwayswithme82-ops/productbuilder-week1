@@ -75,6 +75,7 @@ const translations = {
       "열심히 일해도 왜 가난해지는지 숫자로 증명합니다.\n연봉은 올랐는데 물가가 더 빨리 뛰었다면,\n실질 구매력은 줄어든 겁니다.",
     cta_calculate: "바로 계산하기",
     cta_report: "리포트 만들기",
+    cta_results: "결과 확인",
     geo_updated: "최신 업데이트: 2026.01.21",
     geo_title: "AI 검색 대응 요약",
     geo_hint: "생성형 AI 검색 환경에서도 유용한 정보를 제공하도록 구성했습니다.",
@@ -335,6 +336,7 @@ const translations = {
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
     report_download: "Download image",
+    cta_results: "View results",
     share_title: "Share",
     share_twitter: "Twitter",
     share_threads: "Threads",
@@ -427,6 +429,7 @@ const elements = {
   shareButtons: document.querySelectorAll("[data-share-channel]"),
   jumpToInputs: document.getElementById("jump-to-inputs"),
   jumpToReport: document.getElementById("jump-to-report"),
+  jumpToResults: document.getElementById("jump-to-results"),
   language: document.getElementById("language"),
   country: document.getElementById("country"),
   labelStartSalary: document.getElementById("label-start-salary"),
@@ -1472,6 +1475,12 @@ elements.jumpToInputs.addEventListener("click", () => {
 elements.jumpToReport.addEventListener("click", () => {
   scrollToSection("report");
 });
+
+if (elements.jumpToResults) {
+  elements.jumpToResults.addEventListener("click", () => {
+    scrollToSection("results");
+  });
+}
 
 if (elements.scrollDetails) {
   elements.scrollDetails.addEventListener("click", () => {
