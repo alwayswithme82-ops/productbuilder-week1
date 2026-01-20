@@ -1429,11 +1429,13 @@ const initAds = () => {
   }
 };
 
-const scrollToSection = (targetId) => {
+const scrollToSection = (targetId, offset = 80) => {
   const node = document.getElementById(targetId);
-  if (node) {
-    node.scrollIntoView({ behavior: "smooth" });
+  if (!node) {
+    return;
   }
+  const top = node.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
 };
 
 const settings = loadSettings();
