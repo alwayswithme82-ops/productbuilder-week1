@@ -769,6 +769,29 @@ const drawRoundedRect = (ctx, x, y, width, height, radius) => {
   ctx.closePath();
 };
 
+const drawMoneyStack = (ctx, x, y, width, height, palette) => {
+  const stackGap = 12;
+  const stackHeight = Math.max(24, Math.floor(height / 3) - stackGap);
+  const stackCount = 3;
+  for (let i = 0; i < stackCount; i += 1) {
+    const offsetY = y + (stackCount - 1 - i) * stackGap;
+    const opacity = 0.2 + i * 0.12;
+    ctx.save();
+    ctx.globalAlpha = opacity;
+    ctx.fillStyle = palette.gain;
+    drawRoundedRect(ctx, x, offsetY, width, stackHeight, 18);
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.fillStyle = palette.inkSoft;
+  ctx.font = "24px 'Pretendard', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("MONEY", x + width / 2, y + height / 2 + 2);
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+};
+
 const drawWrappedTextBlock = (ctx, text, x, y, maxWidth, lineHeight, shouldDraw = true) => {
   if (!text) {
     return 0;
@@ -973,7 +996,13 @@ const renderReportCanvas = (stats, settings) => {
     cardY + 90,
   );
 
-  const impactY = cardY + 156;
+  const graphicY = cardY + 148;
+  const graphicH = 120;
+  const graphicW = Math.min(360, contentW);
+  const graphicX = contentX + (contentW - graphicW) / 2;
+  drawMoneyStack(ctx, graphicX, graphicY, graphicW, graphicH, palette);
+
+  const impactY = graphicY + graphicH + 24;
   const captionBoxY = panelY + panelH - 280;
   const impactMaxY = captionBoxY - 20;
   let impactFontSize = 40;
