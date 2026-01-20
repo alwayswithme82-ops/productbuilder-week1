@@ -876,10 +876,10 @@ const renderReportCanvas = (stats, settings) => {
   }
   ctx.restore();
 
-  const panelX = 70;
-  const panelY = 180;
-  const panelW = width - 140;
-  const panelH = height - 300;
+  const panelX = 60;
+  const panelY = 160;
+  const panelW = width - 120;
+  const panelH = height - 260;
   const panelRadius = 32;
 
   const panelGradient = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH);
@@ -892,9 +892,9 @@ const renderReportCanvas = (stats, settings) => {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  const contentX = panelX + 60;
-  const contentW = panelW - 120;
-  let cursorY = panelY + 70;
+  const contentX = panelX + 48;
+  const contentW = panelW - 96;
+  let cursorY = panelY + 58;
 
   ctx.font = "24px 'Pretendard', sans-serif";
   const badgeText = dict.report_subtitle;
@@ -909,7 +909,7 @@ const renderReportCanvas = (stats, settings) => {
   ctx.textBaseline = "middle";
   ctx.fillText(badgeText, contentX + badgePadding, cursorY + badgeHeight / 2);
 
-  cursorY += 70;
+  cursorY += 62;
   ctx.fillStyle = palette.ink;
   ctx.font = "64px 'GmarketSansBold', sans-serif";
   ctx.textBaseline = "alphabetic";
@@ -922,7 +922,7 @@ const renderReportCanvas = (stats, settings) => {
     70,
   );
 
-  cursorY += titleHeight + 26;
+  cursorY += titleHeight + 22;
   ctx.font = "42px 'GmarketSansBold', sans-serif";
   ctx.fillStyle = palette.action;
   const headlineHeight = drawWrappedTextBlock(
@@ -934,7 +934,7 @@ const renderReportCanvas = (stats, settings) => {
     48,
   );
 
-  cursorY += headlineHeight + 30;
+  cursorY += headlineHeight + 24;
   ctx.strokeStyle = palette.stroke;
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -942,9 +942,9 @@ const renderReportCanvas = (stats, settings) => {
   ctx.lineTo(contentX + contentW, cursorY + 20);
   ctx.stroke();
 
-  const cardY = cursorY + 50;
-  const cardH = 120;
-  const cardGap = 20;
+  const cardY = cursorY + 44;
+  const cardH = 112;
+  const cardGap = 16;
   const cardW = (contentW - cardGap) / 2;
   const cardX = contentX;
   const cardX2 = cardX + cardW + cardGap;
@@ -973,8 +973,8 @@ const renderReportCanvas = (stats, settings) => {
     cardY + 90,
   );
 
-  const impactY = cardY + 170;
-  const captionBoxY = panelY + panelH - 320;
+  const impactY = cardY + 156;
+  const captionBoxY = panelY + panelH - 280;
   const impactMaxY = captionBoxY - 20;
   let impactFontSize = 40;
   let impactLineHeight = 44;
