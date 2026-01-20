@@ -1429,12 +1429,13 @@ const initAds = () => {
   }
 };
 
-const scrollToSection = (targetId, offset = 80) => {
+const scrollToSection = (targetId) => {
   const node = document.getElementById(targetId);
   if (!node) {
     return;
   }
-  const top = node.getBoundingClientRect().top + window.scrollY - offset;
+  const headerOffset = 92;
+  const top = node.getBoundingClientRect().top + window.scrollY - headerOffset;
   window.scrollTo({ top, behavior: "smooth" });
 };
 

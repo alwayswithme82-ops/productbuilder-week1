@@ -637,7 +637,7 @@ a:hover {
 
 .form-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 8px;
 }
 
@@ -1181,10 +1181,6 @@ select:focus {
   .hero h1 {
     font-size: clamp(1.45rem, 6.5vw, 1.95rem);
     line-height: 1.2;
-  }
-
-  .form-actions {
-    justify-content: center;
   }
 
   .field--inline {
