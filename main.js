@@ -739,11 +739,31 @@ const calculate = (settings) => {
   };
 };
 
+const getThemePalette = () => {
+  const rootStyles = getComputedStyle(document.documentElement);
+  const read = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
+  return {
+    bg: read("--bg", "#0f1012"),
+    ink: read("--ink", "#f3f3f3"),
+    inkSoft: read("--ink-soft", "#b6b6b6"),
+    accent: read("--accent", "#4aa3ff"),
+    accentDark: read("--accent-dark", "#2d7ed4"),
+    accent2: read("--accent-2", "#ff7a7a"),
+    action: read("--action", "#ffd166"),
+    loss: read("--loss", "#ff6b6b"),
+    gain: read("--gain", "#52c2a6"),
+    surface: read("--surface", "rgba(20, 20, 20, 0.95)"),
+    surface2: read("--surface-2", "rgba(28, 28, 28, 0.92)"),
+    stroke: read("--stroke", "rgba(255, 255, 255, 0.08)"),
+  };
+};
+
 const renderReportCanvas = (stats, settings) => {
   const dict = translations[settings.language] || translations.ko;
   const canvas = elements.reportCanvas;
   const ctx = canvas.getContext("2d");
   const { width, height } = canvas;
+  const palette = getThemePalette();
   const lossAmount = Math.max(stats.startSalary - stats.realCurrentSalary, 0);
   const headline = dict.report_headline.replace(
     "{real}",
@@ -754,21 +774,63 @@ const renderReportCanvas = (stats, settings) => {
     : dict.report_loss_private;
   const topShift = 120;
 
-  const gradient = ctx.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, "#111111");
-  gradient.addColorStop(0.5, "#182240");
-  gradient.addColorStop(1, "#111111");
-  ctx.fillStyle = gradient;
+  const bgGradient = ctx.createRadialGradient(
+    width * 0.3,
+    height * 0.05,
+    0,
+    width * 0.3,
+    height * 0.05,
+    height * 1.1,
+  );
+  bgGradient.addColorStop(0, "#1c1f24");
+  bgGradient.addColorStop(0.55, "#121316");
+  bgGradient.addColorStop(1, "#0a0b0d");
+  ctx.fillStyle = bgGradient;
   ctx.fillRect(0, 0, width, height);
+
+  const drawBlob = (x, y, r, color, alpha) => {
+    ctx.save();
+    const blob = ctx.createRadialGradient(x, y, 0, x, y, r);
+    blob.addColorStop(0, color);
+    blob.addColorStop(1, "transparent");
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = blob;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  };
+
+  drawBlob(width * 0.1, height * 0.05, 260, palette.accent, 0.22);
+  drawBlob(width * 0.92, height * 0.2, 320, palette.accent2, 0.2);
+  drawBlob(width * 0.2, height * 0.92, 260, palette.action, 0.18);
+
+  ctx.save();
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+  ctx.lineWidth = 1;
+  const gridSize = 140;
+  for (let x = 0; x <= width; x += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, height);
+    ctx.stroke();
+  }
+  for (let y = 0; y <= height; y += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+  }
+  ctx.restore();
 
   const panelX = 80;
   const panelY = 200;
   const panelW = width - 160;
   const panelH = height - 320;
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+  ctx.fillStyle = palette.surface2;
   ctx.fillRect(panelX, panelY, panelW, panelH);
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+  ctx.strokeStyle = palette.stroke;
   ctx.lineWidth = 2;
   ctx.strokeRect(panelX, panelY, panelW, panelH);
 
@@ -808,23 +870,26 @@ const renderReportCanvas = (stats, settings) => {
   };
 
   drawConfetti();
-  drawSticker(panelX + panelW - 110, panelY + 120, 60, "찐", "#ffd166", "#111111");
-  drawSticker(panelX + 120, panelY + 140, 52, "헉", "#4aa3ff", "#111111");
+  drawSticker(panelX + panelW - 110, panelY + 120, 60, "찐", palette.action, "#111111");
+  drawSticker(panelX + 120, panelY + 140, 52, "헉", palette.accent, "#111111");
 
   ctx.textAlign = "center";
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = palette.ink;
   ctx.font = "88px 'GmarketSansBold', sans-serif";
   ctx.fillText(dict.report_title_line, width / 2, 330);
 
   ctx.font = "38px 'Pretendard', sans-serif";
-  ctx.fillStyle = "#ffd93d";
+  ctx.fillStyle = palette.action;
   ctx.fillText(dict.report_subtitle, width / 2, 390);
 
   const barY = 440;
   const barH = 96;
-  ctx.fillStyle = "rgba(77, 150, 255, 0.18)";
+  ctx.save();
+  ctx.fillStyle = palette.accent;
+  ctx.globalAlpha = 0.18;
   ctx.fillRect(panelX + 40, barY, panelW - 80, barH);
-  ctx.fillStyle = "#ffffff";
+  ctx.restore();
+  ctx.fillStyle = palette.ink;
   ctx.font = "36px 'Pretendard', sans-serif";
   ctx.fillText(headline, width / 2, barY + 58);
 
@@ -836,16 +901,16 @@ const renderReportCanvas = (stats, settings) => {
   const cardX = panelX + 40;
   const cardX2 = cardX + cardW + cardGap;
 
-  ctx.fillStyle = "rgba(15, 23, 42, 0.8)";
+  ctx.fillStyle = palette.surface;
   ctx.fillRect(cardX, cardY, cardW, cardH);
   ctx.fillRect(cardX2, cardY, cardW, cardH);
 
-  ctx.fillStyle = "#e2e8f0";
+  ctx.fillStyle = palette.inkSoft;
   ctx.font = "28px 'Pretendard', sans-serif";
   ctx.fillText(dict.result_nominal_change, cardX + 24, cardY + 46);
   ctx.fillText(dict.result_inflation_change, cardX2 + 24, cardY + 46);
 
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = palette.ink;
   ctx.font = "44px 'GmarketSansBold', sans-serif";
   ctx.fillText(
     `+${formatPercent(stats.nominalDelta, settings.language)}`,
@@ -858,7 +923,7 @@ const renderReportCanvas = (stats, settings) => {
     cardY + 100,
   );
 
-  ctx.fillStyle = "#4d96ff";
+  ctx.fillStyle = palette.accent;
   ctx.font = "52px 'GmarketSansBold', sans-serif";
   ctx.fillText(
     `${dict.result_power_change} ${formatPercent(stats.realDelta, settings.language)}`,
@@ -866,15 +931,17 @@ const renderReportCanvas = (stats, settings) => {
     cardY + 220,
   );
 
-  ctx.fillStyle = "#ff4d4d";
+  ctx.fillStyle = palette.loss;
   ctx.font = "46px 'GmarketSansBold', sans-serif";
   ctx.fillText(lossText, panelX + 40, cardY + 300);
 
   const captionBoxY = height - 360;
-  ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+  ctx.fillStyle = palette.ink;
+  ctx.globalAlpha = 0.9;
   ctx.fillRect(panelX + 40, captionBoxY, panelW - 80, 240);
+  ctx.globalAlpha = 1;
 
-  ctx.fillStyle = "#111111";
+  ctx.fillStyle = palette.bg;
   ctx.font = "30px 'Pretendard', sans-serif";
   ctx.fillText(dict.report_caption, panelX + 70, captionBoxY + 70);
   ctx.fillText(dict.report_caption2, panelX + 70, captionBoxY + 115);
@@ -888,9 +955,9 @@ const renderReportCanvas = (stats, settings) => {
     44,
   );
 
-  ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+  ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
   ctx.fillRect(panelX + 40, height - 140, panelW - 80, 80);
-  ctx.fillStyle = "#e2e8f0";
+  ctx.fillStyle = palette.inkSoft;
   ctx.font = "30px 'GmarketSansBold', sans-serif";
   ctx.textAlign = "center";
   ctx.fillText("실질 월급 팩트 체크", width / 2, height - 90);
