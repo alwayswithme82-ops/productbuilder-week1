@@ -769,6 +769,50 @@ const drawRoundedRect = (ctx, x, y, width, height, radius) => {
   ctx.closePath();
 };
 
+const drawWrappedTextBlock = (ctx, text, x, y, maxWidth, lineHeight, shouldDraw = true) => {
+  if (!text) {
+    return 0;
+  }
+  const words = text.split(" ").filter(Boolean);
+  const lines = [];
+  const pushLine = (line) => {
+    if (line.trim()) {
+      lines.push(line.trim());
+    }
+  };
+  if (words.length <= 1) {
+    let line = "";
+    for (const char of text) {
+      const testLine = `${line}${char}`;
+      if (ctx.measureText(testLine).width > maxWidth && line) {
+        pushLine(line);
+        line = char;
+      } else {
+        line = testLine;
+      }
+    }
+    pushLine(line);
+  } else {
+    let line = "";
+    words.forEach((word, index) => {
+      const testLine = `${line}${word} `;
+      if (ctx.measureText(testLine).width > maxWidth && index > 0) {
+        pushLine(line);
+        line = `${word} `;
+      } else {
+        line = testLine;
+      }
+    });
+    pushLine(line);
+  }
+  if (shouldDraw) {
+    lines.forEach((line, index) => {
+      ctx.fillText(line, x, y + index * lineHeight);
+    });
+  }
+  return lines.length * lineHeight;
+};
+
 const renderReportCanvas = (stats, settings) => {
   const dict = translations[settings.language] || translations.ko;
   const canvas = elements.reportCanvas;
@@ -867,16 +911,30 @@ const renderReportCanvas = (stats, settings) => {
 
   cursorY += 70;
   ctx.fillStyle = palette.ink;
-  ctx.font = "72px 'GmarketSansBold', sans-serif";
+  ctx.font = "64px 'GmarketSansBold', sans-serif";
   ctx.textBaseline = "alphabetic";
-  ctx.fillText(dict.report_title_line, contentX, cursorY + 10);
+  const titleHeight = drawWrappedTextBlock(
+    ctx,
+    dict.report_title_line,
+    contentX,
+    cursorY + 10,
+    contentW,
+    70,
+  );
 
-  cursorY += 90;
-  ctx.font = "44px 'GmarketSansBold', sans-serif";
+  cursorY += titleHeight + 26;
+  ctx.font = "42px 'GmarketSansBold', sans-serif";
   ctx.fillStyle = palette.action;
-  ctx.fillText(headline, contentX, cursorY + 10);
+  const headlineHeight = drawWrappedTextBlock(
+    ctx,
+    headline,
+    contentX,
+    cursorY + 10,
+    contentW,
+    48,
+  );
 
-  cursorY += 50;
+  cursorY += headlineHeight + 30;
   ctx.strokeStyle = palette.stroke;
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -916,16 +974,36 @@ const renderReportCanvas = (stats, settings) => {
   );
 
   const impactY = cardY + 170;
+  const captionBoxY = panelY + panelH - 320;
+  const impactMaxY = captionBoxY - 20;
+  let impactFontSize = 40;
+  let impactLineHeight = 44;
+  let impactHeight = 0;
   const impactColor = settings.maskVisible
     ? lossAmount > 0
       ? palette.loss
       : palette.gain
     : palette.inkSoft;
   ctx.fillStyle = impactColor;
-  ctx.font = "42px 'GmarketSansBold', sans-serif";
-  ctx.fillText(lossText, contentX, impactY);
+  do {
+    ctx.font = `${impactFontSize}px 'GmarketSansBold', sans-serif`;
+    impactHeight = drawWrappedTextBlock(
+      ctx,
+      lossText,
+      contentX,
+      impactY,
+      contentW,
+      impactLineHeight,
+      false,
+    );
+    if (impactY + impactHeight <= impactMaxY || impactFontSize <= 30) {
+      break;
+    }
+    impactFontSize -= 4;
+    impactLineHeight -= 4;
+  } while (impactFontSize > 28);
+  drawWrappedTextBlock(ctx, lossText, contentX, impactY, contentW, impactLineHeight);
 
-  const captionBoxY = panelY + panelH - 320;
   ctx.fillStyle = palette.surface2;
   drawRoundedRect(ctx, contentX, captionBoxY, contentW, 240, 22);
   ctx.fill();
@@ -958,22 +1036,7 @@ const renderReportCanvas = (stats, settings) => {
 };
 
 const drawWrappedText = (ctx, text, x, y, maxWidth, lineHeight) => {
-  const words = text.split(" ");
-  let line = "";
-  let offsetY = 0;
-  words.forEach((word, index) => {
-    const testLine = `${line}${word} `;
-    if (ctx.measureText(testLine).width > maxWidth && index > 0) {
-      ctx.fillText(line.trim(), x, y + offsetY);
-      line = `${word} `;
-      offsetY += lineHeight;
-    } else {
-      line = testLine;
-    }
-  });
-  if (line) {
-    ctx.fillText(line.trim(), x, y + offsetY);
-  }
+  drawWrappedTextBlock(ctx, text, x, y, maxWidth, lineHeight);
 };
 
 const renderDynamicLabels = (settings) => {
