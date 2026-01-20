@@ -157,7 +157,7 @@ const translations = {
     result_inflation_hint: "입사 → 현재 누적",
     verdict_loading: "결과 계산 중입니다.",
     loading_text: "결과 계산 중입니다.",
-    report_title: "사장님 나빠요 리포트",
+    report_title: "실질 연봉 리포트",
     report_generate: "이미지 생성",
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
     report_copy: "텍스트 복사",
@@ -205,13 +205,13 @@ const translations = {
     power_positive: "월급이 버텼습니다 (+{real})",
     shock_template: "당신은 {loss} 손해 봤습니다.",
     share_text:
-      "내 연봉 {nominal} 올랐다더니 물가가 {inflation}. 실질은 {real}. #월급실종 #인플레",
-    report_title_line: "사장님 나빠요",
-    report_subtitle: "월급 실종 보고서",
+      "입사 당시 기준으로 보면 연봉은 {nominal}, 물가는 {inflation}. 실질 변화는 {real}입니다.",
+    report_title_line: "실질 연봉 리포트",
+    report_subtitle: "물가 반영 결과",
     report_headline: "실질 구매력 {real}",
-    report_caption: "열심히 일해도 가난해지는 이유,",
-    report_caption2: "이 숫자에 다 있습니다.",
-    report_footer: "월급 올랐다고요? 아니요.",
+    report_caption: "명목 인상과 물가를 함께 보면,",
+    report_caption2: "체감 변화가 더 분명해집니다.",
+    report_footer: "숫자로 보는 월급 체감",
     report_loss_private: "연봉 손해액 비공개",
     ad_caption: "손해 본 돈, 이걸로 메꾸세요",
     bar_start_label: "입사 연봉",
@@ -330,7 +330,7 @@ const translations = {
     result_inflation_hint: "Start → current total",
     verdict_loading: "Calculating results...",
     loading_text: "Calculating results...",
-    report_title: "\"Boss, this is unfair\" report",
+    report_title: "Real salary report",
     report_generate: "Generate image",
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
@@ -378,13 +378,13 @@ const translations = {
     power_positive: "Your paycheck survived (+{real})",
     shock_template: "You lost {loss} in real value.",
     share_text:
-      "Salary up {nominal}, inflation {inflation}. Real value {real}. #salary #inflation",
-    report_title_line: "Boss, this is unfair",
-    report_subtitle: "Salary reality check",
+      "Measured against start-year prices: salary {nominal}, inflation {inflation}, real change {real}.",
+    report_title_line: "Real salary report",
+    report_subtitle: "Inflation-adjusted summary",
     report_headline: "Real buying power {real}",
-    report_caption: "Why hard work feels poorer,",
-    report_caption2: "the numbers are here.",
-    report_footer: "Salary went up? Not really.",
+    report_caption: "Nominal raises vs inflation,",
+    report_caption2: "this is the real change.",
+    report_footer: "Paycheck reality check",
     report_loss_private: "Loss amount hidden",
     ad_caption: "Cover your loss with this",
     bar_start_label: "Start salary",
@@ -758,6 +758,17 @@ const getThemePalette = () => {
   };
 };
 
+const drawRoundedRect = (ctx, x, y, width, height, radius) => {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + width, y, x + width, y + height, r);
+  ctx.arcTo(x + width, y + height, x, y + height, r);
+  ctx.arcTo(x, y + height, x, y, r);
+  ctx.arcTo(x, y, x + width, y, r);
+  ctx.closePath();
+};
+
 const renderReportCanvas = (stats, settings) => {
   const dict = translations[settings.language] || translations.ko;
   const canvas = elements.reportCanvas;
@@ -772,8 +783,6 @@ const renderReportCanvas = (stats, settings) => {
   const lossText = settings.maskVisible
     ? dict.shock_template.replace("{loss}", formatCurrency(lossAmount, settings.country))
     : dict.report_loss_private;
-  const topShift = 120;
-
   const bgGradient = ctx.createRadialGradient(
     width * 0.3,
     height * 0.05,
@@ -823,145 +832,128 @@ const renderReportCanvas = (stats, settings) => {
   }
   ctx.restore();
 
-  const panelX = 80;
-  const panelY = 200;
-  const panelW = width - 160;
-  const panelH = height - 320;
+  const panelX = 70;
+  const panelY = 180;
+  const panelW = width - 140;
+  const panelH = height - 300;
+  const panelRadius = 32;
 
-  ctx.fillStyle = palette.surface2;
-  ctx.fillRect(panelX, panelY, panelW, panelH);
+  const panelGradient = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH);
+  panelGradient.addColorStop(0, "rgba(26, 26, 30, 0.92)");
+  panelGradient.addColorStop(1, "rgba(18, 18, 22, 0.92)");
+  ctx.fillStyle = panelGradient;
+  drawRoundedRect(ctx, panelX, panelY, panelW, panelH, panelRadius);
+  ctx.fill();
   ctx.strokeStyle = palette.stroke;
   ctx.lineWidth = 2;
-  ctx.strokeRect(panelX, panelY, panelW, panelH);
+  ctx.stroke();
 
-  const drawSticker = (x, y, r, text, fill, stroke) => {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = fill;
-    ctx.fill();
-    ctx.lineWidth = 8;
-    ctx.strokeStyle = stroke;
-    ctx.stroke();
-    ctx.fillStyle = "#111111";
-    ctx.font = "32px 'GmarketSansBold', sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(text, x, y + 2);
-    ctx.restore();
-  };
+  const contentX = panelX + 60;
+  const contentW = panelW - 120;
+  let cursorY = panelY + 70;
 
-  const drawConfetti = () => {
-    ctx.save();
-    const colors = ["#ffd166", "#4aa3ff", "#ff7a7a", "#52c2a6", "#f4b07a"];
-    for (let i = 0; i < 24; i += 1) {
-      const cx = panelX + 60 + Math.random() * (panelW - 120);
-      const cy = panelY + 40 + Math.random() * 200;
-      const w = 10 + Math.random() * 12;
-      const h = 6 + Math.random() * 10;
-      ctx.fillStyle = colors[i % colors.length];
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate((Math.PI / 180) * (Math.random() * 40 - 20));
-      ctx.fillRect(-w / 2, -h / 2, w, h);
-      ctx.restore();
-    }
-    ctx.restore();
-  };
-
-  drawConfetti();
-  drawSticker(panelX + panelW - 110, panelY + 120, 60, "찐", palette.action, "#111111");
-  drawSticker(panelX + 120, panelY + 140, 52, "헉", palette.accent, "#111111");
-
-  ctx.textAlign = "center";
-  ctx.fillStyle = palette.ink;
-  ctx.font = "88px 'GmarketSansBold', sans-serif";
-  ctx.fillText(dict.report_title_line, width / 2, 330);
-
-  ctx.font = "38px 'Pretendard', sans-serif";
-  ctx.fillStyle = palette.action;
-  ctx.fillText(dict.report_subtitle, width / 2, 390);
-
-  const barY = 440;
-  const barH = 96;
-  ctx.save();
+  ctx.font = "24px 'Pretendard', sans-serif";
+  const badgeText = dict.report_subtitle;
+  const badgePadding = 18;
+  const badgeHeight = 40;
+  const badgeWidth = ctx.measureText(badgeText).width + badgePadding * 2;
+  ctx.fillStyle = "rgba(74, 163, 255, 0.18)";
+  drawRoundedRect(ctx, contentX, cursorY, badgeWidth, badgeHeight, badgeHeight / 2);
+  ctx.fill();
   ctx.fillStyle = palette.accent;
-  ctx.globalAlpha = 0.18;
-  ctx.fillRect(panelX + 40, barY, panelW - 80, barH);
-  ctx.restore();
-  ctx.fillStyle = palette.ink;
-  ctx.font = "36px 'Pretendard', sans-serif";
-  ctx.fillText(headline, width / 2, barY + 58);
-
   ctx.textAlign = "left";
-  const cardY = 560;
-  const cardH = 140;
+  ctx.textBaseline = "middle";
+  ctx.fillText(badgeText, contentX + badgePadding, cursorY + badgeHeight / 2);
+
+  cursorY += 70;
+  ctx.fillStyle = palette.ink;
+  ctx.font = "72px 'GmarketSansBold', sans-serif";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText(dict.report_title_line, contentX, cursorY + 10);
+
+  cursorY += 90;
+  ctx.font = "44px 'GmarketSansBold', sans-serif";
+  ctx.fillStyle = palette.action;
+  ctx.fillText(headline, contentX, cursorY + 10);
+
+  cursorY += 50;
+  ctx.strokeStyle = palette.stroke;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(contentX, cursorY + 20);
+  ctx.lineTo(contentX + contentW, cursorY + 20);
+  ctx.stroke();
+
+  const cardY = cursorY + 50;
+  const cardH = 120;
   const cardGap = 20;
-  const cardW = (panelW - 80 - cardGap) / 2;
-  const cardX = panelX + 40;
+  const cardW = (contentW - cardGap) / 2;
+  const cardX = contentX;
   const cardX2 = cardX + cardW + cardGap;
 
   ctx.fillStyle = palette.surface;
-  ctx.fillRect(cardX, cardY, cardW, cardH);
-  ctx.fillRect(cardX2, cardY, cardW, cardH);
+  drawRoundedRect(ctx, cardX, cardY, cardW, cardH, 20);
+  ctx.fill();
+  drawRoundedRect(ctx, cardX2, cardY, cardW, cardH, 20);
+  ctx.fill();
 
   ctx.fillStyle = palette.inkSoft;
-  ctx.font = "28px 'Pretendard', sans-serif";
-  ctx.fillText(dict.result_nominal_change, cardX + 24, cardY + 46);
-  ctx.fillText(dict.result_inflation_change, cardX2 + 24, cardY + 46);
+  ctx.font = "26px 'Pretendard', sans-serif";
+  ctx.fillText(dict.result_nominal_change, cardX + 24, cardY + 42);
+  ctx.fillText(dict.result_inflation_change, cardX2 + 24, cardY + 42);
 
   ctx.fillStyle = palette.ink;
-  ctx.font = "44px 'GmarketSansBold', sans-serif";
+  ctx.font = "40px 'GmarketSansBold', sans-serif";
   ctx.fillText(
     `+${formatPercent(stats.nominalDelta, settings.language)}`,
     cardX + 24,
-    cardY + 100,
+    cardY + 90,
   );
   ctx.fillText(
     `+${formatPercent(stats.inflationRate, settings.language)}`,
     cardX2 + 24,
-    cardY + 100,
+    cardY + 90,
   );
 
-  ctx.fillStyle = palette.accent;
-  ctx.font = "52px 'GmarketSansBold', sans-serif";
-  ctx.fillText(
-    `${dict.result_power_change} ${formatPercent(stats.realDelta, settings.language)}`,
-    panelX + 40,
-    cardY + 220,
-  );
+  const impactY = cardY + 170;
+  const impactColor = settings.maskVisible
+    ? lossAmount > 0
+      ? palette.loss
+      : palette.gain
+    : palette.inkSoft;
+  ctx.fillStyle = impactColor;
+  ctx.font = "42px 'GmarketSansBold', sans-serif";
+  ctx.fillText(lossText, contentX, impactY);
 
-  ctx.fillStyle = palette.loss;
-  ctx.font = "46px 'GmarketSansBold', sans-serif";
-  ctx.fillText(lossText, panelX + 40, cardY + 300);
+  const captionBoxY = panelY + panelH - 320;
+  ctx.fillStyle = palette.surface2;
+  drawRoundedRect(ctx, contentX, captionBoxY, contentW, 240, 22);
+  ctx.fill();
 
-  const captionBoxY = height - 360;
   ctx.fillStyle = palette.ink;
-  ctx.globalAlpha = 0.9;
-  ctx.fillRect(panelX + 40, captionBoxY, panelW - 80, 240);
-  ctx.globalAlpha = 1;
-
-  ctx.fillStyle = palette.bg;
-  ctx.font = "30px 'Pretendard', sans-serif";
-  ctx.fillText(dict.report_caption, panelX + 70, captionBoxY + 70);
-  ctx.fillText(dict.report_caption2, panelX + 70, captionBoxY + 115);
-  ctx.font = "34px 'GmarketSansBold', sans-serif";
+  ctx.font = "28px 'Pretendard', sans-serif";
+  ctx.fillText(dict.report_caption, contentX + 24, captionBoxY + 70);
+  ctx.fillText(dict.report_caption2, contentX + 24, captionBoxY + 110);
+  ctx.font = "32px 'GmarketSansBold', sans-serif";
   drawWrappedText(
     ctx,
     getVerdictText(stats, settings.language),
-    panelX + 70,
-    captionBoxY + 170,
-    panelW - 140,
+    contentX + 24,
+    captionBoxY + 165,
+    contentW - 48,
     44,
   );
 
-  ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
-  ctx.fillRect(panelX + 40, height - 140, panelW - 80, 80);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+  drawRoundedRect(ctx, contentX, panelY + panelH - 100, contentW, 64, 18);
+  ctx.fill();
   ctx.fillStyle = palette.inkSoft;
-  ctx.font = "30px 'GmarketSansBold', sans-serif";
+  ctx.font = "26px 'GmarketSansBold', sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("실질 월급 팩트 체크", width / 2, height - 90);
+  ctx.textBaseline = "middle";
+  ctx.fillText(dict.report_footer, width / 2, panelY + panelH - 68);
   ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
 
 };
 
