@@ -769,27 +769,41 @@ const drawRoundedRect = (ctx, x, y, width, height, radius) => {
   ctx.closePath();
 };
 
+const drawMoneyBill = (ctx, x, y, width, height, palette, opacity = 0.35) => {
+  ctx.save();
+  ctx.globalAlpha = opacity;
+  ctx.fillStyle = palette.gain;
+  drawRoundedRect(ctx, x, y, width, height, 16);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+  ctx.lineWidth = 2;
+  drawRoundedRect(ctx, x + 10, y + 10, width - 20, height - 20, 12);
+  ctx.stroke();
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.18)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(x + width * 0.28, y + height / 2, height * 0.2, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x + width * 0.52, y + height * 0.35);
+  ctx.lineTo(x + width * 0.82, y + height * 0.35);
+  ctx.moveTo(x + width * 0.52, y + height * 0.5);
+  ctx.lineTo(x + width * 0.82, y + height * 0.5);
+  ctx.moveTo(x + width * 0.52, y + height * 0.65);
+  ctx.lineTo(x + width * 0.72, y + height * 0.65);
+  ctx.stroke();
+  ctx.restore();
+};
+
 const drawMoneyStack = (ctx, x, y, width, height, palette) => {
   const stackGap = 12;
-  const stackHeight = Math.max(24, Math.floor(height / 3) - stackGap);
+  const stackHeight = Math.max(28, Math.floor(height / 3) - stackGap);
   const stackCount = 3;
   for (let i = 0; i < stackCount; i += 1) {
     const offsetY = y + (stackCount - 1 - i) * stackGap;
-    const opacity = 0.2 + i * 0.12;
-    ctx.save();
-    ctx.globalAlpha = opacity;
-    ctx.fillStyle = palette.gain;
-    drawRoundedRect(ctx, x, offsetY, width, stackHeight, 18);
-    ctx.fill();
-    ctx.restore();
+    const opacity = 0.18 + i * 0.14;
+    drawMoneyBill(ctx, x, offsetY, width, stackHeight, palette, opacity);
   }
-  ctx.fillStyle = palette.inkSoft;
-  ctx.font = "24px 'Pretendard', sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("MONEY", x + width / 2, y + height / 2 + 2);
-  ctx.textAlign = "left";
-  ctx.textBaseline = "alphabetic";
 };
 
 const drawWrappedTextBlock = (ctx, text, x, y, maxWidth, lineHeight, shouldDraw = true) => {
