@@ -76,6 +76,21 @@ const translations = {
     cta_calculate: "바로 계산하기",
     cta_report: "리포트 만들기",
     cta_results: "결과 확인",
+    overview_title: "이 사이트가 하는 일",
+    overview_hint: "계산 결과만 보여주는 것이 아니라 해석까지 돕습니다.",
+    overview_desc1:
+      "이 계산기는 입사 연도와 현재 연봉을 비교해, 물가 상승 이후에도 실제로 더 나아졌는지 확인하도록 돕습니다.\n단순히 연봉 숫자가 올랐는지만 보지 않고, 같은 돈으로 무엇을 살 수 있는지라는 구매력 관점에서 해석합니다.",
+    overview_desc2:
+      "결과 화면에는 실질 연봉, 구매력 변화율, 명목 인상률, 누적 물가 상승률을 함께 보여줍니다.\n그래서 사용자는 '연봉은 올랐는데 왜 생활이 더 빠듯한가' 같은 질문에 스스로 답할 수 있습니다.",
+    overview_card1_title: "누가 쓰면 좋은가",
+    overview_card1_desc:
+      "이직을 고민하는 직장인, 연봉 협상 전후를 비교하려는 사용자, 최근 몇 년간 체감 물가가 높다고 느낀 사람에게 적합합니다.",
+    overview_card2_title: "무엇을 확인하나",
+    overview_card2_desc:
+      "현재 연봉이 입사 시점 대비 실질적으로 늘었는지, 혹은 물가 상승을 따라가지 못했는지 바로 확인할 수 있습니다.",
+    overview_card3_title: "어떻게 읽어야 하나",
+    overview_card3_desc:
+      "명목 인상률과 물가 상승률을 먼저 보고, 그 다음 실질 연봉과 손실액을 보면 결과를 더 정확하게 해석할 수 있습니다.",
     geo_updated: "최신 업데이트: 2026.01.21",
     geo_title: "AI 검색 대응 요약",
     geo_hint: "생성형 AI 검색 환경에서도 유용한 정보를 제공하도록 구성했습니다.",
@@ -163,6 +178,19 @@ const translations = {
     report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
     report_copy: "텍스트 복사",
     report_download: "이미지 다운로드",
+    use_cases_title: "이렇게 해석해 보세요",
+    use_cases_hint: "숫자가 어떤 의미인지 바로 이해할 수 있는 대표 상황입니다.",
+    use_case1_title: "연봉은 올랐는데 체감은 제자리",
+    use_case1_desc:
+      "명목 인상률보다 누적 물가 상승률이 크면 실질 구매력은 줄어듭니다. 숫자로는 상승이지만 생활 수준은 후퇴할 수 있습니다.",
+    use_case2_title: "이직 제안 비교",
+    use_case2_desc:
+      "몇 년 전 연봉과 지금 제안을 같은 물가 기준으로 맞춰 보면, 제시 연봉이 체감상 유리한지 불리한지 더 선명하게 보입니다.",
+    use_case3_title: "생활비 압박 점검",
+    use_case3_desc:
+      "공식 CPI와 생활물가 보정 값을 함께 비교하면, 공적 지표와 개인 체감 사이 차이를 더 현실적으로 볼 수 있습니다.",
+    use_cases_note:
+      "이 계산기는 투자 조언이 아니라 생활비와 구매력 변화를 이해하기 위한 정보 도구입니다.",
     share_title: "SNS 공유",
     share_twitter: "트위터",
     share_threads: "Threads",
@@ -186,6 +214,12 @@ const translations = {
     faq_a3: "설정값은 브라우저 로컬 저장소에만 저장되며 외부로 전송되지 않습니다.",
     faq_q4: "데이터는 얼마나 자주 업데이트되나요?",
     faq_a4: "공식 CPI 발표 주기에 맞춰 연 1회 이상 갱신하는 것을 원칙으로 합니다.",
+    faq_q5: "왜 결과만 보고 판단하면 안 되나요?",
+    faq_a5:
+      "실질 연봉 계산은 평균 물가를 기준으로 하므로 주거비, 교육비, 식비처럼 개인별 비중이 큰 항목은 별도로 해석해야 합니다.",
+    faq_q6: "어떤 데이터를 검토한 뒤 사용하는 것이 좋나요?",
+    faq_a6:
+      "현재 연봉, 입사 시점 연봉, 최근 연봉 변동 내역, 체감 물가를 크게 좌우하는 생활비 항목을 함께 확인하면 판단 정확도가 높아집니다.",
     contact_title: "문의",
     contact_hint: "피드백과 데이터 제보를 기다립니다.",
     contact_desc: "제휴, 오류 제보, 데이터 문의는 아래 이메일로 보내주세요. 48시간 내 회신을 목표로 합니다.",
@@ -249,6 +283,22 @@ const translations = {
       "Your salary may go up, but prices can rise faster.\nThis shows how much buying power you actually lost.",
     cta_calculate: "Calculate",
     cta_report: "Create Report",
+    cta_results: "View results",
+    overview_title: "What this site does",
+    overview_hint: "It explains the result instead of only showing a number.",
+    overview_desc1:
+      "This calculator compares your starting salary with your current salary to show whether you are actually better off after inflation.\nIt focuses on buying power, not just whether the number on your payslip went up.",
+    overview_desc2:
+      "The result combines real salary, purchasing-power change, nominal growth, and cumulative inflation.\nThat helps answer practical questions such as why day-to-day life feels tighter even after a raise.",
+    overview_card1_title: "Who it helps",
+    overview_card1_desc:
+      "It is useful for employees reviewing career moves, salary negotiations, or the real impact of several years of price increases.",
+    overview_card2_title: "What it checks",
+    overview_card2_desc:
+      "You can quickly see whether your current salary truly improved in real terms or failed to keep up with inflation.",
+    overview_card3_title: "How to read it",
+    overview_card3_desc:
+      "Read nominal salary growth beside inflation first, then interpret the real salary and estimated loss amount together.",
     geo_updated: "Last updated: 2026.01.21",
     geo_title: "AI search readiness",
     geo_hint: "Structured to answer generative AI queries with clarity.",
@@ -336,7 +386,19 @@ const translations = {
     report_desc: "Save and share this report in your community.",
     report_copy: "Copy text",
     report_download: "Download image",
-    cta_results: "View results",
+    use_cases_title: "How to interpret the result",
+    use_cases_hint: "These are common situations where the numbers become easier to read.",
+    use_case1_title: "Salary up, but life feels flat",
+    use_case1_desc:
+      "If cumulative inflation is higher than your nominal raise, your real purchasing power still falls. The headline number can improve while daily life gets harder.",
+    use_case2_title: "Comparing a job offer",
+    use_case2_desc:
+      "Putting an older salary and a new offer on the same price level makes it easier to judge whether the offer is truly better in practical terms.",
+    use_case3_title: "Checking cost-of-living pressure",
+    use_case3_desc:
+      "Comparing the official CPI with the adjusted living-cost option helps frame the gap between public data and personal experience.",
+    use_cases_note:
+      "This tool is for understanding living-cost pressure and purchasing power, not for investment or financial advice.",
     share_title: "Share",
     share_twitter: "Twitter",
     share_threads: "Threads",
@@ -359,6 +421,12 @@ const translations = {
     faq_a3: "Settings stay in local browser storage only.",
     faq_q4: "How often is data updated?",
     faq_a4: "We update at least annually following CPI releases.",
+    faq_q5: "Why shouldn't I rely on the result alone?",
+    faq_a5:
+      "The calculator uses average inflation, so items with large personal weight such as housing, food, or education should still be interpreted separately.",
+    faq_q6: "What should I review before using it?",
+    faq_a6:
+      "Check your starting salary, current salary, recent raises, and the living-cost categories that affect your household the most for a better reading.",
     contact_title: "Contact",
     contact_hint: "We welcome feedback and data tips.",
     contact_desc: "For partnerships, corrections, or data questions, email us. We aim to reply within 48 hours.",
