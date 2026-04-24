@@ -145,6 +145,35 @@
   </header>
 
   <main class="layout">
+    <section class="panel panel--content" id="editorial-overview">
+      <div class="panel-head">
+        <h2 data-i18n="overview_title">이 사이트가 하는 일</h2>
+        <span class="step-hint" data-i18n="overview_hint">계산 결과만 보여주는 것이 아니라 해석까지 돕습니다.</span>
+      </div>
+      <p class="panel-desc" data-i18n="overview_desc1">
+        이 계산기는 입사 연도와 현재 연봉을 비교해, 물가 상승 이후에도 실제로 더 나아졌는지 확인하도록 돕습니다.
+        단순히 연봉 숫자가 올랐는지만 보지 않고, 같은 돈으로 무엇을 살 수 있는지라는 구매력 관점에서 해석합니다.
+      </p>
+      <p class="panel-desc" data-i18n="overview_desc2">
+        결과 화면에는 실질 연봉, 구매력 변화율, 명목 인상률, 누적 물가 상승률을 함께 보여줍니다.
+        그래서 사용자는 ‘연봉은 올랐는데 왜 생활이 더 빠듯한가’ 같은 질문에 스스로 답할 수 있습니다.
+      </p>
+      <div class="info-grid">
+        <article class="info-card">
+          <h3 data-i18n="overview_card1_title">누가 쓰면 좋은가</h3>
+          <p data-i18n="overview_card1_desc">이직을 고민하는 직장인, 연봉 협상 전후를 비교하려는 사용자, 최근 몇 년간 체감 물가가 높다고 느낀 사람에게 적합합니다.</p>
+        </article>
+        <article class="info-card">
+          <h3 data-i18n="overview_card2_title">무엇을 확인하나</h3>
+          <p data-i18n="overview_card2_desc">현재 연봉이 입사 시점 대비 실질적으로 늘었는지, 혹은 물가 상승을 따라가지 못했는지 바로 확인할 수 있습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3 data-i18n="overview_card3_title">어떻게 읽어야 하나</h3>
+          <p data-i18n="overview_card3_desc">명목 인상률과 물가 상승률을 먼저 보고, 그 다음 실질 연봉과 손실액을 보면 결과를 더 정확하게 해석할 수 있습니다.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="panel panel--inputs" id="inputs">
       <div class="panel-head">
         <h2 data-i18n="step1_title">연봉 입력</h2>
@@ -259,6 +288,30 @@
       </details>
     </section>
 
+    <section class="panel panel--content" id="use-cases">
+      <div class="panel-head">
+        <h2 data-i18n="use_cases_title">이렇게 해석해 보세요</h2>
+        <span class="step-hint" data-i18n="use_cases_hint">숫자가 어떤 의미인지 바로 이해할 수 있는 대표 상황입니다.</span>
+      </div>
+      <div class="info-grid">
+        <article class="info-card">
+          <h3 data-i18n="use_case1_title">연봉은 올랐는데 체감은 제자리</h3>
+          <p data-i18n="use_case1_desc">명목 인상률보다 누적 물가 상승률이 크면 실질 구매력은 줄어듭니다. 숫자로는 상승이지만 생활 수준은 후퇴할 수 있습니다.</p>
+        </article>
+        <article class="info-card">
+          <h3 data-i18n="use_case2_title">이직 제안 비교</h3>
+          <p data-i18n="use_case2_desc">몇 년 전 연봉과 지금 제안을 같은 물가 기준으로 맞춰 보면, 제시 연봉이 체감상 유리한지 불리한지 더 선명하게 보입니다.</p>
+        </article>
+        <article class="info-card">
+          <h3 data-i18n="use_case3_title">생활비 압박 점검</h3>
+          <p data-i18n="use_case3_desc">공식 CPI와 생활물가 보정 값을 함께 비교하면, 공적 지표와 개인 체감 사이 차이를 더 현실적으로 볼 수 있습니다.</p>
+        </article>
+      </div>
+      <div class="callout" data-i18n="use_cases_note">
+        이 계산기는 투자 조언이 아니라 생활비와 구매력 변화를 이해하기 위한 정보 도구입니다.
+      </div>
+    </section>
+
     <section class="panel panel--share" id="report">
       <div class="panel-head">
         <h2 data-i18n="report_title">"사장님 나빠요" 리포트</h2>
@@ -299,7 +352,7 @@
     </section>
 
     <section class="panel panel--content panel--accordion" id="value">
-      <details class="accordion">
+      <details class="accordion" open>
         <summary class="panel-head">
           <h2 data-i18n="value_title">핵심 인사이트</h2>
           <span class="step-hint" data-i18n="value_hint">실질 연봉 변화의 의미를 바로 이해할 수 있게 정리했습니다.</span>
@@ -395,7 +448,7 @@
     </section>
 
     <section class="panel panel--content panel--accordion" id="about">
-      <details class="accordion">
+      <details class="accordion" open>
         <summary class="panel-head">
           <h2 data-i18n="about_title">서비스 소개</h2>
           <span class="step-hint" data-i18n="about_hint">실질 구매력을 숫자로 보여주는 인플레이션 계산기입니다.</span>
@@ -424,7 +477,7 @@
     </section>
 
     <section class="panel panel--content panel--accordion" id="method">
-      <details class="accordion">
+      <details class="accordion" open>
         <summary class="panel-head">
           <h2 data-i18n="method_title">계산 방법</h2>
           <span class="step-hint" data-i18n="method_hint">누구나 이해할 수 있도록 계산 흐름을 공개합니다.</span>
@@ -443,7 +496,7 @@
     </section>
 
     <section class="panel panel--content panel--accordion" id="faq">
-      <details class="accordion">
+      <details class="accordion" open>
         <summary class="panel-head">
           <h2 data-i18n="faq_title">자주 묻는 질문</h2>
           <span class="step-hint" data-i18n="faq_hint">정책, 데이터, 개인정보 관련 안내입니다.</span>
@@ -466,13 +519,21 @@
               <summary data-i18n="faq_q4">데이터는 얼마나 자주 업데이트되나요?</summary>
               <p data-i18n="faq_a4">공식 CPI 발표 주기에 맞춰 연 1회 이상 갱신하는 것을 원칙으로 합니다.</p>
             </details>
+            <details>
+              <summary data-i18n="faq_q5">왜 결과만 보고 판단하면 안 되나요?</summary>
+              <p data-i18n="faq_a5">실질 연봉 계산은 평균 물가를 기준으로 하므로 주거비, 교육비, 식비처럼 개인별 비중이 큰 항목은 별도로 해석해야 합니다.</p>
+            </details>
+            <details>
+              <summary data-i18n="faq_q6">어떤 데이터를 검토한 뒤 사용하는 것이 좋나요?</summary>
+              <p data-i18n="faq_a6">현재 연봉, 입사 시점 연봉, 최근 연봉 변동 내역, 체감 물가를 크게 좌우하는 생활비 항목을 함께 확인하면 판단 정확도가 높아집니다.</p>
+            </details>
           </div>
         </div>
       </details>
     </section>
 
     <section class="panel panel--content panel--accordion" id="contact">
-      <details class="accordion">
+      <details class="accordion" open>
         <summary class="panel-head">
           <h2 data-i18n="contact_title">문의</h2>
           <span class="step-hint" data-i18n="contact_hint">피드백과 데이터 제보를 기다립니다.</span>
