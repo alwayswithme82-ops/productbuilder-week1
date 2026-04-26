@@ -191,6 +191,39 @@ const translations = {
       "공식 CPI와 생활물가 보정 값을 함께 비교하면, 공적 지표와 개인 체감 사이 차이를 더 현실적으로 볼 수 있습니다.",
     use_cases_note:
       "이 계산기는 투자 조언이 아니라 생활비와 구매력 변화를 이해하기 위한 정보 도구입니다.",
+    guide_title: "결과를 해석하는 기준",
+    guide_hint: "단순한 계산값보다 판단 기준을 함께 확인하세요.",
+    guide_desc:
+      "실질 연봉은 현재 연봉을 과거 물가 수준으로 되돌려 본 값입니다. 예를 들어 입사 당시 5,000만원을 받았고 현재 5,500만원을 받더라도, 같은 기간 물가가 더 많이 올랐다면 실제 구매력은 줄어들 수 있습니다.",
+    guide_item1_title: "1. 명목 인상률부터 확인",
+    guide_item1_desc:
+      "연봉 숫자가 몇 퍼센트 올랐는지 확인합니다. 이 값은 계약서에 보이는 표면적인 변화입니다.",
+    guide_item2_title: "2. 물가 상승률과 비교",
+    guide_item2_desc:
+      "같은 기간 CPI가 더 빠르게 올랐다면 월급이 올라도 생활비 부담은 커질 수 있습니다.",
+    guide_item3_title: "3. 실질 구매력으로 판단",
+    guide_item3_desc:
+      "실질 연봉이 입사 연봉보다 낮으면, 숫자상 연봉 인상에도 불구하고 구매력은 감소한 것입니다.",
+    checklist_title: "계산 전 확인할 점",
+    checklist_hint: "더 정확한 판단을 위한 입력 체크리스트입니다.",
+    check_item1_title: "세전·세후 기준 통일",
+    check_item1_desc:
+      "입사 연봉과 현재 연봉은 세전 또는 세후 중 하나로 맞춰 입력해야 결과가 왜곡되지 않습니다.",
+    check_item2_title: "상여금 포함 여부",
+    check_item2_desc:
+      "성과급, 고정 상여, 식대 등 반복 지급 항목을 같은 기준으로 포함하거나 제외하세요.",
+    check_item3_title: "근무 형태 변화",
+    check_item3_desc:
+      "파트타임, 프리랜서, 근무시간 변경이 있었다면 시간당 보상도 별도로 비교하는 것이 좋습니다.",
+    check_item4_title: "개인 물가 차이",
+    check_item4_desc:
+      "주거비, 교육비, 교통비 비중이 큰 사람은 공식 CPI와 체감 물가가 다를 수 있습니다.",
+    limitations_title: "계산의 한계와 책임 있는 사용",
+    limitations_hint: "결과를 과도하게 단정하지 않도록 공개합니다.",
+    limitations_desc1:
+      "이 도구는 평균 소비자물가지수를 사용하므로 개인의 소비 구조를 완벽하게 반영하지 않습니다. 전월세, 대출이자, 육아비, 의료비처럼 개인별 비중이 큰 항목은 별도로 검토해야 합니다.",
+    limitations_desc2:
+      "계산 결과는 연봉 협상, 이직 비교, 생활비 점검을 위한 참고 정보입니다. 투자, 세무, 법률 또는 고용 조건에 대한 전문 자문을 대체하지 않습니다.",
     share_title: "SNS 공유",
     share_twitter: "트위터",
     share_threads: "Threads",
@@ -399,6 +432,39 @@ const translations = {
       "Comparing the official CPI with the adjusted living-cost option helps frame the gap between public data and personal experience.",
     use_cases_note:
       "This tool is for understanding living-cost pressure and purchasing power, not for investment or financial advice.",
+    guide_title: "How to Read the Result",
+    guide_hint: "Use the interpretation standard, not only the final number.",
+    guide_desc:
+      "Real salary converts today's pay back to the price level of your starting year. For example, even if salary moved from 50 million KRW to 55 million KRW, purchasing power can still fall when prices rose faster over the same period.",
+    guide_item1_title: "1. Start with the nominal raise",
+    guide_item1_desc:
+      "Check how much the salary number increased. This is the surface-level change shown in a contract.",
+    guide_item2_title: "2. Compare it with inflation",
+    guide_item2_desc:
+      "If CPI rose faster over the same period, daily cost pressure can increase even when pay went up.",
+    guide_item3_title: "3. Judge by purchasing power",
+    guide_item3_desc:
+      "If real salary is below the starting salary, purchasing power fell despite a higher headline salary.",
+    checklist_title: "Before You Calculate",
+    checklist_hint: "A checklist for more reliable inputs.",
+    check_item1_title: "Use one tax basis",
+    check_item1_desc:
+      "Use either pre-tax or after-tax salary for both periods so the result is not distorted.",
+    check_item2_title: "Handle bonuses consistently",
+    check_item2_desc:
+      "Include or exclude recurring bonuses, allowances, and meal support using the same rule for both salaries.",
+    check_item3_title: "Account for work changes",
+    check_item3_desc:
+      "If working hours or employment type changed, compare hourly compensation separately.",
+    check_item4_title: "Remember personal inflation",
+    check_item4_desc:
+      "People with high housing, education, or transport costs may feel inflation differently from official CPI.",
+    limitations_title: "Limits and Responsible Use",
+    limitations_hint: "The tool avoids overstating what one calculation can prove.",
+    limitations_desc1:
+      "This tool uses average consumer price indices, so it cannot fully represent each household's spending pattern. Housing, interest, childcare, and healthcare costs should be reviewed separately when they matter to you.",
+    limitations_desc2:
+      "The result is reference information for salary negotiation, job-offer comparison, and cost-of-living checks. It does not replace investment, tax, legal, or employment advice.",
     share_title: "Share",
     share_twitter: "Twitter",
     share_threads: "Threads",
