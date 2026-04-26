@@ -66,6 +66,7 @@ const translations = {
     nav_calculator: "계산기",
     nav_faq: "FAQ",
     nav_contact: "문의",
+    nav_ad_policy: "광고 원칙",
     nav_policies: "정책",
     label_language: "언어",
     label_country: "국가",
@@ -91,7 +92,7 @@ const translations = {
     overview_card3_title: "어떻게 읽어야 하나",
     overview_card3_desc:
       "명목 인상률과 물가 상승률을 먼저 보고, 그 다음 실질 연봉과 손실액을 보면 결과를 더 정확하게 해석할 수 있습니다.",
-    geo_updated: "최신 업데이트: 2026.01.21",
+    geo_updated: "최신 업데이트: 2026.04.26",
     geo_title: "AI 검색 대응 요약",
     geo_hint: "생성형 AI 검색 환경에서도 유용한 정보를 제공하도록 구성했습니다.",
     geo_desc:
@@ -175,7 +176,7 @@ const translations = {
     loading_text: "결과 계산 중입니다.",
     report_title: "실질 연봉 리포트",
     report_generate: "이미지 생성",
-    report_desc: "공유용 이미지로 저장해서 커뮤니티에 퍼뜨리세요.",
+    report_desc: "계산 결과를 이미지와 텍스트로 저장해 개인 기록이나 공유용으로 활용할 수 있습니다.",
     report_copy: "텍스트 복사",
     report_download: "이미지 다운로드",
     use_cases_title: "이렇게 해석해 보세요",
@@ -224,6 +225,24 @@ const translations = {
       "이 도구는 평균 소비자물가지수를 사용하므로 개인의 소비 구조를 완벽하게 반영하지 않습니다. 전월세, 대출이자, 육아비, 의료비처럼 개인별 비중이 큰 항목은 별도로 검토해야 합니다.",
     limitations_desc2:
       "계산 결과는 연봉 협상, 이직 비교, 생활비 점검을 위한 참고 정보입니다. 투자, 세무, 법률 또는 고용 조건에 대한 전문 자문을 대체하지 않습니다.",
+    ad_policy_title: "광고 및 콘텐츠 운영 원칙",
+    ad_policy_hint: "사용자 콘텐츠를 우선하고 광고는 보조 요소로만 운영합니다.",
+    ad_policy_desc1:
+      "이 사이트는 계산기, 데이터 출처, 해석 가이드, FAQ처럼 사용자가 방문한 목적을 해결하는 게시자 콘텐츠를 먼저 제공합니다. 광고는 콘텐츠를 가리거나 버튼, 입력창, 공유 기능처럼 사용자가 조작하는 요소와 혼동되는 위치에 배치하지 않는 것을 원칙으로 합니다.",
+    ad_policy_desc2:
+      "공유 안내 페이지, 오류 페이지, 정책 문서처럼 콘텐츠 양이 적거나 이동 목적이 강한 화면에는 Google 게재 광고를 넣지 않습니다. 또한 제휴 링크, 자동 생성 글, 외부 콘텐츠 복제, 준비 중인 화면을 광고 수익 목적으로 만들지 않습니다.",
+    ad_policy_item1_title: "콘텐츠 우선",
+    ad_policy_item1_desc:
+      "광고보다 계산기와 설명 콘텐츠가 화면의 중심이 되도록 구성합니다.",
+    ad_policy_item2_title: "빈 화면 광고 금지",
+    ad_policy_item2_desc:
+      "오류, 이동, 공유 미리보기 전용 화면에는 광고 코드를 배치하지 않습니다.",
+    ad_policy_item3_title: "오작동 유도 금지",
+    ad_policy_item3_desc:
+      "입력창, 버튼, 내비게이션 근처에 혼동을 일으키는 광고 배치를 피합니다.",
+    ad_policy_item4_title: "복제 콘텐츠 금지",
+    ad_policy_item4_desc:
+      "외부 문서를 단순 복사하지 않고 직접 작성한 설명과 계산 기능을 제공합니다.",
     share_title: "SNS 공유",
     share_twitter: "트위터",
     share_threads: "Threads",
@@ -290,7 +309,7 @@ const translations = {
     receipt_headline: "나는 {item} {lost}개 손해봤다 😭",
     receipt_item_salary: "잃어버린 연봉",
     receipt_item_basket: "사라진 {item}",
-    receipt_item_conscience: "사장님 양심",
+    receipt_item_conscience: "협상 여지",
     receipt_total: "합계 손실",
     receipt_col_item: "품목",
     receipt_col_qty: "수량",
@@ -307,6 +326,7 @@ const translations = {
     nav_calculator: "Calculator",
     nav_faq: "FAQ",
     nav_contact: "Contact",
+    nav_ad_policy: "Ad Principles",
     nav_policies: "Policies",
     label_language: "Language",
     label_country: "Country",
@@ -416,7 +436,7 @@ const translations = {
     loading_text: "Calculating results...",
     report_title: "Real salary report",
     report_generate: "Generate image",
-    report_desc: "Save and share this report in your community.",
+    report_desc: "Save the calculation as an image or text for your own record or sharing.",
     report_copy: "Copy text",
     report_download: "Download image",
     use_cases_title: "How to interpret the result",
@@ -465,6 +485,24 @@ const translations = {
       "This tool uses average consumer price indices, so it cannot fully represent each household's spending pattern. Housing, interest, childcare, and healthcare costs should be reviewed separately when they matter to you.",
     limitations_desc2:
       "The result is reference information for salary negotiation, job-offer comparison, and cost-of-living checks. It does not replace investment, tax, legal, or employment advice.",
+    ad_policy_title: "Advertising and Content Principles",
+    ad_policy_hint: "Publisher content comes first; advertising is only supplementary.",
+    ad_policy_desc1:
+      "This site prioritizes publisher content that solves the user's purpose: the calculator, data sources, interpretation guide, and FAQ. Ads should not cover content or be confused with buttons, inputs, sharing controls, or other interactive elements.",
+    ad_policy_desc2:
+      "Google-served ads are not placed on screens with limited content or primarily navigational purpose, including share preview pages, error pages, and policy documents. We do not create affiliate pages, auto-generated articles, copied content, or under-construction pages for ad monetization.",
+    ad_policy_item1_title: "Content first",
+    ad_policy_item1_desc:
+      "The calculator and explanatory content should remain the focus of the screen.",
+    ad_policy_item2_title: "No ads on empty screens",
+    ad_policy_item2_desc:
+      "No ad code is placed on error, navigation, or share preview screens.",
+    ad_policy_item3_title: "No accidental interactions",
+    ad_policy_item3_desc:
+      "Ad placements should not be confused with inputs, buttons, or navigation.",
+    ad_policy_item4_title: "No replicated content",
+    ad_policy_item4_desc:
+      "The site provides original explanations and calculation functionality instead of copied external content.",
     share_title: "Share",
     share_twitter: "Twitter",
     share_threads: "Threads",
@@ -1555,14 +1593,6 @@ const handleShare = async (event) => {
   }
 };
 
-const initAds = () => {
-  if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
-    document.querySelectorAll("ins.adsbygoogle").forEach(() => {
-      window.adsbygoogle.push({});
-    });
-  }
-};
-
 const scrollToSection = (targetId) => {
   const node = document.getElementById(targetId);
   if (!node) {
@@ -1578,8 +1608,6 @@ setFormValues(settings);
 applyTranslations(settings.language);
 render(settings);
 syncSalaryInputs(settings);
-initAds();
-
 ["input", "change"].forEach((eventName) => {
   elements.form.addEventListener(eventName, handleInput);
   elements.inflationSource.addEventListener(eventName, handleInput);
